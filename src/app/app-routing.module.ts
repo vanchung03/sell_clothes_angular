@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: '', redirectTo: '../app/auth/login', pathMatch: 'full' },  // Trang mặc định sẽ chuyển tới login
+  { path: 'auth', loadChildren: () => import('../app/auth/auth.module').then(m => m.AuthModule) },
+  // Các route khác
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
