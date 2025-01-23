@@ -6,14 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['../login/login.component.scss']
 })
 export class LoginComponent {
-  email: string = '';    // Khai báo thuộc tính email
+  username: string = '';    // Khai báo thuộc tính email
   password: string = ''; // Khai báo thuộc tính password
 
   constructor() {}
 
   onLogin() {
     // Xử lý logic đăng nhập ở đây
-    console.log('Email:', this.email);
+    console.log('Username:', this.username);
     console.log('Password:', this.password);
   }
 }

@@ -6,20 +6,20 @@ import { Component } from '@angular/core';
   styleUrls: ['../register/register.component.scss']
 })
 export class RegisterComponent {
-  fullName: string = ''; // Khai báo thuộc tính fullName
+  username: string = '';
   email: string = '';    // Khai báo thuộc tính email
   password: string = ''; // Khai báo thuộc tính password
-  username: string = '';
+  fullName: string = '';
   phone:string='';
 
   constructor() {}
 
   onRegister() {
     // Xử lý logic đăng ký ở đây
+    console.log('Username:',this.username);
+    console.log('Password:', this.password);
     console.log('Full Name:', this.fullName);
     console.log('Email:', this.email);
-    console.log('Password:', this.password);
-    console.log('Username:',this.username);
     console.log('Phone:',this.phone)
   }
 }

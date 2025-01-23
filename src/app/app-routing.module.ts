@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: '../app/auth/login', pathMatch: 'full' },  // Trang mặc định sẽ chuyển tới login
-  { path: 'auth', loadChildren: () => import('../app/auth/auth.module').then(m => m.AuthModule) },
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },  // Trang mặc định sẽ chuyển tới login
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   // Các route khác
 ];
 
