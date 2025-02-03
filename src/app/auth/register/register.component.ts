@@ -7,19 +7,19 @@ import { Component } from '@angular/core';
 })
 export class RegisterComponent {
   username: string = '';
-  email: string = '';    // Khai báo thuộc tính email
-  password: string = ''; // Khai báo thuộc tính password
+  email: string = '';   
+  password: string = ''; 
   fullName: string = '';
-  phone:string='';
+  phone: string='';
 
   constructor() {}
 
   onRegister() {
     // Xử lý logic đăng ký ở đây
     console.log('Username:',this.username);
-    console.log('Password:', this.password);
-    console.log('Full Name:', this.fullName);
     console.log('Email:', this.email);
+    console.log('Password:', this.password);
+    console.log('FullName:', this.fullName);
     console.log('Phone:',this.phone)
   }
 }

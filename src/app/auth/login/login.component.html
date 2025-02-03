@@ -1,18 +1,38 @@
-<div class="login-container">
-    <h2>Đăng nhập</h2>
+<div class="auth-container">
+  <div class="auth-form">
+    <h1 class="store-name">Serenity</h1>
+    <div class="triangle">Clothes</div>
+
+    <h2>Login</h2>
     <form (ngSubmit)="onLogin()">
       <mat-form-field class="full-width">
         <mat-label>Username</mat-label>
-        <input matInput [(ngModel)]="username" name="username" required />
+        <input matInput [(ngModel)]="loginRequest.username" name="username" required />
       </mat-form-field>
+
       <mat-form-field class="full-width">
-        <mat-label>Mật khẩu</mat-label>
-        <input matInput type="password" [(ngModel)]="password" name="password" required />
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="loginRequest.password" name="password" required />
       </mat-form-field>
-      <button mat-raised-button color="primary">Đăng nhập</button>
+
+      <button mat-raised-button color="primary" type="submit">Login</button>
     </form>
-    <p>
-      Chưa có tài khoản? <a routerLink="/auth/register">Đăng ký</a>
+
+    <div class="social-login">
+      <button mat-raised-button color="warn">
+        <!-- Google Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+          <path fill="#4285F4" d="M23.49 12.3c0-.69-.06-1.35-.18-1.98H12.9v3.84h5.77c-1.01 2.71-3.75 4.68-7.01 4.68-4.28 0-7.74-3.16-7.74-7.05s3.46-7.05 7.74-7.05c2.28 0 4.34.86 5.81 2.3l4.3-4.3C19.41 1.8 16.32 0 12.9 0 6.47 0 2 4.19 2 9.33c0 5.14 4.47 9.33 9.9 9.33 5.75 0 10.41-4.68 10.41-10.36z"/>
+        </svg>
+        Login with Google
+      </button>
+    </div>
+
+    <p class="auth-action">
+      Don't have an account? <a routerLink="/auth/register">Register</a>
+    </p>
+    <p class="forgot-password">
+      <a routerLink="/auth/forgot-password">Forgot password?</a>
     </p>
   </div>
-  
+</div>
