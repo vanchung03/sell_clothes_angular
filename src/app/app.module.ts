@@ -5,7 +5,7 @@ import { AppComponent } from '../app/app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './pages/home/home.component';
-import { DashboardComponent } from './admin/dashboard/dashboard.component';  // Nhập BrowserAnimationsModule
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, DashboardComponent],
