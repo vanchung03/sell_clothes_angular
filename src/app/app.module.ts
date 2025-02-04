@@ -13,16 +13,12 @@ import { DashboardComponent } from './admin/dashboard/dashboard.component';
   declarations: [AppComponent, HomeComponent, DashboardComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,  // Đảm bảo AppRoutingModule được thêm vào
-    HttpClientModule,  // Đảm bảo HttpClientModule đã được thêm vào
-    BrowserAnimationsModule,  // Thêm BrowserAnimationsModule
-    ToastrModule.forRoot({  // Khởi tạo ToastrModule
-      positionClass: 'toast-top-right',  // Vị trí thông báo
-      timeOut: 3000,  // Thời gian hiển thị thông báo
-      preventDuplicates: true,  // Ngừng hiển thị thông báo trùng lặp
-    }),
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

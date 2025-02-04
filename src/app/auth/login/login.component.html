@@ -18,15 +18,19 @@
       <button mat-raised-button color="primary" type="submit">Login</button>
     </form>
 
+    <p class="or-login">Or login with:</p>
     <div class="social-login">
-      <button mat-raised-button color="warn">
-        <!-- Google Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
-          <path fill="#4285F4" d="M23.49 12.3c0-.69-.06-1.35-.18-1.98H12.9v3.84h5.77c-1.01 2.71-3.75 4.68-7.01 4.68-4.28 0-7.74-3.16-7.74-7.05s3.46-7.05 7.74-7.05c2.28 0 4.34.86 5.81 2.3l4.3-4.3C19.41 1.8 16.32 0 12.9 0 6.47 0 2 4.19 2 9.33c0 5.14 4.47 9.33 9.9 9.33 5.75 0 10.41-4.68 10.41-10.36z"/>
-        </svg>
-        Login with Google
+      <!-- Google Login Button -->
+      <button mat-raised-button class="google-login">
+        <i class="fa-brands fa-google"></i> Login with Google
+      </button>
+    
+      <!-- Facebook Login Button -->
+      <button mat-raised-button class="facebook-login">
+        <i class="fa-brands fa-facebook-f"></i> Login with Facebook
       </button>
     </div>
+    
 
     <p class="auth-action">
       Don't have an account? <a routerLink="/auth/register">Register</a>

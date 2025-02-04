@@ -8,6 +8,7 @@ import jwt_decode from 'jwt-decode';
 @Injectable({
   providedIn: 'root',
 })
+
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth'; 
 
@@ -28,15 +29,38 @@ export class AuthService {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('Token không tồn tại trong localStorage');
-      this.router.navigateByUrl('/login');  
       return null;
     }
     try {
-      return jwt_decode(token);  
+      const decodedToken = jwt_decode<any>(token); // Sử dụng any để đảm bảo giải mã không bị lỗi
+
+      // Kiểm tra nếu token không có trường exp
+      if (!decodedToken.exp) {
+        console.error('Token không có trường expiration (exp)');
+        this.logout(); // Đăng xuất người dùng nếu không có exp
+        return null;
+      }
+
+      const expirationDate = decodedToken.exp * 1000;  // Chuyển từ giây sang mili giây
+      const currentDate = new Date().getTime();
+      
+      if (currentDate > expirationDate) {
+        console.error('Token đã hết hạn');
+        this.logout(); // Thực hiện logout nếu token hết hạn
+        return null;
+      }
+      
+      return decodedToken;
     } catch (error) {
       console.error('Lỗi giải mã token:', error);
       return null;
     }
+  }
+
+  // Đăng xuất người dùng và xóa token
+  logout(): void {
+    localStorage.removeItem('accessToken');
+    this.router.navigateByUrl('/login');
   }
 
   // Kiểm tra quyền và trạng thái người dùng
@@ -66,6 +90,21 @@ export class AuthService {
     return userInfo ? userInfo.status === status : false;
   }
 
+  // Kiểm tra phiên đăng nhập và chuyển hướng
+  checkLoginStatus() {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      const userInfo = this.checkUserRoleAndStatus();
+      if (userInfo) {
+        this.navigateBasedOnRoleAndStatus();
+      } else {
+        this.router.navigateByUrl('/login');  // Nếu không có thông tin hợp lệ, chuyển về login
+      }
+    } else {
+      this.router.navigateByUrl('/login');  // Nếu không có token, chuyển về login
+    }
+  }
+
   // Phương thức chuyển hướng dựa trên quyền và trạng thái
   navigateBasedOnRoleAndStatus() {
     const userInfo = this.checkUserRoleAndStatus();
@@ -74,7 +113,7 @@ export class AuthService {
 
       // Chỉ chuyển hướng khi trạng thái là '1'
       if (status === '1') {
-        if (roles.includes('ROLE_ADMIN')) {
+        if (roles.includes('ROLE_ADMIN')) { 
           this.router.navigateByUrl('/admin/dashboard');  // Chuyển đến trang admin
         } else if (roles.includes('ROLE_USER')) {
           this.router.navigateByUrl('/pages/home');  // Chuyển đến trang user

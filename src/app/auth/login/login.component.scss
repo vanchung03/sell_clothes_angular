@@ -14,147 +14,154 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     position: relative;
-    /* Để đảm bảo tên cửa hàng sẽ đè lên tam giác */
+    z-index: 2;
+  } 
 
-    /* Tên cửa hàng */
-    .store-name {
-      font-size: 32px;
-      font-weight: bold;
-      color: #ff5733;
-      /* Màu của tên cửa hàng */
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-      text-shadow: 1px 1px 5px rgba(255, 87, 51, 0.6);
-      position: relative;
-      z-index: 2;
+  .store-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ff5733;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 5px rgba(255, 87, 51, 0.6);
+    position: relative;
+    z-index: 2;
+  }
+
+  .triangle {
+    width: 100px;
+    height: 30px;
+    background-color: #ff5733;
+    border-radius: 50px;
+    margin: 0 auto;
+    position: absolute;
+    top: 75px; /* Increased top margin to avoid overlap */
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin-top: 60px;
+    color: #333;
+    font-size: 26px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1.5px;
+  }
+
+  .or-login {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+    mat-label {
+      font-size: 16px;
+      color: #333;
     }
-    .social-login {
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-    
-      button {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 16px;
-        font-weight: bold;
-        background-color: #db4437;
-        color: white;
-        border-radius: 5px;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        transition: 0.3s;
-    
-        &:hover {
-          background-color: #c1351d;
-        }
-    
-        .google-icon {
-          width: 20px;
-          height: 20px;
-        }
-      }
+    input {
+      font-size: 16px;
     }
-    
+  }
 
-    .triangle {
-      width: 100px;
-      height: 30px;
-      background-color: #ff5733;
-      border-radius: 50px;
-      margin: 0 auto;
-      position: absolute;
-      top: 55px;
-      left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 1;
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 
-      /* Thêm chữ "Clothes" vào giữa hình bầu dục */
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
+  .social-login {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  
+    button {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 14px;
+      gap: 8px;
+      font-size: 15px;
       font-weight: bold;
-      color: white;
-      text-transform: uppercase;
-    }
-
-    h2 {
-      margin-top: 20px; /* Đẩy xuống để không bị che */
-      color: #333; /* Màu chữ */
-      font-size: 26px; /* Kích thước chữ lớn hơn */
-      font-weight: bold; /* Đậm hơn */
-      text-transform: uppercase; /* Viết hoa */
-      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3); /* Bóng chữ */
-      letter-spacing: 1.5px; /* Giãn chữ nhẹ */
-    }
-    
-
-    mat-form-field {
-      width: 100%;
-      margin-bottom: 20px;
-
-      mat-label {
-        font-size: 16px;
-        color: #333;
-      }
-
-      input {
-        font-size: 16px;
-      }
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      background-color: #007bff;
-      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
       border: none;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-
+      cursor: pointer;
+      transition: 0.3s;
+      flex: 1;
+      i {
+        font-size: 18px;
+      }
+    }
+  
+    .google-login {
+      background-color: #db4437;
+      color: white;
+  
       &:hover {
-        background-color: #0056b3;
+        background-color: #c1351d;
+      }
+  
+      i {
+        color: white;
       }
     }
-
-    .auth-action {
-      margin-top: 10px;
-      font-size: 14px;
-
-      a {
-        color: #007bff;
-        text-decoration: none;
-        font-weight: 600;
-
-        &:hover {
-          text-decoration: underline;
-        }
+  
+    .facebook-login {
+      background-color: #1877f2;
+      color: white;
+  
+      &:hover {
+        background-color: #165f99;
       }
-    }
-
-    .forgot-password {
-      margin-top: 10px;
-      font-size: 14px;
-
-      a {
-        color: #007bff;
-        text-decoration: none;
-        font-weight: 600;
-
-        &:hover {
-          text-decoration: underline;
-        }
+  
+      i {
+        color: white;
       }
     }
   }
-}
+  
+  }
+
+  .auth-action,
+  .forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
 
 @media (max-width: 768px) {
   .auth-container {
@@ -191,6 +198,11 @@
     .auth-action,
     .forgot-password {
       font-size: 12px;
+    }
+
+    .social-login {
+      flex-direction: column;
+      gap: 10px;
     }
   }
 }
