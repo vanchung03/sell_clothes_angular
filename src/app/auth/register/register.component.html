@@ -1,36 +1,36 @@
-<div class="auth-container">
-  <div class="auth-form">
-    <h2>Register</h2>
-    <form (ngSubmit)="onRegister()">
-      <mat-form-field class="full-width">
-        <mat-label>Username</mat-label>
-        <input matInput [(ngModel)]="username" name="username" required />
-      </mat-form-field>
+  <div class="auth-container">
+    <div class="auth-form">
+      <h2>Register</h2>
+      <form (ngSubmit)="onRegister()">
+        <mat-form-field class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="registerData.username" name="username" required />
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput [(ngModel)]="email" name="email" required />
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="registerData.email" name="email" required />
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" [(ngModel)]="password" name="password" required />
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" [(ngModel)]="registerData.password" name="password" required />
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Full Name</mat-label>
-        <input matInput [(ngModel)]="fullName" name="fullName" required />
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput [(ngModel)]="registerData.fullName" name="fullName" required />
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Phone Number</mat-label>
-        <input matInput [(ngModel)]="phone" name="phone" required />
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Phone Number</mat-label>
+          <input matInput [(ngModel)]="registerData.phone"  name="phone" required  />
+        </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit">Register</button>
-    </form>
-    <p class="auth-action">
-      Already have an account? <a routerLink="/auth/login">Login</a>
-    </p>
+        <button mat-raised-button color="primary" type="submit">Register</button>
+      </form>
+      <p class="auth-action">
+        Already have an account? <a routerLink="/auth/login">Login</a>
+      </p>
+    </div>
   </div>
-</div>

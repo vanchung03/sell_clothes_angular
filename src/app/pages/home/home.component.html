@@ -1,22 +1,22 @@
 <div class="store-container">
-  <!-- Thanh Menu -->
+  <!-- Menu Bar -->
   <nav class="store-navbar">
     <div class="logo">Serenity</div>
     <ul class="menu">
-      <li><a href="#">Trang Chủ</a></li>
-      <li><a href="#">Sản Phẩm</a></li>
-      <li><a href="#">Giới Thiệu</a></li>
-      <li><a href="#">Liên Hệ</a></li>
-      <!-- Menu Tài Khoản -->
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <!-- Account Menu -->
       <li class="account-menu">
         <a href="#">
-          <!-- Avatar người dùng và tên -->
+          <!-- User Avatar and Name -->
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToRPaDpcxC7v2UzGExHbBGxg6Z5PIRAbMtYg&s" alt="Avatar" class="avatar">
-          <span class="username">Tên Người Dùng</span>
+          <span class="username">Account</span>
         </a>
         <ul class="dropdown">
-          <li><a href="#">Thông Tin Cá Nhân</a></li>
-          <li><a href="#"(click)="logout()">Đăng Xuất</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="#" (click)="logout()">Logout</a></li>
         </ul>
       </li>
     </ul>
@@ -27,52 +27,52 @@
 
   <!-- Header -->
   <header class="store-header">
-    <h1>Chào mừng đến với Cửa Hàng</h1>
-    <p>Khám phá những sản phẩm tốt nhất của chúng tôi ngay hôm nay!</p>
+    <h1>Welcome to Our Store</h1>
+    <p>Discover our best products today!</p>
   </header>
 
-  <!-- Danh sách sản phẩm -->
+  <!-- Product List -->
   <section class="products">
-    <h2>Sản Phẩm Nổi Bật</h2>
+    <h2>Featured Products</h2>
     <div class="product-list">
-      <!-- Sản phẩm 1 -->
+      <!-- Product 1 -->
       <div class="product-item">
-        <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSRDHrr2HLa_qIeWwjfjph2Z09E3xyK8TZ_oZeFEtLqEm9x0e7i2PpR7WVQMz9vBlNzm19frKJ_1iv5_6Hs8fl224ObSN0jdAPHJTghRjgYXb4tT0UdOPZHxmqsRuVezWmUML3ihsk&usqp=CAc" alt="Sản phẩm 1">
-        <h3>Sản Phẩm 1</h3>
-        <p>Giá: 500.000đ</p>
-        <button (click)="addToCart('Sản phẩm 1', 500000)">Thêm vào giỏ</button>
+        <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSRDHrr2HLa_qIeWwjfjph2Z09E3xyK8TZ_oZeFEtLqEm9x0e7i2PpR7WVQMz9vBlNzm19frKJ_1iv5_6Hs8fl224ObSN0jdAPHJTghRjgYXb4tT0UdOPZHxmqsRuVezWmUML3ihsk&usqp=CAc" alt="Product 1">
+        <h3>Product 1</h3>
+        <p>Price: 500,000 VND</p>
+        <button (click)="addToCart('Product 1', 500000)">Add to Cart</button>
       </div>
-      <!-- Sản phẩm 2 -->
+      <!-- Product 2 -->
       <div class="product-item">
-        <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSbFmc33DlmuF6CNnG4NRe7PX7DnkdmwoO_Dp5M6vrR5ziYQ14UKWIQQzzgkZIG4hp5OqXlXKRB_qImAxWhxE4aY6dziGyKMe1tK-Mw-hgjChTyj6DJdjBlyRJD2idEuhT30Po4zyw&usqp=CAc" alt="Sản phẩm 2">
-        <h3>Sản Phẩm 2</h3>
-        <p>Giá: 750.000đ</p>
-        <button (click)="addToCart('Sản phẩm 2', 750000)">Thêm vào giỏ</button>
+        <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSbFmc33DlmuF6CNnG4NRe7PX7DnkdmwoO_Dp5M6vrR5ziYQ14UKWIQQzzgkZIG4hp5OqXlXKRB_qImAxWhxE4aY6dziGyKMe1tK-Mw-hgjChTyj6DJdjBlyRJD2idEuhT30Po4zyw&usqp=CAc" alt="Product 2">
+        <h3>Product 2</h3>
+        <p>Price: 750,000 VND</p>
+        <button (click)="addToCart('Product 2', 750000)">Add to Cart</button>
       </div>
-      <!-- Sản phẩm 3 -->
+      <!-- Product 3 -->
       <div class="product-item">
-        <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRLNVYQtbhwxKPAbqlrbn6tW_Dkq3iZl7oBjNkRIY-KRwwKJu5KSvJi6RdlAR34f1AsRwLxlQB07tMebSI-L5kcP_od9mYDt64sXk7hX9tFi5SoI1fG6eMuTFI2T_iPqw4jUdkN6RU&usqp=CAc" alt="Sản phẩm 3">
-        <h3>Sản Phẩm 3</h3>
-        <p>Giá: 1.200.000đ</p>
-        <button (click)="addToCart('Sản phẩm 3', 1200000)">Thêm vào giỏ</button>
+        <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRLNVYQtbhwxKPAbqlrbn6tW_Dkq3iZl7oBjNkRIY-KRwwKJu5KSvJi6RdlAR34f1AsRwLxlQB07tMebSI-L5kcP_od9mYDt64sXk7hX9tFi5SoI1fG6eMuTFI2T_iPqw4jUdkN6RU&usqp=CAc" alt="Product 3">
+        <h3>Product 3</h3>
+        <p>Price: 1,200,000 VND</p>
+        <button (click)="addToCart('Product 3', 1200000)">Add to Cart</button>
       </div>
     </div>
   </section>
 
-  <!-- Giỏ hàng -->
+  <!-- Shopping Cart -->
   <section class="cart">
-    <h2>Giỏ Hàng</h2>
+    <h2>Shopping Cart</h2>
     <ul class="cart-items">
       <li *ngFor="let item of cart">
         {{ item.name }} - {{ item.price | currency:'VND' }}
       </li>
     </ul>
-    <p>Tổng: {{ total | currency:'VND' }}</p>
-    <button (click)="checkout()">Thanh Toán</button>
+    <p>Total: {{ total | currency:'VND' }}</p>
+    <button (click)="checkout()">Checkout</button>
   </section>
 
   <!-- Footer -->
   <footer class="store-footer">
-    <p>© 2025, Cửa Hàng. Mọi quyền được bảo lưu.</p>
+    <p>© 2025, Store. All rights reserved.</p>
   </footer>
 </div>

@@ -4,20 +4,40 @@ import { Observable } from 'rxjs';
 import { LoginRequest } from '../models/login-request.model'; 
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import { RegisterRequest } from '../models/register-request.model'; 
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth'; 
 
   constructor(private http: HttpClient, private router: Router) {}
-
+  
+  // 🟢 ĐĂNG KÝ TÀI KHOẢN
+  register(request: RegisterRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/register`, request);
+  }
   // Phương thức đăng nhập
   login(request: LoginRequest): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, request);
   }
+  // Gửi OTP
+  requestOTP(email: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/request-otp`, { email });
+  }
+
+  // Xác nhận OTP
+  verifyOTP(email: string, otp: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/verify-otp`, { email, otp });
+  }
+
+  // Đặt mật khẩu mới
+  resetPassword(email: string, otp: string, newPassword: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/reset-password`, { email, otp, newPassword });
+  }
+
+
 
   // Lưu token vào localStorage
   saveToken(token: string) {
@@ -113,7 +133,7 @@ export class AuthService {
 
       // Chỉ chuyển hướng khi trạng thái là '1'
       if (status === '1') {
-        if (roles.includes('ROLE_ADMIN')) { 
+        if (roles.includes('ROLE_ADMIN')) {
           this.router.navigateByUrl('/admin/dashboard');  // Chuyển đến trang admin
         } else if (roles.includes('ROLE_USER')) {
           this.router.navigateByUrl('/pages/home');  // Chuyển đến trang user

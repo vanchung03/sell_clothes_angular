@@ -28,6 +28,10 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(): void {
+    if (!this.loginRequest.username || !this.loginRequest.password) {
+      this.toastr.error('Vui lòng nhập tên đăng nhập và mật khẩu!', 'Lỗi');
+      return;
+    }
     this.authService
       .login(this.loginRequest)
       .pipe(
@@ -61,7 +65,7 @@ export class LoginComponent implements OnInit {
           }, 1000);
         } else {
           // Nếu không có token trong phản hồi API
-          this.toastr.error('Không có token trong phản hồi API!', 'Lỗi');
+          this.toastr.error('Phiên đăng nhập hết hạn!', 'Lỗi');
         }
       });
   }
