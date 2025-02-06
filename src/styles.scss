@@ -1,7 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'node_modules/ngx-toastr/toastr.css';
+/* To enable Material themes and animations */
+@import '@angular/material/theming';
+
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Thêm CSS này nếu chưa có */
 
+app-root {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+  }
   
+  mat-sidenav-container {
+    flex: 1;
+  }
+  
+  /* Dark theme styles */
+  .dark-theme {
+    background-color: #2c3e50;
+    color: white;
+  }
+  
+  .dark-theme .mat-card {
+    background-color: #34495e;
+  }

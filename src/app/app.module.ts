@@ -1,27 +1,38 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from '../app/app-routing.module';  // Import AppRoutingModule
-import { AppComponent } from '../app/app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms'; // Import đây
-import { ToastrModule } from 'ngx-toastr';  // Import ToastrModule
+import { ToastrModule } from 'ngx-toastr';
+// Import MaterialModule
+import { MaterialModule } from './material.module'; 
 
-import { HomeComponent } from './pages/home/home.component';
-import { DashboardComponent } from './admin/dashboard/dashboard.component';
+// Import admin and pages module
+import { AdminModule } from './admin/admin.module';  
+import { PagesModule } from './pages/pages.module';
+
+// Import auth module
+import { AuthModule } from './auth/auth.module';
+
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, DashboardComponent],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
+    AdminModule,
+    MaterialModule,  
+    PagesModule,
+    AuthModule,
+
     BrowserModule,
-    ReactiveFormsModule, // 👈 Cần import để dùng [formGroup]
-    FormsModule,         // 👈 Nếu dùng [(ngModel)]
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,13 +1,5 @@
-
-<mat-toolbar color="primary">
-  <span>Admin Dashboard</span>
-</mat-toolbar>
-
-<div class="admin-container">
-  <!-- Sidebar for Admin -->
-  <mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="example-container">
     <mat-sidenav mode="side" opened>
-      <!-- Sidebar content (links) here -->
       <mat-nav-list>
         <a mat-list-item routerLink="/admin/dashboard">Dashboard</a>
         <a mat-list-item routerLink="/admin/user-management">User Management</a>
@@ -15,9 +7,9 @@
         <a mat-list-item routerLink="/admin/settings">Settings</a>
       </mat-nav-list>
     </mat-sidenav>
+  
     <mat-sidenav-content>
-      <!-- Router Outlet to load admin components -->
-      <router-outlet></router-outlet>
+      <ng-content></ng-content>
     </mat-sidenav-content>
   </mat-sidenav-container>
-</div>
+  
