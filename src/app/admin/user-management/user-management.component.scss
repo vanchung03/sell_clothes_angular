@@ -1,0 +1,64 @@
+.user-management-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .user-list {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .role {
+    display: inline-block;
+    margin-right: 5px;
+    padding: 2px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #333;
+  }
+  
+  button {
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 4px;
+  }
+  
+  .actions {
+    margin-top: 20px;
+  }
+  
+  mat-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  mat-header-cell, mat-cell {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  mat-header-row {
+    background-color: #f4f4f4;
+  }
+  
+  button {
+    font-size: 14px;
+  }
+  

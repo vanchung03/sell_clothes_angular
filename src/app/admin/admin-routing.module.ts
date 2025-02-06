@@ -16,7 +16,7 @@ const routes: Routes = [
     { path: 'settings', component: SettingsComponent },
     { path: 'products', component: ProductsComponent },
     { path: 'reports', component: ReportsComponent },
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    { path: '', redirectTo: '/auth/login', pathMatch: 'full' }
   ]}
 ];
 

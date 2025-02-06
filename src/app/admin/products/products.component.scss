@@ -1,0 +1,127 @@
+// Sử dụng màu sắc hài hòa: nền trắng, màu chính xanh dương và xám nhạt.
+$primary-color: #1565c0; // Màu xanh dương đậm
+$accent-color: #ff9800;  // Màu cam nhạt
+$header-bg: #e3f2fd;     // Màu xanh nhạt cho header
+$table-border: #b0bec5;  // Màu xám cho đường viền
+$text-color: #424242;    // Màu chữ xám đậm
+
+.products-container {
+  max-width: 100%;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  mat-toolbar {
+    background-color: $table-border;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    .spacer {
+      flex: 1;
+    }
+
+    button {
+      background-color: $header-bg;
+      color: #130707;
+      font-weight: bold;
+      &:hover {
+        background-color: darken($header-bg, 10%);
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: middle;
+      border-bottom: 1px solid $table-border;
+      font-size: 14px;
+      color: $text-color;
+    }
+
+    th {
+      background-color: $header-bg;
+      font-weight: 600;
+    }
+
+    td img.product-image {
+      width: 80px;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    td span.active {
+      color: green;
+      font-weight: bold;
+    }
+    td span.inactive {
+      color: red;
+      font-weight: bold;
+    }
+  }
+
+  // Style cho MatPaginator
+  mat-paginator {
+    margin-top: 16px;
+    .mat-paginator-range-label, .mat-paginator-page-size, .mat-paginator-icon {
+      color: $text-color;
+    }
+    button.mat-icon-button {
+      color: $primary-color;
+    }
+  }
+
+  // Responsive table: chuyển sang dạng block trên thiết bị nhỏ
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    tr {
+      border: 1px solid $table-border;
+      margin-bottom: 8px;
+    }
+    td {
+      border: none;
+      position: relative;
+      padding-left: 50%;
+    }
+    td:before {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: bold;
+      color: $text-color;
+    }
+    /* Gán label cho từng cột */
+    td:nth-of-type(1):before { content: "ID"; }
+    td:nth-of-type(2):before { content: "Brand ID"; }
+    td:nth-of-type(3):before { content: "Tên sản phẩm"; }
+    td:nth-of-type(4):before { content: "Mô tả"; }
+    td:nth-of-type(5):before { content: "Giá"; }
+    td:nth-of-type(6):before { content: "Giá KM"; }
+    td:nth-of-type(7):before { content: "Hình ảnh"; }
+    td:nth-of-type(8):before { content: "Trạng thái"; }
+    // td:nth-of-type(9):before { content: "Ngày tạo"; }
+    // td:nth-of-type(10):before { content: "Ngày cập nhật"; }
+    td:nth-of-type(9):before { content: "Hành động"; }
+  }
+}

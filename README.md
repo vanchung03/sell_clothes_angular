@@ -28,5 +28,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 #
 git status
 git add .
-git commit -m "Updated the auth section "
+git commit -m " update control router"
 git push origin main

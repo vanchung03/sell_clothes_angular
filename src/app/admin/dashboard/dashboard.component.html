@@ -1,23 +1,104 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h2>Dashboard</h2>
+    <div class="header-actions">
+      <button mat-button color="primary">Add New Item</button>
+      <button mat-icon-button color="accent">
+        <mat-icon>settings</mat-icon>
+      </button>
+    </div>
+  </div>
 
-<mat-toolbar color="primary">
-  <span>Admin Dashboard</span>
-</mat-toolbar>
+  <!-- Dashboard Widgets -->
+  <div class="dashboard-widgets">
+    <div class="widget-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Total Sales</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="widget-info">
+            <h3>$12,450</h3>
+            <span>+15% from last month</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-<div class="admin-container">
-  <!-- Sidebar for Admin -->
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav mode="side" opened>
-      <!-- Sidebar content (links) here -->
-      <mat-nav-list>
-        <a mat-list-item routerLink="/admin/dashboard">Dashboard</a>
-        <a mat-list-item routerLink="/admin/user-management">User Management</a>
-        <a mat-list-item routerLink="/admin/product-management">Product Management</a>
-        <a mat-list-item routerLink="/admin/settings">Settings</a>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <!-- Router Outlet to load admin components -->
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    <div class="widget-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Active Users</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="widget-info">
+            <h3>1500</h3>
+            <span>+5% from last month</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="widget-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>New Orders</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="widget-info">
+            <h3>320</h3>
+            <span>-3% from last month</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section">
+    <div class="chart-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Sales Over Time</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart">
+            <!-- Đây là nơi bạn có thể thêm biểu đồ của bạn -->
+            <img src="assets/sales-chart.png" alt="Sales Chart" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="chart-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Customer Growth</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart">
+            <!-- Đây là nơi bạn có thể thêm biểu đồ của bạn -->
+            <img src="assets/customer-growth.png" alt="Customer Growth Chart" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Recent Activities -->
+  <div class="recent-activities">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Recent Activities</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <li>User John Doe registered</li>
+          <li>Order #3456 completed</li>
+          <li>New product added to inventory</li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

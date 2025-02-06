@@ -2,7 +2,7 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { PageNotFoundComponent } from './page-not-found.component';
 // Định tuyến cho các module con
 const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
@@ -17,7 +17,9 @@ const routes: Routes = [
   { path: 'pages', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule) },
 
   // Định tuyến mặc định cho các route không tồn tại (redirect về login)
-  { path: '**', redirectTo: 'auth/login', pathMatch: 'full' },
+  // { path: '**', redirectTo: 'auth/login', pathMatch: 'full' },
+  // Route 404
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

@@ -5,13 +5,13 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { PageNotFoundComponent } from './page-not-found.component';
 // Import MaterialModule
 import { MaterialModule } from './material.module'; 
 
 // Import admin and pages module
 import { AdminModule } from './admin/admin.module';  
 import { PagesModule } from './pages/pages.module';
-
 // Import auth module
 import { AuthModule } from './auth/auth.module';
 
@@ -19,12 +19,15 @@ import { AuthModule } from './auth/auth.module';
 @NgModule({
   declarations: [
     AppComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     AdminModule,
     MaterialModule,  
     PagesModule,
     AuthModule,
+    
+    
 
     BrowserModule,
     AppRoutingModule,

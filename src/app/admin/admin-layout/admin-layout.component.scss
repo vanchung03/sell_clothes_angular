@@ -1,0 +1,126 @@
+// Các biến màu sắc
+$primary-color: #6200ea;
+$background-color: #f4f4f4;
+$dark-background-color: #121212;
+$text-color: #333333;
+$dark-text-color: #ffffff;
+$toolbar-background-light: #ffffff;
+$toolbar-background-dark: #333333;
+$sidebar-background-light: #ffffff;
+$sidebar-background-dark: #1d1d1d;
+$link-hover-light: rgba(0, 0, 0, 0.1);
+$link-hover-dark: rgba(255, 255, 255, 0.1);
+
+// Style chung cho body
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: $background-color;
+  color: $text-color;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+// Dark Mode
+body.dark-mode {
+  background-color: $dark-background-color;
+  color: $dark-text-color;
+}
+
+// Thanh công cụ (Toolbar)
+.admin-toolbar {
+  background-color: $toolbar-background-light;
+  color: $text-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  transition: background-color 0.3s, color 0.3s;
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .store-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: $text-color;
+    }
+  }
+
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    button.mat-icon-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  button {
+    color: $text-color;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+// Dark Mode cho thanh công cụ
+body.dark-mode .admin-toolbar {
+  background-color: $toolbar-background-dark;
+  color: $dark-text-color;
+  button {
+    color: $dark-text-color;
+  }
+}
+
+// Sidebar
+.mat-sidenav {
+  background-color: $sidebar-background-light;
+  color: $text-color;
+  transition: background-color 0.3s, color 0.3s;
+
+  .mat-nav-list a {
+    color: $text-color;
+    &:hover {
+      background-color: $link-hover-light;
+    }
+  }
+}
+
+// Dark Mode cho Sidebar
+body.dark-mode .mat-sidenav {
+  background-color: $sidebar-background-dark;
+}
+
+body.dark-mode .mat-nav-list a {
+  color: $dark-text-color;
+  &:hover {
+    background-color: $link-hover-dark;
+  }
+}
+
+.mat-sidenav-content {
+  background-color: $background-color;
+  color: $text-color;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .mat-sidenav-content {
+  background-color: $dark-background-color;
+}
+
+.mat-sidenav-container {
+  display: flex;
+  height: 100vh;
+}
+
+.mat-sidenav {
+  flex: 0 0 250px;
+}
+
+.mat-sidenav-content {
+  flex: 1;
+}

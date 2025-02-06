@@ -1,31 +1,81 @@
-.dashboard-card {
+.dashboard-container {
   padding: 20px;
-  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  min-height: 100vh; /* Đảm bảo chiều cao đầy đủ */
 }
 
-.stats {
+.dashboard-header {
   display: flex;
   justify-content: space-between;
-}
-
-.stat {
-  display: flex;
   align-items: center;
-  text-align: center;
-  flex: 1;
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #3c3c3c;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+  }
 }
 
-.stat mat-icon {
-  font-size: 48px;
-  margin-right: 10px;
+.dashboard-widgets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+
+  .widget-card {
+    .mat-card {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .widget-info {
+      text-align: center;
+      h3 {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      span {
+        font-size: 1rem;
+        color: #757575;
+      }
+    }
+  }
 }
 
-.stat h3 {
-  margin: 0;
-  font-size: 24px;
+.charts-section {
+  display: flex;
+  gap: 20px;
+
+  .chart-card {
+    flex: 1;
+    .mat-card {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart img {
+      width: 100%;
+      height: auto;
+    }
+  }
 }
 
-.stat p {
-  margin: 0;
-  color: #757575;
+.recent-activities {
+  .mat-card {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin: 10px 0;
+      }
+    }
+  }
 }

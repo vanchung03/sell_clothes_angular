@@ -1,14 +1,24 @@
-.toolbar {
-    background-color: #34495e;
+.admin-toolbar {
+    background-color: #3f51b5;
     color: white;
-    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
-  .toolbar mat-icon {
-    margin-right: 10px;
+  .toolbar-title {
+    font-size: 18px;
+    font-weight: bold;
   }
   
-  .toolbar .title {
+  .toolbar-spacer {
     flex: 1;
+  }
+  
+  .admin-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
   }
   
