@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../service/auth.service';
-import { RegisterRequest } from '../models/register-request.model';
+import { AuthService } from '../../service/auth.service';
+import { RegisterRequest } from '../../types/auth/RegisterRequest';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 

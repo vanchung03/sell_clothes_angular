@@ -3,14 +3,12 @@ import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { MaterialModule } from '../material.module';  // Import MaterialModule
 
-import { DashboardComponent } from './dashboard/dashboard.component';  // Đảm bảo chỉ khai báo ở đây
-import { UserManagementComponent } from './user-management/user-management.component';
-import { SettingsComponent } from './settings/settings.component';
-import { ProductsComponent } from './products/products.component';
-import { ReportsComponent } from './reports/reports.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+import { DashboardComponent } from './component/dashboard/dashboard.component';  // Đảm bảo chỉ khai báo ở đây
+import { UserManagementComponent } from './component/users/user.component';
+import { SettingsComponent } from './component/settings/settings.component';
+import { ProductsComponent } from './component/products/products.component';
+import { ReportsComponent } from './component/reports/reports.component';
+import { AdminLayoutComponent } from './component/index-layout/index.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +17,6 @@ import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
     SettingsComponent,
     ProductsComponent,
     ReportsComponent,
-    SidebarComponent,
-    ToolbarComponent,
     AdminLayoutComponent,
   ],
   imports: [

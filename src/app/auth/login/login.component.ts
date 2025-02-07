@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../service/auth.service';
-import { LoginRequest } from '../models/login-request.model';
+import { AuthService } from '../../service/auth.service';
+import { LoginRequest } from '../../types/auth/LoginRequest';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';

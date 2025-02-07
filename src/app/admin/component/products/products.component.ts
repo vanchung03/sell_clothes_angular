@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { ProductService, Product } from '../service/product.service';
+import { ProductService, Product } from '../../../service/product.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -78,6 +78,6 @@ export class ProductsComponent implements OnInit {
   onEdit(product: Product): void {
     console.log('Chỉnh sửa sản phẩm:', product);
     this.toastr.info('Chức năng chỉnh sửa đang được phát triển', 'Thông báo');
-    // Thêm logic mở modal chỉnh sửa sản phẩm tại đây (ví dụ: mở dialog, điền form, v.v.)
+
   }
 }

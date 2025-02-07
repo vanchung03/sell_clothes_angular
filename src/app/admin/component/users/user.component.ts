@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserService } from '../service/user.service';  // Import dịch vụ người dùng
+import { UserService } from '../../../service/user.service';  // Import dịch vụ người dùng
 
 @Component({
   selector: 'app-user-management',
-  templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.scss']
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss']
 })
 export class UserManagementComponent implements OnInit {
   displayedColumns: string[] = ['userId', 'username', 'email', 'fullName', 'phone', 'avatar', 'status', 'roles', 'actions'];

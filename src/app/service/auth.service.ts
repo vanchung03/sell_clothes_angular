@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginRequest } from '../models/login-request.model'; 
+import { LoginRequest } from '../types/auth/LoginRequest'; 
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { RegisterRequest } from '../models/register-request.model'; 
+import { RegisterRequest } from '../types/auth/RegisterRequest'; 
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
   
-  // 🟢 ĐĂNG KÝ TÀI KHOẢN
+  // ĐĂNG KÝ TÀI KHOẢN
   register(request: RegisterRequest): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, request);
   }

@@ -1,5 +1,4 @@
 export class RegisterRequest {
-
     username: string;
     password: string;
     fullName: string;
