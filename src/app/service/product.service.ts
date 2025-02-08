@@ -32,7 +32,6 @@ export class ProductService {
       'Content-Type': 'application/json',
     });
   }
-
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl, { headers: this.getAuthHeaders() });
   }

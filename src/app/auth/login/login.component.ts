@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Nếu đã có token, kiểm tra trạng thái đăng nhập
+    // Nếu đã có access token, kiểm tra trạng thái đăng nhập
     if (localStorage.getItem('accessToken')) {
       this.authService.checkLoginStatus();
     }
@@ -29,44 +29,21 @@ export class LoginComponent implements OnInit {
 
   onLogin(): void {
     if (!this.loginRequest.username || !this.loginRequest.password) {
-      this.toastr.error('Vui lòng nhập tên đăng nhập và mật khẩu!', 'Lỗi');
+      this.toastr.error('Vui lòng nhập tài khoản và mật khẩu!', 'Lỗi');
       return;
     }
-    this.authService
-      .login(this.loginRequest)
-      .pipe(
-        // Bắt lỗi và hiển thị thông báo
-        catchError((error) => {
-          console.error('Lỗi đăng nhập:', error);
-          this.toastr.error('Đăng nhập thất bại, vui lòng thử lại!', 'Lỗi');
-          // Trả về một observable rỗng để kết thúc stream
-          return of(null);
-        })
-      )
-      .subscribe((response) => {
-        // Nếu có lỗi, response sẽ là null
-        if (!response) {
-          return;
-        }
-        console.log('Response từ API:', response);
 
-        if (response && response.token) {
-          // Lưu token vào localStorage
-          this.authService.saveToken(response.token);
-
-          // Hiển thị thông báo thành công
-          this.toastr.success('Đăng nhập thành công!', 'Thông báo', {
-            timeOut: 3000,
-          });
-
-          // Chuyển hướng sau khi đăng nhập thành công sau 1 giây
-          setTimeout(() => {
-            this.authService.navigateBasedOnRoleAndStatus();
-          }, 1000);
-        } else {
-          // Nếu không có token trong phản hồi API
-          this.toastr.error('Phiên đăng nhập hết hạn!', 'Lỗi');
-        }
-      });
+    this.authService.login(this.loginRequest).pipe(
+      catchError((error) => {
+        console.error('Lỗi đăng nhập:', error);
+        this.toastr.error('Đăng nhập thất bại, vui lòng thử lại!', 'Lỗi');
+        return of(null);
+      })
+    ).subscribe((response) => {
+      if (response && response.accessToken) {
+        this.toastr.success('Đăng nhập thành công!', 'Thông báo', { timeOut: 3000 });
+        this.authService.checkLoginStatus();
+      }
+    });
   }
 }

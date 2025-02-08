@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductService, Product } from '../../../service/product.service';
 import { ToastrService } from 'ngx-toastr';
+import { TokenService } from 'src/app/service/token.service';
 
 @Component({
   selector: 'app-products',
@@ -32,7 +33,8 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private tokenService: TokenService,
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +43,8 @@ export class ProductsComponent implements OnInit {
 
   // Load danh sách sản phẩm từ API và thiết lập phân trang
   loadProducts(): void {
+      // Log refreshToken
+    this.tokenService.logRefreshToken();
     this.productService.getAllProducts().subscribe(
       (data: Product[]) => {
         this.dataSource.data = data;
