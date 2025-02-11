@@ -1,96 +1,109 @@
 <mat-card class="products-container">
-  <mat-toolbar >
-    <span>Quản lý sản phẩm</span>
-    <span class="spacer"></span>
-    <button mat-raised-button>+ Thêm sản phẩm</button>
+  <mat-toolbar class="header-toolbar">
+    <!-- Ô tìm kiếm -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Tìm kiếm</mat-label>
+      <input #searchInput matInput (input)="applyFilter($event)" placeholder="Nhập từ khóa tìm kiếm" />
+      <button mat-icon-button matSuffix (click)="clearSearch(searchInput)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- Nút xuất Excel -->
+    <button mat-raised-button color="accent" (click)="exportToExcel()">
+      <mat-icon>file_download</mat-icon> Xuất Excel
+    </button>
+    <!-- Nút thêm sản phẩm -->
+    <button mat-raised-button color="primary" (click)="addProduct()">
+      + Thêm sản phẩm
+    </button>
   </mat-toolbar>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-table">
-    <!-- Cột: ID -->
-    <ng-container matColumnDef="productId">
-      <th mat-header-cell *matHeaderCellDef> ID </th>
-      <td mat-cell *matCellDef="let product"> {{ product.productId }} </td>
-    </ng-container>
-
-    <!-- Cột: Brand ID -->
-    <ng-container matColumnDef="brandId">
-      <th mat-header-cell *matHeaderCellDef> Brand ID </th>
-      <td mat-cell *matCellDef="let product"> {{ product.brandId }} </td>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+    <!-- Cột Avatar & Info -->
+    <ng-container matColumnDef="avatarAndInfo">
+      <th mat-header-cell *matHeaderCellDef> Avatar & Info </th>
+      <td mat-cell *matCellDef="let product" class="avatar-and-info">
+        <img [src]="product.thumbnail" alt="{{ product.name }}" class="product-avatar" />
+        <div class="info">
+          <p>ID: {{ product.productId }}</p>
+          <p>Thương hiệu: {{ product.brandId }}</p>
+        </div>
+      </td>
     </ng-container>
 
     <!-- Cột: Tên sản phẩm -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
-      <td mat-cell *matCellDef="let product"> {{ product.name }} </td>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>label</mat-icon> Tên sản phẩm
+      </th>
+      <td mat-cell *matCellDef="let product">
+        <strong>{{ product.name }}</strong>
+      </td>
     </ng-container>
 
     <!-- Cột: Mô tả -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef> Mô tả </th>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>description</mat-icon> Mô tả
+      </th>
       <td mat-cell *matCellDef="let product"> {{ product.description }} </td>
     </ng-container>
 
     <!-- Cột: Giá -->
     <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef> Giá </th>
-      <td mat-cell *matCellDef="let product"> {{ product.price | currency:'VND' }} </td>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>attach_money</mat-icon> Giá
+      </th>
+      <td mat-cell *matCellDef="let product">
+        {{ product.price | currency: 'VND' }}
+      </td>
     </ng-container>
 
     <!-- Cột: Giá khuyến mãi -->
     <ng-container matColumnDef="salePrice">
-      <th mat-header-cell *matHeaderCellDef> Giá KM </th>
-      <td mat-cell *matCellDef="let product"> {{ product.salePrice | currency:'VND' }} </td>
-    </ng-container>
-
-    <!-- Cột: Hình ảnh -->
-    <ng-container matColumnDef="thumbnail">
-      <th mat-header-cell *matHeaderCellDef> Hình ảnh </th>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>local_offer</mat-icon> Giá KM
+      </th>
       <td mat-cell *matCellDef="let product">
-        <img [src]="product.thumbnail" alt="{{ product.name }}" class="product-image" />
+        {{ product.salePrice | currency: 'VND' }}
       </td>
     </ng-container>
 
     <!-- Cột: Trạng thái -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>toggle_on</mat-icon> Trạng thái
+      </th>
       <td mat-cell *matCellDef="let product">
-        <span [ngClass]="{'active': product.status, 'inactive': !product.status}">
-          {{ product.status ? 'ACTIVE' : 'INACTIVE' }}
+        <span class="status-badge" [ngClass]="product.status ? 'active' : 'inactive'">
+          {{ product.status ? 'Hoạt động' : 'Không hoạt động' }}
         </span>
       </td>
     </ng-container>
 
-    <!-- Cột: Ngày tạo -->
-    <!-- <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef> Ngày tạo </th>
-      <td mat-cell *matCellDef="let product"> {{ product.createdAt | date:'shortDate' }} </td>
-    </ng-container> -->
-
-    <!-- Cột: Ngày cập nhật -->
-    <!-- <ng-container matColumnDef="updatedAt">
-      <th mat-header-cell *matHeaderCellDef> Ngày cập nhật </th>
-      <td mat-cell *matCellDef="let product"> {{ product.updatedAt | date:'shortDate' }} </td>
-    </ng-container> -->
-
     <!-- Cột: Hành động -->
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Hành động </th>
+      <th mat-header-cell *matHeaderCellDef>
+        <i class="fas fa-ellipsis-h text-muted"></i> Hành động
+      </th>
       <td mat-cell *matCellDef="let product">
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="onEdit(product)">✏️ Sửa</button>
-          <button mat-menu-item (click)="onDelete(product.productId)">🗑 Xóa</button>
-        </mat-menu>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
+        <!-- Nút Sửa -->
+        <button mat-icon-button class="btn btn-outline-primary btn-sm" (click)="onEdit(product)">
+          <i class="fas fa-edit text-primary"></i>
+        </button>
+        <!-- Nút Xóa -->
+        <button mat-icon-button class="btn btn-outline-danger btn-sm" (click)="onDelete(product.productId)">
+          <i class="fas fa-times text-danger"></i>
         </button>
       </td>
     </ng-container>
+    
 
     <!-- Header và Row -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <!-- MatPaginator hỗ trợ phân trang, giới hạn 5 sản phẩm mỗi trang -->
   <mat-paginator [pageSize]="3" [pageSizeOptions]="[3, 5, 7]" showFirstLastButtons></mat-paginator>
 </mat-card>

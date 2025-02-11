@@ -1,43 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserService } from '../../../service/user.service';  // Import dịch vụ người dùng
+import { MatPaginator } from '@angular/material/paginator';
+import { UserService } from '../../../service/user.service';
+import { User } from 'src/app/types/users/UserResponse';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserManagementComponent implements OnInit {
-  displayedColumns: string[] = ['userId', 'username', 'email', 'fullName', 'phone', 'avatar', 'status', 'roles', 'actions'];
-  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]); 
-  isLoading: boolean = true;
-  searchTerm: string = '';
+export class UserManagementComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private userService: UserService, private http: HttpClient) {}
+  displayedColumns: string[] = ['idEmailAvatar', 'username', 'fullName', 'phone', 'roles', 'status', 'actions'];
+  dataSource: MatTableDataSource<User> = new MatTableDataSource<User>([]);
+  isLoading: boolean = true;
+
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadUsers();
   }
 
-  // Lấy danh sách người dùng từ API
+  ngAfterViewInit(): void {
+    // Liên kết paginator với MatTableDataSource
+    this.dataSource.paginator = this.paginator;
+  }
+
   loadUsers(): void {
-    this.userService.getAllUsers().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);  // Cập nhật lại dataSource với dữ liệu từ API
-      this.isLoading = false;
+    this.isLoading = true;
+    this.userService.getAllUsers().subscribe({
+      next: (data) => {
+        this.dataSource = new MatTableDataSource(data);
+
+        // Đảm bảo paginator được liên kết sau khi dữ liệu được tải
+        this.dataSource.paginator = this.paginator;
+
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Lỗi khi tải danh sách người dùng:', err);
+        this.isLoading = false;
+      }
     });
   }
 
-
-
-  // Thêm người dùng mới
-  addUser(): void {
-    // Logic thêm người dùng mới
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
-  // Sửa người dùng
-  editUser(user: any): void {
-    // Logic sửa người dùng
+  editUser(user: User): void {
+    console.log('Sửa người dùng:', user);
+  }
+
+  deleteUser(userId: number): void {
+    console.log('Xóa người dùng với ID:', userId);
   }
 }

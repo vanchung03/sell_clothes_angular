@@ -1,64 +1,122 @@
 .user-management-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
+  padding: 20px;
+
   .title {
     font-size: 24px;
-    font-weight: 600;
-    color: #333;
+    font-weight: bold;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    mat-icon {
+      color: #1976d2; // Màu xanh dương cho tiêu đề
+      font-size: 28px;
+    }
   }
-  
+
+  .search-bar {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+
+    .search-field {
+      width: 300px;
+    }
+
+    mat-icon {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  .loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+
+    mat-spinner {
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+    }
+  }
+
   .user-list {
-    max-width: 100%;
-    overflow-x: auto;
+    table {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+
+      th {
+        text-align: left;
+        background-color: #f5f5f5;
+        color: #333;
+        font-weight: bold;
+        padding: 10px;
+      }
+
+      td {
+        padding: 10px;
+        vertical-align: middle;
+
+        &.id-email-avatar {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          .avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+          }
+
+          .info {
+            display: flex;
+            flex-direction: column;
+
+            p {
+              margin: 0;
+
+              strong {
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+
+      .role {
+        display: inline-block;
+        background-color: #e0f7fa;
+        color: #00796b;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-right: 5px;
+        font-size: 12px;
+      }
+
+      mat-icon {
+        font-size: 18px;
+      }
+    }
   }
-  
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  
-  .role {
-    display: inline-block;
-    margin-right: 5px;
-    padding: 2px 8px;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    font-size: 12px;
-    color: #333;
-  }
-  
-  button {
-    padding: 8px 16px;
-    margin-right: 10px;
-    border-radius: 4px;
-  }
-  
-  .actions {
+
+  mat-paginator {
     margin-top: 20px;
+
+    .mat-paginator-range-label {
+      font-size: 14px;
+    }
   }
-  
-  mat-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  mat-header-cell, mat-cell {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #ddd;
-  }
-  
-  mat-header-row {
-    background-color: #f4f4f4;
-  }
-  
-  button {
-    font-size: 14px;
-  }
-  
+}

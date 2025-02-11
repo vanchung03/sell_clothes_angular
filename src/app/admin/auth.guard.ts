@@ -15,7 +15,6 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.tokenService.isTokenExpired()) {
-      this.toastr.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại!', 'Lỗi');  // Hiển thị thông báo lỗi
       this.router.navigate(['/login']);
       return false;
     }

@@ -12,7 +12,7 @@ import { AdminLayoutComponent } from './component/index-layout/index.component';
 
 @NgModule({
   declarations: [
-    DashboardComponent,  // Khai báo ở đây một lần duy nhất
+    DashboardComponent,  
     UserManagementComponent,
     SettingsComponent,
     ProductsComponent,

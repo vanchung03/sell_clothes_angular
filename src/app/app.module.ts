@@ -6,29 +6,27 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { PageNotFoundComponent } from './exception/page-not-found.component';
-import { CookieService } from 'ngx-cookie-service';  // Import CookieService
 // Import MaterialModule
 import { MaterialModule } from './material.module'; 
-
 // Import admin and pages module
 import { AdminModule } from './admin/admin.module';  
 import { PagesModule } from './pages/pages.module';
 // Import auth module
 import { AuthModule } from './auth/auth.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth/auth.Interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+
   ],
   imports: [
     AdminModule,
     MaterialModule,  
     PagesModule,
     AuthModule,
-    
-    
 
     BrowserModule,
     AppRoutingModule,
@@ -36,7 +34,13 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [CookieService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

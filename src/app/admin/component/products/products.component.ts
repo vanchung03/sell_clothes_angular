@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductService, Product } from '../../../service/product.service';
 import { ToastrService } from 'ngx-toastr';
-import { TokenService } from 'src/app/service/token.service';
 
 @Component({
   selector: 'app-products',
@@ -13,18 +12,36 @@ import { TokenService } from 'src/app/service/token.service';
 export class ProductsComponent implements OnInit {
   // Danh sách các cột hiển thị (phải khớp với template)
   displayedColumns: string[] = [
-    'productId',
-    'brandId',
+    'avatarAndInfo', // Tên cột phải khớp với matColumnDef
     'name',
     'description',
     'price',
     'salePrice',
-    'thumbnail',
     'status',
-    // 'createdAt',
-    // 'updatedAt',
-    'actions'
+    'actions',
   ];
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
+  clearSearch(inputElement: HTMLInputElement) {
+    inputElement.value = ''; // Xóa nội dung trong ô nhập
+    this.applyFilter({ target: inputElement } as unknown as Event); // Áp dụng bộ lọc với giá trị trống
+  }
+  
+  
+  exportToExcel() {
+    // Logic xuất file Excel, có thể sử dụng thư viện như xlsx
+    console.log('Xuất file Excel!');
+  }
+  
+  addProduct() {
+    // Điều hướng hoặc mở dialog thêm sản phẩm
+    console.log('Thêm sản phẩm!');
+  }
+  
+  
 
   // Sử dụng MatTableDataSource để hỗ trợ phân trang, lọc, …  
   dataSource = new MatTableDataSource<Product>();
@@ -34,7 +51,6 @@ export class ProductsComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private toastr: ToastrService,
-    private tokenService: TokenService,
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +60,6 @@ export class ProductsComponent implements OnInit {
   // Load danh sách sản phẩm từ API và thiết lập phân trang
   loadProducts(): void {
       // Log refreshToken
-    this.tokenService.logRefreshToken();
     this.productService.getAllProducts().subscribe(
       (data: Product[]) => {
         this.dataSource.data = data;

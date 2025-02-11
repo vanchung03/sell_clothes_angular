@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { TokenService } from './token.service';
 import { LoginRequest } from '../types/auth/LoginRequest';
 import { RegisterRequest } from '../types/auth/RegisterRequest';
-import { CookieService } from 'ngx-cookie-service'; // Import CookieService
+import { CookieService } from 'ngx-cookie-service';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +13,7 @@ export class AuthService {
 
   private apiUrl = 'http://localhost:8080/api/auth';
 
-  constructor(private http: HttpClient, private router: Router, private tokenService: TokenService,private cookieService: CookieService ){ }
+  constructor(private http: HttpClient, private router: Router, private tokenService: TokenService, private cookieService: CookieService) { }
   // Gửi OTP
   requestOTP(email: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/request-otp`, { email });
@@ -50,60 +50,48 @@ export class AuthService {
     // this.tokenService.removeToken();
     this.router.navigateByUrl('/login');
   }
-
-  // Hàm làm mới accessToken  // Hàm làm mới accessToken
-  refreshAccessToken(): Observable<any> {
-    const refreshToken = this.tokenService.getRefreshToken();  // Lấy refreshToken từ cookie
+  refreshAccessToken(): Observable<string | null> {
+    const refreshToken = this.tokenService.getRefreshToken();
+    console.log('Refresh Token:', refreshToken); // Kiểm tra refresh token
 
     if (!refreshToken) {
-      console.error('Refresh token không có trong cookie');
-      this.logout();  // Nếu không có refreshToken thì đăng xuất
+      console.error('Không có refreshToken');
+      this.logout();
       return of(null);
     }
-
-    // Kiểm tra token còn hiệu lực hay không
-    // Gửi yêu cầu làm mới accessToken
+    // Gửi yêu cầu làm mới token đến server
     return this.http.post<any>(`${this.apiUrl}/refresh`, { refreshToken }, { withCredentials: true }).pipe(
       switchMap((response) => {
+        console.log('Refresh Response:', response);
         if (response && response.accessToken) {
-          // Lưu accessToken mới vào localStorage
           this.tokenService.saveToken(response.accessToken);
-          return of(response.accessToken);  // Trả về accessToken mới
+          return of(response.accessToken);
         } else {
-          console.error('Không nhận được accessToken mới');
-          this.logout();  // Đăng xuất nếu không nhận được accessToken mới
+          this.logout();
           return of(null);
         }
       }),
       catchError((error) => {
-        console.error('Lỗi làm mới token:', error);
-        this.logout();  // Đăng xuất nếu có lỗi trong quá trình làm mới token
+        console.error('Lỗi khi làm mới token:', error);
+        this.logout();
         return of(null);
       })
     );
   }
 
-  // Kiểm tra trạng thái đăng nhập
   checkLoginStatus() {
     if (this.tokenService.isTokenExpired()) {
-      console.log('Token hết hạn, làm mới...');
-      this.refreshAccessToken().pipe(
-        switchMap((refreshResponse) => {
-          if (refreshResponse && refreshResponse.accessToken) {
-            this.tokenService.saveToken(refreshResponse.accessToken);
-            return of(true);
-          } else {
-            this.router.navigateByUrl('/login');
-            return of(false);
-          }
-        })
-      ).subscribe();
+      this.refreshAccessToken().subscribe((newToken) => {
+        if (newToken) {
+          this.navigateBasedOnRoleAndStatus();
+        } else {
+          this.router.navigateByUrl('/login');
+        }
+      });
     } else {
       this.navigateBasedOnRoleAndStatus();
     }
   }
-
-
   // Chuyển hướng theo quyền & trạng thái
   navigateBasedOnRoleAndStatus() {
     const roles = this.tokenService.getRoles();
@@ -118,7 +106,7 @@ export class AuthService {
         console.error('Không xác định quyền truy cập');
       }
     } else {
-      console.error('Trạng thái người dùng không hợp lệ');
+      console.error('Tài khoản người dùng đã bị khóa');
       this.router.navigateByUrl('/login');
     }
   }

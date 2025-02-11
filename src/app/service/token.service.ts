@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import jwt_decode from 'jwt-decode';
-import { CookieService } from 'ngx-cookie-service';  // Import CookieService
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
   private tokenKey = 'accessToken';
-  private refreshTokenKey = 'refreshToken';  // Key cho refreshToken
+  private refreshTokenKey = 'refreshToken'; 
 
   constructor(private cookieService: CookieService) {}
 
@@ -15,7 +15,6 @@ export class TokenService {
   saveToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
   }
-
   // Lấy accessToken từ localStorage
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
@@ -23,25 +22,12 @@ export class TokenService {
 
   // Lấy refreshToken từ cookie
   getRefreshToken(): string | null {
-    return this.cookieService.get(this.refreshTokenKey);  // Lấy refreshToken từ cookie
+    return this.cookieService.get(this.refreshTokenKey);
   }
-
-  // Hàm log refreshToken ra console
-  logRefreshToken(): void {
-    const refreshToken = this.getRefreshToken();
-    if (refreshToken) {
-      console.log(document.cookie);  // In tất cả cookie hiện tại
-      console.log('Refresh Token: ', refreshToken);
-    } else {
-      console.log(document.cookie);  // In tất cả cookie hiện tại
-      console.log('Không tìm thấy refresh token trong cookie.');
-    }
-  }
-
   // // Lưu refreshToken vào cookie
-  // saveRefreshToken(token: string): void {
-  //   this.cookieService.set(this.refreshTokenKey, token);  // Lưu refreshToken vào cookie
-  // }
+  saveRefreshToken(token: string): void {
+    this.cookieService.set(this.refreshTokenKey, token); 
+  }
 
   // Xóa accessToken khỏi localStorage
   removeToken(): void {
@@ -50,20 +36,18 @@ export class TokenService {
 
   // Xóa refreshToken khỏi cookie
   removeRefreshToken(): void {
-    this.cookieService.delete(this.refreshTokenKey);  // Xóa refreshToken khỏi cookie
+    this.cookieService.delete(this.refreshTokenKey);
   }
 
   // Giải mã accessToken
   decodeToken(): any {
     const token = this.getToken();
     if (!token) {
-      console.error('Token không tồn tại');
       return null;
     }
     try {
       return jwt_decode<any>(token);
     } catch (error) {
-      console.error('Lỗi giải mã token:', error);
       return null;
     }
   }
@@ -84,7 +68,6 @@ export class TokenService {
   isTokenExpired(): boolean {
     const decodedToken = this.decodeToken();
     if (!decodedToken) return true;
-
     const currentTime = Math.floor(Date.now() / 1000);
     return decodedToken.exp < currentTime;
   }

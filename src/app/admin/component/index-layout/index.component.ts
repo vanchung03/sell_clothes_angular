@@ -1,39 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'; // Import Router
+import { Component, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class AdminLayoutComponent implements OnInit {
-  [x: string]: any;
-  sidebarOpen = true;
-  isDarkMode = false;
-  constructor(private router: Router) {} // Inject Router
-  ngOnInit() {
-    // Kiểm tra chế độ sáng/tối khi tải lại trang
-    const savedMode = localStorage.getItem('dark-mode');
-    if (savedMode === 'enabled') {
-      this.isDarkMode = true;
-      document.body.classList.add('dark-mode'); // Thêm lớp dark-mode vào body
-    } else {
-      this.isDarkMode = false;
-      document.body.classList.remove('dark-mode'); // Thêm lớp dark-mode vào body nếu không có
-    }
-  }
+export class AdminLayoutComponent {
+  isDarkMode = false; // Trạng thái chế độ sáng/tối
+  showMenu = false;
+  constructor(private router: Router, private renderer: Renderer2) {}
 
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen;
-  }
-
-  toggleDarkMode() {
+  toggleTheme(): void {
     this.isDarkMode = !this.isDarkMode;
+    const body = document.body;
     if (this.isDarkMode) {
-      document.body.classList.add('dark-mode'); // Thêm lớp dark-mode vào body
-      localStorage.setItem('dark-mode', 'enabled'); // Lưu trạng thái vào localStorage
+      this.renderer.addClass(body, 'dark-theme');
+      this.renderer.removeClass(body, 'light-theme');
     } else {
-      document.body.classList.remove('dark-mode'); // Xóa lớp dark-mode khỏi body
-      localStorage.setItem('dark-mode', 'disabled'); // Lưu trạng thái vào localStorage
+      this.renderer.addClass(body, 'light-theme');
+      this.renderer.removeClass(body, 'dark-theme');
     }
   }
 
@@ -41,5 +27,4 @@ export class AdminLayoutComponent implements OnInit {
     localStorage.removeItem('accessToken');
     this.router.navigateByUrl('/login');
   }
-  
 }

@@ -12,6 +12,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatTreeModule } from '@angular/material/tree'; // Import MatTreeModule
+import { MatExpansionModule } from '@angular/material/expansion'; // Import thêm module này
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   exports: [
@@ -29,6 +31,8 @@ import { MatTreeModule } from '@angular/material/tree'; // Import MatTreeModule
     FormsModule,  
     MatMenuModule, 
     MatTreeModule,
+    MatExpansionModule, // Import thêm module này
+    MatProgressSpinnerModule, // Import thêm module này
     
   ]
 })
