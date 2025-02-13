@@ -1,20 +1,9 @@
+// src/app/service/product.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Product {
-  productId: number;
-  categoryId: number;
-  brandId: number;
-  name: string;
-  description: string;
-  price: number;
-  salePrice: number;
-  thumbnail: string;
-  status: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Product } from '../types/products'; // Import từ file mới
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +13,6 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  // Hàm tạo headers với JWT Token
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     return new HttpHeaders({
@@ -32,6 +20,7 @@ export class ProductService {
       'Content-Type': 'application/json',
     });
   }
+
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl, { headers: this.getAuthHeaders() });
   }

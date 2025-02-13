@@ -10,11 +10,11 @@
     </mat-form-field>
 
     <!-- Nút xuất Excel -->
-    <button mat-raised-button color="accent" (click)="exportToExcel()">
+    <button mat-raised-button (click)="exportToExcel()">
       <mat-icon>file_download</mat-icon> Xuất Excel
     </button>
     <!-- Nút thêm sản phẩm -->
-    <button mat-raised-button color="primary" (click)="addProduct()">
+    <button mat-raised-button (click)="addProduct()">
       + Thêm sản phẩm
     </button>
   </mat-toolbar>
@@ -26,8 +26,8 @@
       <td mat-cell *matCellDef="let product" class="avatar-and-info">
         <img [src]="product.thumbnail" alt="{{ product.name }}" class="product-avatar" />
         <div class="info">
-          <p>ID: {{ product.productId }}</p>
-          <p>Thương hiệu: {{ product.brandId }}</p>
+          <p><mat-icon>lock</mat-icon>: {{ product.productId }}</p>
+          <p><mat-icon>business</mat-icon>: {{ product.brandId }}</p>
         </div>
       </td>
     </ng-container>

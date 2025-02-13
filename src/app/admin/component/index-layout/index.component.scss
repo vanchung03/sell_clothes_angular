@@ -7,8 +7,7 @@
 
 .sidenav {
   width: 250px;
-  background-color: #2c3e50;
-  color: #ecf0f1;
+  color: #000304;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -17,7 +16,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #34495e;
   padding: 16px;
 
   .profile-info {
@@ -43,10 +41,10 @@
       flex-direction: column;
       color: #ecf0f1;
 
-      .email {
+      .namestore {
         font-size: 0.9rem;
         font-weight: bold;
-        color: #ecf0f1;
+        color: #303b3e;
       }
       .status {
         font-size: 0.8rem;
@@ -57,36 +55,37 @@
 }
 
 //
+.mat-icon{
+  font-size: 20px;
+  margin-right: 10px;
+}
 
 .sidenav-header {
   font-size: 1.5rem;
   font-weight: bold;
   color: #ecf0f1;
   text-transform: uppercase;
-  background-color: #34495e;
   padding: 16px;
 }
 
-mat-expansion-panel {
-  background-color: #2c3e50;
-  border: none;
+::ng-deep mat-expansion-panel {
+  border: none !important;
+  box-shadow: none !important;
 }
 
+
 mat-expansion-panel-header {
-  padding: 0 16px;
+  padding: 0 10px;
   color: #ecf0f1;
-  background-color: #2c3e50;
   border-radius: 4px;
 }
 
 mat-expansion-panel-header:hover {
-  background-color: #1abc9c;
-  border-radius: 4px;
+  background-color: #c9e9e2;
 }
 
 .menu-item,
 .submenu-item {
-  color: white !important;
   text-decoration: none;
   padding: 10px 16px;
   border-radius: 4px;
@@ -95,7 +94,7 @@ mat-expansion-panel-header:hover {
 
   // Hiệu ứng hover
   &:hover {
-    background-color: #1abc9c;
+    background-color: #b8d7d1;
   }
 
   // Thanh lướt chạy
@@ -106,7 +105,7 @@ mat-expansion-panel-header:hover {
     left: 0;
     width: 0;
     height: 3px;
-    background-color: #16a085;
+    background-color: #233935;
     transition: width 0.3s ease-in-out; // Tạo hiệu ứng mượt
   }
 
@@ -116,7 +115,7 @@ mat-expansion-panel-header:hover {
 }
 
 .active-menu {
-  background-color: #16a085;
+  background-color: #b8d7d1;
   border-radius: 4px;
 
   // Khi menu đang được active, thanh lướt chạy luôn hiển thị
@@ -127,18 +126,17 @@ mat-expansion-panel-header:hover {
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #1abc9c;
+    background-color: #b8d7d1;
   }
 }
 
 
 mat-toolbar {
-  background-color:#2c3e50;
-  color: white;
+  color: rgb(0, 0, 0);
   display: flex;
   align-items: center;
   padding: 0 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 100%;
 }
 
@@ -217,21 +215,21 @@ mat-menu-item {
 }
 
 mat-menu-item:hover {
-  background-color: #1abc9c;
+  background-color: #23322f;
 }
 ::ng-deep mat-expansion-panel {
   color: #ffffff;
 }
 
 
-::ng-deep mat-expansion-panel-header mat-icon,
-::ng-deep mat-nav-list a,
-::ng-deep mat-nav-list span,
-::ng-deep mat-nav-list mat-icon,
-::ng-deep mat-expansion-panel span,
-::ng-deep mat-expansion-panel mat-icon {
-  color: #ffffff !important;
-}
+// ::ng-deep mat-expansion-panel-header mat-icon,
+// ::ng-deep mat-nav-list a,
+// ::ng-deep mat-nav-list span,
+// ::ng-deep mat-nav-list mat-icon,
+// ::ng-deep mat-expansion-panel span,
+// ::ng-deep mat-expansion-panel mat-icon {
+//   color: #ffffff !important;
+// }
 
 //filter-toolbar
 .filter-toolbar {
@@ -307,5 +305,136 @@ mat-sidenav-content {
         color: #ffffff; // Đổi màu chữ thành trắng
       }
     }
+  } 
+}
+
+
+.profile-form {
+  position: relative;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+  .form-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    
+    button {
+      width: auto;
+      min-width: 80px;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .profile-form-container {
+    padding-top: 50px;
+    text-align: center;
+
+    .avatar-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+
+      .avatar-center {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+      }
+
+      .edit-avatar-btn {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        padding: 5px;
+        border-radius: 50%;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.8);
+        }
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+    }
+
+    .form-fields-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+
+      .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+
+        mat-form-field {
+          width: 100%;
+        }
+
+        mat-icon {
+          margin-right: 8px;
+          color: #7f8c8d;
+        }
+
+        input[readonly] {
+          background-color: #e9ecef;
+        }
+
+        input {
+          transition: background-color 0.3s ease;
+          
+          &:focus {
+            background-color: #fff;
+            border: 1px solid #007bff;
+          }
+        }
+      }
+
+      .full-width {
+        width: 100%;
+      }
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .mat-form-field {
+    border-radius: 4px;
+    box-shadow: none;
+    margin-bottom: 10px;
+
+    input[readonly] {
+      background-color: #f0f0f0;
+    }
+  }
+
+  .mat-icon {
+    color: #007bff;
   }
 }

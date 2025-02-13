@@ -1,90 +1,89 @@
-<div class="user-management-container">
-  <!-- Tiêu đề với icon -->
-  <h2 class="title">
-    <mat-icon>group</mat-icon>
-    Quản Lý Người Dùng
-  </h2>
-
-  <!-- Ô tìm kiếm -->
-  <div class="search-bar">
-    <mat-form-field class="search-field" appearance="outline">
+<mat-card class="user-management-container">
+  <mat-toolbar class="header-toolbar">
+    <mat-form-field appearance="outline" class="search-field">
       <mat-label>Tìm kiếm</mat-label>
-      <input matInput (input)="applyFilter($event)" placeholder="Nhập từ khóa tìm kiếm" />
-      <button mat-icon-button matSuffix (click)="applyFilter($event)">
-        <mat-icon>search</mat-icon>
+      <input #searchInput matInput (input)="applyFilter($event)" placeholder="Nhập từ khóa tìm kiếm" />
+      <button mat-icon-button matSuffix (click)="clearSearch(searchInput)">
+        <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
-  </div>
 
-  <!-- Hiển thị trạng thái tải -->
-  <div *ngIf="isLoading" class="loading-indicator">
-    <mat-spinner></mat-spinner>
-    <p>Đang tải dữ liệu...</p>
-  </div>
+    <button mat-raised-button (click)="exportToExcel()">
+      <mat-icon>file_download</mat-icon> Xuất Excel
+    </button>
 
-  <!-- Danh sách người dùng -->
-  <div class="user-list" *ngIf="!isLoading">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <!-- Cột ID, Email và Avatar -->
-      <ng-container matColumnDef="idEmailAvatar">
-        <th mat-header-cell *matHeaderCellDef><mat-icon>badge</mat-icon> ID, Email & Avatar</th>
-        <td mat-cell *matCellDef="let user" class="id-email-avatar">
-          <div class="avatar">
-            <img *ngIf="user.avatar" [src]="user.avatar" alt="Avatar" />
-          </div>
-          <div class="info">
-            <p><strong>ID:</strong> {{ user.userId }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-          </div>
-        </td>
-      </ng-container>
-  
-      <!-- Các cột khác -->
-      <ng-container matColumnDef="username">
-        <th mat-header-cell *matHeaderCellDef><mat-icon>person</mat-icon> Tên Người Dùng</th>
-        <td mat-cell *matCellDef="let user">{{ user.username }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="fullName">
-        <th mat-header-cell *matHeaderCellDef><mat-icon>badge</mat-icon> Họ và Tên</th>
-        <td mat-cell *matCellDef="let user">{{ user.fullName }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef><mat-icon>phone</mat-icon> Số Điện Thoại</th>
-        <td mat-cell *matCellDef="let user">{{ user.phone }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="roles">
-        <th mat-header-cell *matHeaderCellDef><mat-icon>account_circle</mat-icon> Vai Trò</th>
-        <td mat-cell *matCellDef="let user">
-          <span *ngFor="let role of user.roles" class="role">{{ role.name }}</span>
-          <span *ngIf="!user.roles || user.roles.length === 0">Chưa có vai trò</span>
-        </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef><mat-icon>toggle_on</mat-icon> Trạng Thái</th>
-        <td mat-cell *matCellDef="let user">{{ user.status === 1 ? 'Active' : 'Inactive' }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef><mat-icon>settings</mat-icon> Hành Động</th>
-        <td mat-cell *matCellDef="let user">
-          <button mat-icon-button color="primary" (click)="editUser(user)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="deleteUser(user.userId)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  
-    <!-- Phân trang -->
-    <mat-paginator [pageSize]="3" [pageSizeOptions]="[3, 5, 7]" showFirstLastButtons></mat-paginator>
-  </div>  
-</div>
+    <button mat-raised-button  (click)="addUser()">
+      + Thêm người dùng
+    </button>
+  </mat-toolbar>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+    <ng-container matColumnDef="idEmailAvatar">
+      <th mat-header-cell *matHeaderCellDef><mat-icon>badge</mat-icon> ID, Email & Avatar</th>
+      <td mat-cell *matCellDef="let user" class="avatar-and-info">
+        <img *ngIf="user.avatar" [src]="user.avatar" alt="Avatar" class="user-avatar" />
+        <div class="info">
+          <p><strong><mat-icon>lock</mat-icon>{{ user.userId }}</strong></p>
+          <p><strong><mat-icon>email</mat-icon>{{ user.email }}</strong></p>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef><mat-icon>person</mat-icon> Tên Người Dùng</th>
+      <td mat-cell *matCellDef="let user">{{ user.username }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef><mat-icon>badge</mat-icon> Họ và Tên</th>
+      <td mat-cell *matCellDef="let user">{{ user.fullName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef><mat-icon>phone</mat-icon> Số Điện Thoại</th>
+      <td mat-cell *matCellDef="let user">{{ user.phone }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="roles">
+      <th mat-header-cell *matHeaderCellDef><mat-icon>account_circle</mat-icon> Vai Trò</th>
+      <td mat-cell *matCellDef="let user">
+        <span *ngFor="let role of user.roles" class="role">{{ role.name }}</span>
+        <span *ngIf="!user.roles || user.roles.length === 0">Chưa có vai trò</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>toggle_on</mat-icon> Trạng Thái
+      </th>
+      <td mat-cell *matCellDef="let user">
+        <span class="status-badge" [ngClass]="{'active': user.status === 1, 'inactive': user.status !== 1}">
+          {{ user.status === 1 ? 'Active' : 'Inactive' }}
+        </span>
+        <mat-icon (click)="toggleStatus(user)"
+          [ngClass]="{'icon-active': user.status === 1, 'icon-inactive': user.status !== 1}">
+          {{ user.status === 1 ? 'toggle_on' : 'toggle_off' }}
+        </mat-icon>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>
+        <i class="fas fa-ellipsis-h text-muted"></i> Hành động
+      </th>
+      <td mat-cell *matCellDef="let user">
+        <button mat-icon-button class="btn btn-outline-primary btn-sm" (click)="editUser(user)">
+          <i class="fas fa-edit text-primary"></i>
+        </button>
+        <button mat-icon-button class="btn btn-outline-danger btn-sm" (click)="deleteUser(user.userId)">
+          <i class="fas fa-times text-danger"></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSize]="3" [pageSizeOptions]="[3, 5, 7]" showFirstLastButtons></mat-paginator>
+</mat-card>

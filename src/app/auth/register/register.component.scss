@@ -134,3 +134,12 @@
     }
   }
 }
+.footer-left {
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    margin-right: 0.5rem; // Khoảng cách giữa icon và chữ
+    font-size: 1.2rem;
+  }
+}

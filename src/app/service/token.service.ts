@@ -71,4 +71,9 @@ export class TokenService {
     const currentTime = Math.floor(Date.now() / 1000);
     return decodedToken.exp < currentTime;
   }
+   // Lấy user_id từ token (user_id là dạng string)
+   getUserId(): number | null {
+    const decodedToken = this.decodeToken();
+    return decodedToken?.user_id || null; // Assuming 'userId' is stored as a string in the token payload
+  }
 }

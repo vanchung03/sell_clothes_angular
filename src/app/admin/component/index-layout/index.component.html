@@ -17,7 +17,7 @@
       <!-- Dashboard -->
       <a mat-list-item routerLink="/dashboard" routerLinkActive="active-menu" class="menu-item">
         <mat-icon>home</mat-icon>
-        <span>Dashboard</span>
+        <span> Dashboard</span>
       </a>
 
       <!-- Nested Menu for Users -->
@@ -65,14 +65,14 @@
       </mat-expansion-panel>
 
       <!-- Nested Menu for Orders -->
-      <mat-expansion-panel >
+      <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <mat-icon >shopping_cart</mat-icon>
+            <mat-icon>shopping_cart</mat-icon>
             <span>Orders</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <mat-nav-list >
+        <mat-nav-list>
           <!-- All Orders -->
           <a mat-list-item routerLink="/all-orders" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>list</mat-icon>
@@ -139,7 +139,7 @@
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <span class="title">HOME</span>
+      <span class="title">Home</span>
       <span class="spacer"></span>
       <button mat-icon-button>
         <mat-icon>notifications</mat-icon>
@@ -156,24 +156,112 @@
         <img src="https://i.pinimg.com/originals/48/7e/7a/487e7ae852ddc21342b56c28d9159b36.jpg" alt="Avatar"
           class="avatar" />
         <div class="profile-dropdown" *ngIf="showMenu">
-          <button mat-menu-item>
+          <button mat-menu-item (click)="toggleProfileForm()">
             <mat-icon>person</mat-icon>
             <span>Profile</span>
           </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
-          </button>          
+          </button>
         </div>
       </div>
     </mat-toolbar>
+    <!-- Profile Form (Hidden by default) -->
+    <div *ngIf="isProfileFormVisible" class="profile-form">
+      <!-- Edit and Save Buttons -->
+      <div class="form-actions">
+        <button *ngIf="!isEditing" mat-raised-button color="primary" (click)="startEditing()">Edit</button>
+        <button *ngIf="isEditing" mat-raised-button color="accent" (click)="saveChanges()">Save</button>
+      </div>
+
+      <form class="profile-form-container">
+        <!-- Avatar and Edit Button -->
+        <div class="avatar-container">
+          <img [src]="user.avatar" alt="Avatar" class="avatar-center" />
+          <button mat-icon-button class="edit-avatar-btn" (click)="editAvatar()">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <input type="file" accept="image/*" #fileInput (change)="onFileSelected($event)" hidden />
+        </div>
+
+        <!-- Form fields -->
+        <div class="form-fields-container">
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Username</mat-label>
+              <input matInput [(ngModel)]="user.username" name="username" [readonly]="!isEditing" />
+              <mat-icon matPrefix>person</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <mat-label>Password</mat-label>
+                <input type="password" matInput [(ngModel)]="user.newPassword" name="newPassword" [readonly]="!isEditing" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput [(ngModel)]="user.email" name="email" [readonly]="!isEditing" />
+              <mat-icon matPrefix>email</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Full Name</mat-label>
+              <input matInput [(ngModel)]="user.fullName" name="fullName" [readonly]="!isEditing" />
+              <mat-icon matPrefix>account_circle</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Phone</mat-label>
+              <input matInput [(ngModel)]="user.phone" name="phone" [readonly]="!isEditing" />
+              <mat-icon matPrefix>phone</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Status</mat-label>
+              <input matInput [value]="user.status === 1 ? 'Active' : 'Inactive'" readonly />
+              <mat-icon matPrefix>check_circle</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Created At</mat-label>
+              <input matInput [value]="user.createdAt" readonly />
+              <mat-icon matPrefix>calendar_today</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Updated At</mat-label>
+              <input matInput [value]="user.updatedAt" readonly />
+              <mat-icon matPrefix>update</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Roles</mat-label>
+              <input matInput [value]="userRoles" readonly />
+              <mat-icon matPrefix>group</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+
     <!-- Thêm thanh tìm kiếm và các nút -->
     <!-- <div class="filter-toolbar">
-      <mat-form-field class="search-field" appearance="outline">
-        <mat-label>Search</mat-label>
-        <input matInput type="text" placeholder="Enter keyword..." />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+      Ô tìm kiếm
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Tìm kiếm</mat-label>
+      <input #searchInput matInput (input)="applyFilter($event)" placeholder="Nhập từ khóa tìm kiếm" />
+      <button mat-icon-button matSuffix (click)="clearSearch(searchInput)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
 
       <div class="filter-buttons">
         <button mat-raised-button color="primary">
@@ -193,18 +281,18 @@
     <div class="additional-content">
       <router-outlet></router-outlet>
     </div>
-      <!-- Footer -->
-      <mat-toolbar color="primary" class="footer-toolbar">
-        <div class="footer-left">
-          <mat-icon>copyright</mat-icon>
-          <span>2025 Serenity. All rights reserved.</span>
-        </div>
-        <div class="footer-right">
-          <a mat-button href="#">Privacy Policy</a>
-          <a mat-button href="#">Terms of Service</a>
-          <a mat-button href="#">Contact Us</a>
-        </div>
-      </mat-toolbar>
-   
+    <!-- Footer -->
+    <mat-toolbar color="primary" class="footer-toolbar">
+      <div class="footer-left">
+        <mat-icon>copyright</mat-icon>
+        <span>2025 Serenity. All rights reserved by Mr. Chungcoder !</span>
+      </div>
+      <div class="footer-right">
+        <a mat-button href="#">Privacy Policy</a>
+        <a mat-button href="#">Terms of Service</a>
+        <a mat-button href="#">Contact Us</a>
+      </div>
+    </mat-toolbar>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

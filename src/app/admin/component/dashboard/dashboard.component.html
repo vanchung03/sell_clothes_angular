@@ -53,8 +53,12 @@
         </mat-card-header>
         <mat-card-content>
           <div class="chart">
-            <!-- Đây là nơi bạn có thể thêm biểu đồ của bạn -->
-            <img src="" alt="Sales Chart" />
+            <canvas baseChart
+              [datasets]="salesData"
+              [labels]="salesLabels"
+              [options]="chartOptions"
+              [legend]="true">
+            </canvas>
           </div>
         </mat-card-content>
       </mat-card>
@@ -67,8 +71,12 @@
         </mat-card-header>
         <mat-card-content>
           <div class="chart">
-            <!-- Đây là nơi bạn có thể thêm biểu đồ của bạn -->
-            <img src="" alt="Customer Growth Chart" />
+            <canvas baseChart
+              [datasets]="growthData"
+              [labels]="growthLabels"
+              [options]="chartOptions"
+              [legend]="true">
+            </canvas>
           </div>
         </mat-card-content>
       </mat-card>
