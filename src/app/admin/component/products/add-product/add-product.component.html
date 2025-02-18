@@ -1,0 +1,104 @@
+<div class="add-product-container">
+    <!-- ✅ Tiêu đề -->
+    <h2 class="title">Thêm sản phẩm mới</h2>
+
+    <!-- ✅ Form Thêm sản phẩm -->
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+            <h3>Thông tin sản phẩm</h3>
+
+            <div class="form-group">
+                <label>Tên sản phẩm</label>
+                <input type="text" formControlName="name" placeholder="Nhập tên sản phẩm" />
+            </div>
+
+            <div class="form-group">
+                <label>Mô tả sản phẩm</label>
+                <textarea formControlName="description" placeholder="Nhập mô tả sản phẩm"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Giá gốc</label>
+                    <input type="number" formControlName="price" placeholder="0.00" />
+                </div>
+
+                <div class="form-group">
+                    <label>Giá khuyến mãi</label>
+                    <input type="number" formControlName="sale_price" placeholder="0.00" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Danh mục</label>
+                    <select formControlName="category_id">
+                        <!-- <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option> -->
+                        <option> category1</option>
+                        <option> category2</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Thương hiệu</label>
+                    <select formControlName="brand_id">
+                        <!-- <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option> -->
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Trạng thái</label>
+                <select formControlName="status">
+                    <option value="1">Hoạt động</option>
+                    <option value="0">Không hoạt động</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ✅ Upload Hình Ảnh -->
+        <div class="form-section">
+            <h3>Hình ảnh sản phẩm</h3>
+            <input type="file" multiple (change)="onFileSelected($event)" />
+            <div class="image-preview" *ngFor="let image of imagePreviews; let i = index">
+                <img [src]="image" alt="Ảnh sản phẩm" />
+                <button (click)="removeImage(i)">X</button>
+            </div>
+        </div>
+
+        <!-- ✅ Biến thể sản phẩm -->
+        <div class="form-section">
+            <h3>Biến thể sản phẩm</h3>
+
+            <div class="variant-row" *ngFor="let variant of variants; let i = index">
+                <!-- Chọn Màu sắc -->
+                <select [(ngModel)]="variant.color" (change)="updateSKU(i)">
+                    <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
+                </select>
+
+                <!-- Chọn Size -->
+                <select [(ngModel)]="variant.size" (change)="updateSKU(i)">
+                    <option *ngFor="let size of sizes" [value]="size">{{ size }}</option>
+                </select>
+
+                <!-- SKU tự động tạo -->
+                <input type="text" [(ngModel)]="variant.sku" placeholder="SKU" readonly />
+
+                <input type="number" [(ngModel)]="variant.price" placeholder="Giá" />
+                <input type="number" [(ngModel)]="variant.stock_quantity" placeholder="Số lượng" />
+
+                <button (click)="removeVariant(i)">X</button>
+            </div>
+
+            <button (click)="addVariant()">➕ Thêm biến thể</button>
+        </div>
+
+
+
+        <!-- ✅ Nút Lưu -->
+        <button type="submit" class="save-btn">💾 Lưu sản phẩm</button>
+    </form>
+</div>

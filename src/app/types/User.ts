@@ -9,5 +9,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   status: number;
-  roles: { name: string }[];
+  roles: {
+    [x: string]: any; name: string 
+}[];
 }

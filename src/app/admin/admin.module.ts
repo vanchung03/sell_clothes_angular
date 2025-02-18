@@ -11,6 +11,9 @@ import { SettingsComponent } from './component/settings/settings.component';
 import { ProductsComponent } from './component/products/products.component';
 import { ReportsComponent } from './component/reports/reports.component';
 import { AdminLayoutComponent } from './component/index-layout/index.component';
+import { AddProductComponent } from './component/products/add-product/add-product.component';
+import { AddUserComponent } from './component/users/add-user/add-user.component';
+import { UpdateUserComponent } from './component/users/update-user/update-user.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +23,9 @@ import { AdminLayoutComponent } from './component/index-layout/index.component';
     ProductsComponent,
     ReportsComponent,
     AdminLayoutComponent,
+    AddProductComponent,
+    AddUserComponent,
+    UpdateUserComponent,
   ],
   imports: [
     CommonModule,

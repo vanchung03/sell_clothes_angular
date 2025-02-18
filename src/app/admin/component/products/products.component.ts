@@ -64,8 +64,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.productService.getAllProducts().subscribe(
       (data: Product[]) => {
         this.dataSource.data = data;
-        this.toastr.success('Tải dữ liệu sản phẩm thành công !', 'Thành công');
-        console.log('Danh sách sản phẩm:', data);
+        // this.toastr.success('Tải dữ liệu sản phẩm thành công !', 'Thành công');
+        // console.log('Danh sách sản phẩm:', data);
       },
       (error) => {
         console.error('Lỗi khi lấy sản phẩm:', error);

@@ -1,0 +1,67 @@
+<mat-card class="update-user-container">
+  <h2 class="title">Cập Nhật Thông Tin Người Dùng</h2>
+
+  <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-container">
+      <!-- ✅ Hiển thị Username nhưng không cho phép chỉnh sửa -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" readonly />
+      </mat-form-field>
+
+      <!-- ✅ Cập nhật Email -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+
+      <!-- ✅ Cập nhật Họ và Tên -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Họ và Tên</mat-label>
+        <input matInput type="text" formControlName="fullName" />
+      </mat-form-field>
+
+      <!-- ✅ Cập nhật Số điện thoại -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Số điện thoại</mat-label>
+        <input matInput type="text" formControlName="phone" />
+      </mat-form-field>
+
+      <!-- ✅ Chọn vai trò -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Vai Trò</mat-label>
+        <mat-select formControlName="roles" multiple >
+          <mat-option *ngFor="let role of rolesList" [value]="role.roleId" disabled>
+            {{ role.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- ✅ Cập nhật Trạng thái -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Trạng Thái</mat-label>
+        <mat-select formControlName="status">
+          <mat-option [value]="1">Active</mat-option>
+          <mat-option [value]="0">Inactive</mat-option>
+          <mat-option [value]="2">Banned</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- ✅ Hiển thị Avatar nhưng không cho phép chỉnh sửa -->
+    <mat-card class="avatar-section">
+      <h3>Ảnh đại diện</h3>
+      <div class="avatar-container">
+        <img *ngIf="avatarPreview" [src]="avatarPreview" class="avatar-preview" />
+      </div>
+    </mat-card>
+
+    <!-- ✅ Buttons -->
+    <div class="button-group">
+      <button mat-button (click)="onClose()">Hủy</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? "Đang lưu..." : "💾 Lưu thay đổi" }}
+      </button>
+    </div>
+  </form>
+</mat-card>

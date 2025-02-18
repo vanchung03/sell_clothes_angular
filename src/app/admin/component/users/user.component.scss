@@ -1,166 +1,138 @@
-.products-container, .user-management-container {
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+.user-management-container {
+  max-width: 100%;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+
+  // ✅ Tiêu đề trang
+  .user-header {
+    margin-bottom: 10px;
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: block;
+      color: #333;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+
+  // ✅ Gạch phân cách
+  .divider {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin-bottom: 15px;
+  }
 
   .header-toolbar {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
     background: #fffdfd;
-    padding: 12px;
-    border-radius: 0;
-    box-shadow: none;
 
     .search-field {
       flex: 1;
-      max-width: 800px;
-      margin-top: 20px;
-
-      mat-form-field {
-        width: 100%;
-        background: #f5f5f5;
-        border-radius: 0;
-        box-shadow: none;
-
-        mat-label {
-          color: #757575;
-        }
-
-        input {
-          color: #212121;
-        }
-      }
+      margin-right: 15px;
     }
 
     button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border-radius: 0;
-      font-weight: bold;
-      text-transform: capitalize;
-      box-shadow: none;
-
-      &.mat-raised-button {
-        &.mat-primary {
-          background: #212121;
-          color: #ffffff;
-        }
-
-        &.mat-accent {
-          background: #757575;
-          color: #ffffff;
-        }
-
-        &:hover {
-          filter: brightness(1.1);
-        }
-      }
+      margin-left: 10px;
     }
   }
 
   .custom-table {
     width: 100%;
-    margin-top: 12px;
-    background: #fff;
-    border-radius: 0;
-    overflow: hidden;
     table-layout: fixed;
-    border-collapse: collapse;
 
     th {
-      background: #ffffff;
-      color: #0b0b0b;
+      background-color: #cfd6dd;
+      color: rgb(67, 62, 62);
+      font-weight: bold;
       text-align: left;
       padding: 12px;
+      white-space: nowrap;
     }
 
     td {
       padding: 12px;
-      border-bottom: 1px solid #bdbdbd;
+      border-bottom: 1px solid #ddd;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
 
     .avatar-and-info {
       display: flex;
       align-items: center;
-      gap: 16px; // Tăng khoảng cách giữa avatar và thông tin
-      padding: 12px;
-      min-width: 350px; // Đảm bảo cột đủ rộng
+      gap: 10px;
 
       .user-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        background-color: #fff;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-        border: 2px solid #eee;
-        transition: transform 0.3s ease-in-out;
-
-        &:hover {
-          transform: scale(1.1); // Hiệu ứng phóng to khi hover
-        }
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
       }
 
       .info {
-        font-size: 14px;
-        color: #424242;
         display: flex;
         flex-direction: column;
-        gap: 4px;
-
-        p {
-          margin: 0;
-          line-height: 1.4;
-        }
-
-        strong {
-          color: #212121;
-        }
       }
     }
-  }
 
-  .status-badge {
-    padding: 4px 8px;
-    font-weight: bold;
-    font-size: 12px;
-    display: inline-block;
-    border-radius: 4px;
-
-    &.active {
-      background: #9e9e9e;
-      color: #212121;
+    .status-badge {
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      color: white;
     }
 
-    &.inactive {
-      background: #bdbdbd;
-      color: #424242;
+    .active {
+      background-color: green;
     }
+
+    .inactive {
+      background-color: orange;
+    }
+
+    .banned {
+      background-color: red;
+    }
+
+    /* Icons */
+    .icon-active {
+      color: green;
+    }
+
+    .icon-inactive {
+      color: orange;
+    }
+
+    .icon-banned {
+      color: red;
+    }
+
   }
 
-  .role {
-    display: inline-block;
-    padding: 4px 8px;
-    margin: 2px;
-    border-radius: 4px;
-    font-size: 12px;
+  // ✅ Footer hiển thị tổng số người dùng
+  .table-footer {
+    text-align: right;
+    padding: 10px 0;
     font-weight: bold;
-    color: #fff;
-    background: #607d8b;
+    font-size: 1rem;
+    border-top: 1px solid #ccc;
   }
 
   mat-paginator {
-    margin-top: 12px;
-    background: #fffcfc;
-    padding: 8px;
-    box-shadow: none;
-
-    .mat-paginator-navigation {
-      button {
-        color: #212121;
-      }
-    }
+    margin-top: 10px;
+    background: white;
+    border-radius: 8px;
   }
 }

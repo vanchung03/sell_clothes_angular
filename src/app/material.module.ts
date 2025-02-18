@@ -14,7 +14,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatTreeModule } from '@angular/material/tree'; // Import MatTreeModule
 import { MatExpansionModule } from '@angular/material/expansion'; // Import thêm module này
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core'; // Không cần thiết nhưng có thể thêm
 @NgModule({
   exports: [
     MatButtonModule,
@@ -33,7 +36,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTreeModule,
     MatExpansionModule, // Import thêm module này
     MatProgressSpinnerModule, // Import thêm module này
-    
+    MatProgressBarModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatOptionModule, 
   ]
 })
 export class MaterialModule { }

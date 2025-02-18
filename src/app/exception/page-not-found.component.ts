@@ -3,16 +3,14 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-page-not-found',
   template: `
-    <div class="container">
-      <i class="fas fa-exclamation-triangle icon"></i>
-      <br>
-      <h1>404</h1>
-      <br>
-      <p>Oops! Trang bạn đang tìm không tồn tại.</p>
-      <br>
-      <a routerLink="/" class="btn">
-        <i class="fas fa-home"></i> Quay lại
-      </a>
+    <div class="not-found-container">
+      <div class="not-found-content">
+        <h1>404</h1>
+        <p>Xin lỗi, trang bạn đang tìm không tồn tại.</p>
+        <a routerLink="/" class="btn-back">
+          <i class="fas fa-home"></i> Quay lại trang chủ
+        </a>
+      </div>
     </div>
   `,
   styleUrls: ['page-not-found.component.scss']
