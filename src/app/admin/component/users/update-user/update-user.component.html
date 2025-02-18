@@ -58,10 +58,12 @@
 
     <!-- ✅ Buttons -->
     <div class="button-group">
-      <button mat-button (click)="onClose()">Hủy</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? "Đang lưu..." : "💾 Lưu thay đổi" }}
+      <button mat-button (click)="onClose()"><i class="fa-solid fa-circle-left"></i></button>
+      <button mat-raised-button type="submit" [disabled]="isSubmitting">
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{ isSubmitting ? " Đang lưu..." : " Lưu thay đổi" }}
       </button>
+      
     </div>
   </form>
 </mat-card>

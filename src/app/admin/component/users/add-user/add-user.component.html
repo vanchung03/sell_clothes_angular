@@ -7,7 +7,7 @@
     <input type="file" id="avatar" (change)="onFileSelected($event)" accept="image/*" hidden />
     <div class="avatar-wrapper" (click)="triggerFileInput()">
       <img *ngIf="avatarPreview" [src]="avatarPreview" class="avatar-preview" />
-      <mat-icon *ngIf="!avatarPreview">add_a_photo</mat-icon>
+      <i class="fa-solid fa-cloud"></i>
     </div>
     <mat-progress-bar *ngIf="isUploading" mode="indeterminate"></mat-progress-bar>
   </div>
@@ -53,8 +53,9 @@
     </div>
 
     <div class="button-group">
-      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? "Đang lưu..." : "💾 Lưu người dùng" }}
+      <button mat-raised-button type="submit" [disabled]="isSubmitting">
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{ isSubmitting ? "Đang lưu..." : " Lưu người dùng" }}
       </button>
     </div>
   </form>

@@ -9,7 +9,8 @@ import { AddProductComponent } from './component/products/add-product/add-produc
 import { ReportsComponent } from './component/reports/reports.component';
 import { AdminLayoutComponent } from './component/index-layout/index.component';
 import { AuthGuard } from './auth.guard'; // Import AuthGuard
-
+import { StatisticsComponent } from './component/reports/statistics/statistics.component';
+import { UpdateProductComponent } from './component/products/update-product/update-product.component';
 const routes: Routes = [
   { 
     path: '', 
@@ -21,8 +22,9 @@ const routes: Routes = [
       { path: 'add-user', component: AddUserComponent },  // Thêm đư��ng d��n cho form thêm người dùng
       { path: 'settings', component: SettingsComponent },
       { path: 'add-product', component: AddProductComponent },  // Thêm đư��ng d��n cho form thêm sản phẩm
-      
+      { path: 'statistics', component: StatisticsComponent },  // Thêm đư��ng d��n cho thống kê sản phẩm (tính theo số lượng, giá trung bình,...)
       { path: 'products', component: ProductsComponent },
+      { path: 'update-product/:id', component: UpdateProductComponent },  // Thêm đư��ng d��n cho form cập nhật sản phẩm theo ID
       { path: 'reports', component: ReportsComponent },
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
     ]

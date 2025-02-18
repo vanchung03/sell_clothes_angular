@@ -1,5 +1,16 @@
 <mat-card class="products-container">
   <mat-toolbar class="header-toolbar">
+    <!-- <div class="header-title">
+      <div>
+        <span>Quản lý sản phẩm</span>
+        <p class="notes">
+          🔹 Quản lý thông tin sản phẩm<br>
+          🔹 Có thể chỉnh sửa, xóa hoặc xuất danh sách sản phẩm <br>
+          🔹 Nhấn vào trạng thái để bật/tắt sản phẩm
+        </p>
+      </div>
+    </div> -->
+
     <!-- Ô tìm kiếm -->
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Tìm kiếm</mat-label>
@@ -89,16 +100,18 @@
       </th>
       <td mat-cell *matCellDef="let product">
         <!-- Nút Sửa -->
-        <button mat-icon-button class="btn btn-outline-primary btn-sm" (click)="onEdit(product)">
+        <button mat-icon-button class="btn btn-outline-primary btn-sm"
+          [routerLink]="['/update-product', product.productId]">
           <i class="fas fa-edit text-primary"></i>
         </button>
+
         <!-- Nút Xóa -->
         <button mat-icon-button class="btn btn-outline-danger btn-sm" (click)="onDelete(product.productId)">
           <i class="fas fa-times text-danger"></i>
         </button>
       </td>
     </ng-container>
-    
+
 
     <!-- Header và Row -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

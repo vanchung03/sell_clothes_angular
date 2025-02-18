@@ -1,138 +1,162 @@
 .user-management-container {
-  max-width: 100%;
-  margin: auto;
-  padding: 20px;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
 
-  // ✅ Tiêu đề trang
-  .user-header {
-    margin-bottom: 10px;
+// 🎯 Tiêu đề và toolbar
+.header-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  justify-content: space-between; // Đưa nút sang bên phải
+}
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // Đưa nút sang bên phải
+  width: 100%;
+  button {
+    margin-left: auto; // Đẩy nút sang bên phải
+  }
+}
 
-    .title {
-      font-size: 1.5rem;
-      font-weight: bold;
-      display: block;
-      color: #333;
-    }
+.notes {
+  font-size: 14px;
+  color: #666;
+}
 
-    .subtitle {
-      font-size: 0.9rem;
-      color: #666;
-    }
+.header-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.search-field {
+  width: 300px;
+  height: 50px;
+}
+
+// 🏆 Bảng người dùng
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  
+  th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  // ✅ Gạch phân cách
-  .divider {
-    border: 0;
-    height: 1px;
-    background: #ccc;
-    margin-bottom: 15px;
-  }
-
-  .header-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 15px;
-    background: #fffdfd;
-
-    .search-field {
-      flex: 1;
-      margin-right: 15px;
-    }
-
-    button {
-      margin-left: 10px;
-    }
-  }
-
-  .custom-table {
-    width: 100%;
-    table-layout: fixed;
-
-    th {
-      background-color: #cfd6dd;
-      color: rgb(67, 62, 62);
-      font-weight: bold;
-      text-align: left;
-      padding: 12px;
-      white-space: nowrap;
-    }
-
-    td {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-
-    .avatar-and-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-      }
-
-      .info {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-
-    .status-badge {
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      color: white;
-    }
-
-    .active {
-      background-color: green;
-    }
-
-    .inactive {
-      background-color: orange;
-    }
-
-    .banned {
-      background-color: red;
-    }
-
-    /* Icons */
-    .icon-active {
-      color: green;
-    }
-
-    .icon-inactive {
-      color: orange;
-    }
-
-    .icon-banned {
-      color: red;
-    }
-
-  }
-
-  // ✅ Footer hiển thị tổng số người dùng
-  .table-footer {
-    text-align: right;
-    padding: 10px 0;
+  // 🎯 Tiêu đề cố định khi cuộn
+  th {
+    background: #f4f4f4;
     font-weight: bold;
-    font-size: 1rem;
-    border-top: 1px solid #ccc;
+    color: #333;
+    position: sticky;
+    top: 0;
+    z-index: 2;
   }
 
-  mat-paginator {
-    margin-top: 10px;
-    background: white;
-    border-radius: 8px;
+  // 🎭 Ảnh đại diện và email
+  .avatar-and-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+    max-width: 350px;
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .info {
+      text-align: left;
+    }
   }
+
+  // 🔥 Trạng thái người dùng
+  .status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+
+    &.active {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    &.inactive {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    &.banned {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  }
+
+  mat-icon {
+    cursor: pointer;
+    margin-left: 8px;
+    transition: 0.3s;
+
+    &.icon-active {
+      color: #28a745;
+    }
+
+    &.icon-inactive {
+      color: #ffc107;
+    }
+
+    &.icon-banned {
+      color: #dc3545;
+    }
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  // 🎭 Vai trò
+  .role {
+    background: #e3f2fd;
+    color: #0d47a1;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-right: 5px;
+  }
+
+  // 🛠️ Nút hành động
+  button.mat-icon-button {
+    transition: 0.2s;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+// 📜 Phân trang
+mat-paginator {
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

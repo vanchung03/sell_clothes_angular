@@ -1,0 +1,26 @@
+<mat-card class="statistics-container">
+    <h2 class="title">Thống kê Báo cáo</h2>
+  
+    <div class="charts">
+      <!-- Biểu đồ Doanh thu -->
+      <mat-card class="chart-card">
+        <h3>📊 Doanh thu theo tháng</h3>
+        <canvas baseChart 
+          [data]="revenueChartData"
+          [options]="revenueChartOptions"
+          [type]="'bar'">
+        </canvas>
+      </mat-card>
+  
+      <!-- Biểu đồ Người dùng mới -->
+      <mat-card class="chart-card">
+        <h3>📈 Người dùng mới theo tháng</h3>
+        <canvas baseChart 
+          [data]="userChartData"
+          [options]="userChartOptions"
+          [type]="'line'">
+        </canvas>
+      </mat-card>
+    </div>
+  </mat-card>
+  

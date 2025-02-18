@@ -1,8 +1,26 @@
+
 .products-container {
   background: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 16px;
+
+  // 🎯 Tiêu đề và toolbar
+.header-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  justify-content: space-between; // Đưa nút sang bên phải
+}
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // Đưa nút sang bên phải
+  width: 100%;
+  button {
+    margin-left: auto; // Đẩy nút sang bên phải
+  }
+}
 
   .header-toolbar {
     display: flex;

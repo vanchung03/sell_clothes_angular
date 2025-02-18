@@ -18,6 +18,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core'; // Không cần thiết nhưng có thể thêm
+import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   exports: [
     MatButtonModule,
@@ -40,6 +41,8 @@ import { MatOptionModule } from '@angular/material/core'; // Không cần thiế
     MatDialogModule,
     MatSelectModule,
     MatOptionModule, 
+    MatCheckboxModule, // Thêm module checkbox
+
   ]
 })
 export class MaterialModule { }

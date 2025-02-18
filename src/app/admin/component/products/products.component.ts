@@ -88,9 +88,4 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       );
     }
   }
-
-  onEdit(product: Product): void {
-    console.log('Chỉnh sửa sản phẩm:', product);
-    this.toastr.info('Chức năng chỉnh sửa đang được phát triển', 'Thông báo');
-  }
 }

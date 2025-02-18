@@ -130,7 +130,7 @@
         </mat-expansion-panel-header>
         <mat-nav-list>
           <!-- Revenue Report -->
-          <a mat-list-item routerLink="/revenue-report" routerLinkActive="active-menu" class="submenu-item">
+          <a mat-list-item routerLink="/statistics" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>attach_money</mat-icon>
             <span>Revenue Report</span>
           </a>
@@ -218,7 +218,7 @@
           <div class="avatar-container">
             <img [src]="user.avatar" alt="Avatar" class="avatar-center" />
             <button mat-icon-button class="edit-avatar-btn" (click)="editAvatar()">
-              <mat-icon>edit</mat-icon>
+              <i class="fa-solid fa-cloud"></i>
             </button>
             <input type="file" accept="image/*" #fileInput (change)="onFileSelected($event)" hidden />
           </div>
@@ -294,7 +294,7 @@
     <div class="additional-content">
       <router-outlet></router-outlet>
     </div>
-    Footer
+    <!-- Footer -->
     <!-- <mat-toolbar color="primary" class="footer-toolbar">
       <div class="footer-left">
         <mat-icon>copyright</mat-icon>

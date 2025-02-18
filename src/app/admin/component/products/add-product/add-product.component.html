@@ -1,104 +1,138 @@
 <div class="add-product-container">
-    <!-- ✅ Tiêu đề -->
-    <h2 class="title">Thêm sản phẩm mới</h2>
+    <h2>Thêm sản phẩm mới</h2>
 
-    <!-- ✅ Form Thêm sản phẩm -->
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+        <!-- Thông tin sản phẩm -->
         <div class="form-section">
             <h3>Thông tin sản phẩm</h3>
+            <div>
+                <label>Danh mục</label>
+                <select formControlName="categoryId">
+                    <option *ngFor="let c of categories" [value]="c.categoryId">
+                        {{ c.name }}
+                    </option>
+                </select>
+            </div>
 
-            <div class="form-group">
+            <div>
+                <label>Thương hiệu</label>
+                <select formControlName="brandId">
+                    <option *ngFor="let b of brands" [value]="b.brandId">
+                        {{ b.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
                 <label>Tên sản phẩm</label>
                 <input type="text" formControlName="name" placeholder="Nhập tên sản phẩm" />
             </div>
 
-            <div class="form-group">
-                <label>Mô tả sản phẩm</label>
-                <textarea formControlName="description" placeholder="Nhập mô tả sản phẩm"></textarea>
+            <div>
+                <label>Mô tả</label>
+                <textarea formControlName="description" placeholder="Nhập mô tả"></textarea>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Giá gốc</label>
-                    <input type="number" formControlName="price" placeholder="0.00" />
-                </div>
+            <div>
+                <label>Upload ảnh</label>
+                <input type="file" (change)="onFileSelected_imageproduct($event)" />
 
-                <div class="form-group">
-                    <label>Giá khuyến mãi</label>
-                    <input type="number" formControlName="sale_price" placeholder="0.00" />
-                </div>
+                <!-- Vẫn có thể hiển thị preview URL sau khi upload: -->
+                <label>URL</label>
+                <input type="text" formControlName="thumbnail" />
+                <img [src]="productForm.value.thumbnail" />
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Danh mục</label>
-                    <select formControlName="category_id">
-                        <!-- <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option> -->
-                        <option> category1</option>
-                        <option> category2</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Thương hiệu</label>
-                    <select formControlName="brand_id">
-                        <!-- <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option> -->
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                    </select>
-                </div>
+            <div>
+                <label>Giá gốc</label>
+                <input type="number" formControlName="price" />
             </div>
 
-            <div class="form-group">
+            <div>
+                <label>Giá khuyến mãi</label>
+                <input type="number" formControlName="salePrice" />
+            </div>
+
+
+            <div>
                 <label>Trạng thái</label>
                 <select formControlName="status">
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Không hoạt động</option>
+                    <option [value]="true">Hoạt động</option>
+                    <option [value]="false">Không hoạt động</option>
                 </select>
             </div>
+
         </div>
 
-        <!-- ✅ Upload Hình Ảnh -->
+        <!-- Hình ảnh -->
         <div class="form-section">
             <h3>Hình ảnh sản phẩm</h3>
-            <input type="file" multiple (change)="onFileSelected($event)" />
-            <div class="image-preview" *ngFor="let image of imagePreviews; let i = index">
-                <img [src]="image" alt="Ảnh sản phẩm" />
-                <button (click)="removeImage(i)">X</button>
+
+            <button type="button" (click)="addImage()">Thêm hình ảnh</button>
+            <div formArrayName="images">
+                <div *ngFor="let imgCtrl of imagesForm.controls; let i = index" [formGroupName]="i">
+                    <label>Upload ảnh</label>
+                    <input type="file" (change)="onFileSelected($event, i)" />
+
+                    <!-- Vẫn có thể hiển thị preview URL sau khi upload: -->
+                    <label>URL ảnh</label>
+                    <input type="text" formControlName="imageUrl" placeholder="http://..." />
+                    <img [src]="imgCtrl.value.imageUrl" />
+
+                    <label>Primary?</label>
+                    <input type="checkbox" formControlName="isPrimary" />
+
+                    <label>Thứ tự</label>
+                    <input type="number" formControlName="displayOrder" />
+
+                    <button type="button" (click)="removeImage(i)">Xóa</button>
+                </div>
             </div>
         </div>
-
-        <!-- ✅ Biến thể sản phẩm -->
+        <!-- Biến thể (variants) -->
         <div class="form-section">
             <h3>Biến thể sản phẩm</h3>
 
-            <div class="variant-row" *ngFor="let variant of variants; let i = index">
-                <!-- Chọn Màu sắc -->
-                <select [(ngModel)]="variant.color" (change)="updateSKU(i)">
-                    <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
-                </select>
+            <button type="button" (click)="addVariant()">Thêm biến thể</button>
+            <div formArrayName="variants">
+                <div *ngFor="let variantCtrl of variantsForm.controls; let i = index" [formGroupName]="i">
+                    <label>Size</label>
+                    <select formControlName="size">
+                        <option *ngFor="let s of availableSizes" [value]="s">{{ s }}</option>
+                    </select>
 
-                <!-- Chọn Size -->
-                <select [(ngModel)]="variant.size" (change)="updateSKU(i)">
-                    <option *ngFor="let size of sizes" [value]="size">{{ size }}</option>
-                </select>
+                    <label>Màu</label>
+                    <select formControlName="color">
+                        <option *ngFor="let c of availableColors" [value]="c">{{ c }}</option>
+                    </select>
 
-                <!-- SKU tự động tạo -->
-                <input type="text" [(ngModel)]="variant.sku" placeholder="SKU" readonly />
+                    <label>SKU</label>
+                    <input type="text" formControlName="sku" />
 
-                <input type="number" [(ngModel)]="variant.price" placeholder="Giá" />
-                <input type="number" [(ngModel)]="variant.stock_quantity" placeholder="Số lượng" />
+                    <label>Giá</label>
+                    <input type="number" formControlName="price" />
 
-                <button (click)="removeVariant(i)">X</button>
+                    <label>Số lượng</label>
+                    <input type="number" formControlName="stockQuantity" />
+
+                    <label>Upload ảnh</label>
+                    <input type="file" (change)="onVariantFileSelected($event, i)" />
+                    <label>URL ảnh</label>
+                    <input type="text" formControlName="imageUrl" placeholder="http://..." />
+                    <img [src]="variantCtrl.value.imageUrl" />
+
+                    <label>Trạng thái</label>
+                    <select formControlName="status">
+                        <option [value]="true">Hoạt động</option>
+                        <option [value]="false">Không hoạt động</option>
+                    </select>
+
+                    <button type="button" (click)="removeVariant(i)">Xóa</button>
+                </div>
             </div>
-
-            <button (click)="addVariant()">➕ Thêm biến thể</button>
         </div>
-
-
-
-        <!-- ✅ Nút Lưu -->
-        <button type="submit" class="save-btn">💾 Lưu sản phẩm</button>
+        <!-- Nút Lưu -->
+        <button type="submit">Lưu sản phẩm</button>
     </form>
 </div>

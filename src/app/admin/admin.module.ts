@@ -14,6 +14,8 @@ import { AdminLayoutComponent } from './component/index-layout/index.component';
 import { AddProductComponent } from './component/products/add-product/add-product.component';
 import { AddUserComponent } from './component/users/add-user/add-user.component';
 import { UpdateUserComponent } from './component/users/update-user/update-user.component';
+import { StatisticsComponent } from './component/reports/statistics/statistics.component';
+import { UpdateProductComponent } from './component/products/update-product/update-product.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { UpdateUserComponent } from './component/users/update-user/update-user.c
     AddProductComponent,
     AddUserComponent,
     UpdateUserComponent,
+    StatisticsComponent,
+    UpdateProductComponent,
   ],
   imports: [
     CommonModule,
