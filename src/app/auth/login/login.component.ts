@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Nếu đã có access token, kiểm tra trạng thái đăng nhập
@@ -40,6 +40,11 @@ export class LoginComponent implements OnInit {
         return of(null);
       })
     ).subscribe((response) => {
+      if (response?.error === 'Tài khoản bị khóa') {
+        this.toastr.error('Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!', 'Lỗi');
+        return; // ❌ Ngăn chặn việc kiểm tra trạng thái đăng nhập
+      }
+
       if (response && response.accessToken) {
         this.toastr.success('Đăng nhập thành công!', 'Thông báo', { timeOut: 3000 });
         this.authService.checkLoginStatus();

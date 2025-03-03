@@ -1,0 +1,51 @@
+<div class="dropdown-menu">
+  <div class="left-banner">
+    <img src="https://bizweb.dktcdn.net/100/502/737/themes/953479/assets/mega1-1-image.jpg" alt="Sắc Màu Tươi Tắn">
+    <div class="banner-overlay">
+      <span>Xu hướng mới</span>
+    </div>
+  </div>
+
+  <div class="menu-content">
+    <div class="category">
+      <h3><i class="fas fa-tag"></i> SẢN PHẨM SALE</h3>
+      <div class="sale-badge">-50%</div>
+    </div>
+    
+    <div class="category">
+      <h3><i class="fas fa-fire"></i> SẢN PHẨM MỚI HOT</h3>
+      <div class="new-badge">NEW</div>
+    </div>
+
+    <div class="category">
+      <h3><i class="fas fa-male"></i> THỜI TRANG NAM</h3>
+      <ul>
+        <li *ngFor="let category of categoriesMale">
+          <a (click)="navigateToCategory(category)">
+            <i class="fas fa-chevron-right"></i>
+            <span>{{ category.name }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="category">
+      <h3><i class="fas fa-female"></i> THỜI TRANG NỮ</h3>
+      <ul>
+        <li *ngFor="let category of categoriesFemale">
+          <a (click)="navigateToCategory(category)">
+            <i class="fas fa-chevron-right"></i>
+            <span>{{ category.name }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="right-banner">
+    <img src="https://bizweb.dktcdn.net/100/502/737/themes/953479/assets/mega2-1-image.jpg" alt="Kiểu Đầm Xinh Ngất Ngây">
+    <div class="banner-overlay">
+      <span>Bộ sưu tập mới</span>
+    </div>
+  </div>
+</div>

@@ -33,17 +33,27 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/register`, request);
   }
 
-  // Đăng nhập
   login(request: LoginRequest): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, request, { withCredentials: true }).pipe(
       switchMap(response => {
         if (response.accessToken) {
           this.tokenService.saveToken(response.accessToken);
+
+          // ✅ Kiểm tra status từ token sau khi lưu
+          const status = this.tokenService.getStatus();
+          if (status !== '1') {
+            console.error('Tài khoản bị khóa!');
+            this.tokenService.removeToken(); // Xóa token ngay lập tức
+            return of({ error: 'Tài khoản bị khóa' });
+          }
         }
+
         return of(response);
       })
     );
-  }
+}
+
+
 
   // Đăng xuất
   logout(): void {
@@ -52,12 +62,11 @@ export class AuthService {
   }
   refreshAccessToken(): Observable<string | null> {
     const refreshToken = this.tokenService.getRefreshToken();
-    console.log('Refresh Token:', refreshToken); // Kiểm tra refresh token
-
+    
     if (!refreshToken) {
-      console.error('Không có refreshToken');
-      this.logout();
-      return of(null);
+        console.error('Không có refreshToken');
+        this.logout();
+        return of(null);
     }
     // Gửi yêu cầu làm mới token đến server
     return this.http.post<any>(`${this.apiUrl}/refresh`, { refreshToken }, { withCredentials: true }).pipe(
@@ -67,6 +76,7 @@ export class AuthService {
           this.tokenService.saveToken(response.accessToken);
           return of(response.accessToken);
         } else {
+          console.error('Lỗi làm mới token. Đăng xuất.');
           this.logout();
           return of(null);
         }

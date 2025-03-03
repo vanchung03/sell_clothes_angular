@@ -6,7 +6,7 @@
 }
 
 .sidenav {
-  width: 250px;
+  width: auto;
   color: #000304;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
@@ -56,7 +56,7 @@
 }
 
 .sidenav-header {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #ecf0f1;
   text-transform: uppercase;
@@ -96,7 +96,7 @@ mat-expansion-panel-header:hover {
 
   // Hiệu ứng hover
   &:hover {
-    background-color: #b5b5b5;
+    background-color: #ffdbdb;
   }
 
   // Thanh lướt chạy
@@ -121,7 +121,7 @@ mat-expansion-panel-header:hover {
 }
 
 .active-menu {
-  background-color: #b5b5b5;
+  background-color: #ffdbdb; 
   border-radius: 4px;
 
   // Khi menu đang được active, thanh lướt chạy luôn hiển thị
@@ -132,8 +132,7 @@ mat-expansion-panel-header:hover {
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #b5b5b5;
-
+    background-color:  #ffdbdb;
   }
 }
 
@@ -232,60 +231,11 @@ mat-menu-item:hover {
   color: #ffffff;
 }
 
-
-// ::ng-deep mat-expansion-panel-header mat-icon,
-// ::ng-deep mat-nav-list a,
-// ::ng-deep mat-nav-list span,
-// ::ng-deep mat-nav-list mat-icon,
-// ::ng-deep mat-expansion-panel span,
-// ::ng-deep mat-expansion-panel mat-icon {
-//   color: #ffffff !important;
-// }
-// Nội dung chính sẽ co giãn
 mat-sidenav-content {
   flex: 1; 
   display: flex;
   flex-direction: column;
 }
-
-// Footer luôn dính dưới
-// .footer-toolbar {
-//   display: flex;
-//   justify-content: space-between; 
-//   align-items: center;
-//   padding: 0 1rem; 
-//   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-//   font-size: 0.9rem;
-//   background-color: #1e2a38;
-//   color: #ffffff; 
-//   position: sticky; 
-//   bottom: 0; 
-//   z-index: 1; 
-
-//   .footer-left {
-//     display: flex;
-//     align-items: center;
-
-//     mat-icon {
-//       margin-right: 0.5rem; // Khoảng cách giữa icon và chữ
-//       font-size: 1.2rem;
-//     }
-//   }
-
-//   .footer-right {
-//     a {
-//       color: #00bcd4; // Màu xanh nhạt
-//       text-transform: none; // Không viết hoa toàn bộ
-//       font-weight: 500; // Tăng độ đậm cho chữ
-//       text-decoration: none;
-
-//       &:hover {
-//         text-decoration: underline; // Gạch chân khi hover
-//         color: #ffffff; // Đổi màu chữ thành trắng
-//       }
-//     }
-//   }
-// }
 
 //PROFILE FORM MODAL (Glassmorphism Effect)
 .profile-form {

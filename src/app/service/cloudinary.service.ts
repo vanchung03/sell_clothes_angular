@@ -33,4 +33,14 @@ export class CloudinaryService {
       { headers: this.getAuthHeadersWithoutContentType() }
     );
   }
+  uploadLogoImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);  // key = "file" vì server @RequestParam("file")
+
+    return this.http.post<any>(
+      `${this.apiUrl}/upload-logo-brand`,
+      formData,
+      { headers: this.getAuthHeadersWithoutContentType() }
+    );
+  }
 }

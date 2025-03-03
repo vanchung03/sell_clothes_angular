@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { TokenService } from './token.service'; // Đảm bảo import TokenService đúng
-import { User } from '../types/User';
 import { Role } from '../types/roles';
+import { User } from '../types/User';
 
 @Injectable({
   providedIn: 'root'

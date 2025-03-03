@@ -1,0 +1,41 @@
+<app-header></app-header>
+<app-navbar></app-navbar>
+<div class="product-container">
+  <h2 *ngIf="products.length > 0">Sản phẩm theo danh mục</h2>
+  <div *ngIf="products.length > 0; else noProducts">
+    <div class="product-list">
+      <div *ngFor="let product of products" class="product-card">
+        <div class="product-image-container">
+          <img [src]="product.thumbnail || 'assets/images/default-product.jpg'" alt="{{ product.name }}">
+          <div class="product-overlay">
+            <button class="detail-btn"> <i class="fa fa-eye"></i>Xem chi tiết</button>
+            <button class="cart-btn">Thêm vào giỏ hàng</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="product-price">
+            <span class="current-price">{{ product.salePrice || product.price | currency:'VND' }}</span>
+            <span class="original-price" *ngIf="product.salePrice">{{ product.price | currency:'VND' }}</span>
+          </div>
+        </div>
+        <div class="rating">
+          <div class="stars">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star" style="opacity: 0.3;">★</span>
+          </div>
+         </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+  <ng-template #noProducts>
+    <p>Không có sản phẩm nào trong danh mục này.</p>
+  </ng-template>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,112 @@
+<div class="category-container">
+  <h1>Quản Lý Danh Mục</h1>
+  
+  <!-- Search Bar & Add button -->
+  <div class="search-container">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="searchCategories()"
+      placeholder="Tìm kiếm danh mục..."
+      name="search">
+    <button class="add-button" (click)="showCreateForm()">
+      <i class="fas fa-plus"></i> Thêm mới
+    </button>
+  </div>
+  
+  <!-- Categories Table -->
+  <table class="category-table" *ngIf="categories.length > 0">
+    <thead>
+      <tr>
+        <th>Tên danh mục</th>
+        <th>Slug</th>
+        <th>Mô tả</th>
+        <th>Trạng thái</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories">
+        <td>{{ category.name }}</td>
+        <td>{{ category.slug }}</td>
+        <td>{{ category.description }}</td>
+        <td>
+          <span class="status-badge" [ngClass]="category.status ? 'active' : 'inactive'">
+            {{ category.status ? 'Hoạt động' : 'Không hoạt động' }}
+          </span>
+        </td>
+        <td class="action-buttons">
+          <button class="edit-btn" (click)="selectCategory(category)">
+            <i class="fas fa-edit"></i> Sửa
+          </button>
+          <button class="delete-btn" (click)="confirmDelete(category)">
+            <i class="fas fa-trash"></i> Xóa
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Empty state when no categories -->
+  <div class="empty-state" *ngIf="categories.length === 0">
+    <p>Chưa có danh mục nào. Hãy thêm danh mục mới.</p>
+    <button (click)="showCreateForm()">
+      <i class="fas fa-plus"></i> Thêm danh mục
+    </button>
+  </div>
+  
+  <!-- Form Overlay -->
+  <div class="form-overlay" *ngIf="isFormVisible">
+    <div class="form-container">
+      <h3>{{ isEditing ? 'Cập nhật danh mục' : 'Thêm danh mục mới' }}</h3>
+      
+      <form (ngSubmit)="isEditing ? updateCategory() : createCategory()">
+        <div class="form-group">
+          <label for="name">Tên danh mục</label>
+          <input
+            type="text"
+            id="name"
+            [(ngModel)]="selectedCategory.name"
+            name="name"
+            required>
+        </div>
+        
+        <div class="form-group">
+          <label for="slug">Slug</label>
+          <input
+            type="text"
+            id="slug"
+            [(ngModel)]="selectedCategory.slug"
+            name="slug"
+            required>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Mô tả</label>
+          <textarea
+            id="description"
+            [(ngModel)]="selectedCategory.description"
+            name="description"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <div class="checkbox-container">
+            <input
+              type="checkbox"
+              id="status"
+              [(ngModel)]="selectedCategory.status"
+              name="status">
+            <label for="status">Hoạt động</label>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="cancelForm()">Hủy</button>
+          <button type="submit" class="submit-btn">
+            {{ isEditing ? 'Cập nhật' : 'Tạo mới' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

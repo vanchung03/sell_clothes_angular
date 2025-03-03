@@ -23,6 +23,10 @@
             "polyfills": [
               "zone.js"
             ],
+            "allowedCommonJsDependencies": [
+              "aos",
+              "file-saver"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -31,11 +35,14 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "node_modules/aos/dist/aos.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/aos/dist/aos.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -99,7 +106,6 @@
               "@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.scss"
             ],
-            
             "scripts": []
           }
         }

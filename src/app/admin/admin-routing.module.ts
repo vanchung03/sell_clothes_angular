@@ -9,8 +9,17 @@ import { AddProductComponent } from './component/products/add-product/add-produc
 import { ReportsComponent } from './component/reports/reports.component';
 import { AdminLayoutComponent } from './component/index-layout/index.component';
 import { AuthGuard } from './auth.guard'; // Import AuthGuard
+
 import { StatisticsComponent } from './component/reports/statistics/statistics.component';
 import { UpdateProductComponent } from './component/products/update-product/update-product.component';
+import { CategoryComponent } from './component/category/category.component';
+import { BrandComponent } from './component/brand/brand.component';
+import { RoleComponent } from './component/role/role.component';
+import { OrderComponent } from './component/order/order.component';
+import { OrderDetailComponent } from './component/order/order-detail/order-detail.component';
+
+import { PaymentHistoryComponent } from './component/payment-history/payment-history.component';
+import { PaymentComponent } from './component/payment/payment.component';
 const routes: Routes = [
   { 
     path: '', 
@@ -19,13 +28,20 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'users', component: UserManagementComponent },
-      { path: 'add-user', component: AddUserComponent },  // Thêm đư��ng d��n cho form thêm người dùng
+      { path: 'add-user', component: AddUserComponent },
+      { path: 'roles', component:RoleComponent },
       { path: 'settings', component: SettingsComponent },
-      { path: 'add-product', component: AddProductComponent },  // Thêm đư��ng d��n cho form thêm sản phẩm
-      { path: 'statistics', component: StatisticsComponent },  // Thêm đư��ng d��n cho thống kê sản phẩm (tính theo số lượng, giá trung bình,...)
+      { path: 'add-product', component: AddProductComponent },  
+      { path: 'statistics', component: StatisticsComponent },
       { path: 'products', component: ProductsComponent },
-      { path: 'update-product/:id', component: UpdateProductComponent },  // Thêm đư��ng d��n cho form cập nhật sản phẩm theo ID
+      { path: 'update-product/:id', component: UpdateProductComponent }, 
+      { path: 'order', component: OrderComponent }, 
+      { path: 'orders/:id', component: OrderDetailComponent}, 
+      { path: 'payment-history', component: PaymentHistoryComponent }, 
+      { path: 'payment', component: PaymentComponent },
       { path: 'reports', component: ReportsComponent },
+      { path: 'brand', component: BrandComponent },
+      { path: 'category', component: CategoryComponent }, 
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
     ]
   }

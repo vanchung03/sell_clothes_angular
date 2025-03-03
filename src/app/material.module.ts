@@ -19,9 +19,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core'; // Không cần thiết nhưng có thể thêm
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips'; // Import MatChipsModule
+import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   exports: [
     MatButtonModule,
+    MatSortModule,
+    MatSnackBarModule,
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
@@ -42,6 +48,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatOptionModule, 
     MatCheckboxModule, // Thêm module checkbox
+    MatChipsModule, // Import MatChipsModule
+    
+    
 
   ]
 })

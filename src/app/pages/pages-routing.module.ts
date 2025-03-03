@@ -3,9 +3,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { PaymentComponent } from './payments-result/payments.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { CartComponent } from './cart/cart.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { SaleProductsComponent } from './products/sale-products/sale-products.component';
+import { IntroductionComponent } from './introduction/introduction.component';
+// import { OrderListComponent } from './order-list/order-list.component';
+import { NewsComponent } from './news/news.component';
+import { ContactComponent } from './contact/contact.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'payment-result', component: PaymentComponent },
+
+  { path: 'product-detail/:id', component: ProductDetailComponent }, 
+  { path: 'cart', component: CartComponent }, 
+  { path: 'products-category', component: SaleProductsComponent }, 
+  
+  { path: 'introduction', component: IntroductionComponent },
+  
+  { path: 'news', component: NewsComponent }, 
+  { path: 'contact', component: ContactComponent }, 
+  { path: 'checkout', component: CheckoutComponent }, 
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

@@ -15,6 +15,7 @@ import { PagesModule } from './pages/pages.module';
 import { AuthModule } from './auth/auth.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.Interceptor';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -36,9 +37,11 @@ import { AuthInterceptor } from './auth/auth.Interceptor';
   ],
   providers: [
     {
+      
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+      
     },
   ],
   bootstrap: [AppComponent]

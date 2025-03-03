@@ -1,0 +1,36 @@
+<div class="product-section">
+    <!-- Bộ lọc sản phẩm -->
+    <div class="product-filters">
+      <button class="filter-btn" (click)="sortBy('name-asc')">Tên A-Z</button>
+      <button class="filter-btn" (click)="sortBy('name-desc')">Tên Z-A</button>
+      <button class="filter-btn" (click)="sortBy('newest')">Hàng mới</button>
+      <button class="filter-btn" (click)="sortBy('price-asc')">Giá thấp đến cao</button>
+      <button class="filter-btn" (click)="sortBy('price-desc')">Giá cao xuống thấp</button>
+    </div>
+  
+    <!-- Lưới sản phẩm -->
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of filteredProducts">
+        <div class="product-image">
+          <img [src]="product.thumbnail || 'assets/images/default-product.jpg'" [alt]="product.name" />
+          <span class="discount-badge" *ngIf="product.salePrice && product.price">
+          -{{ ((1 - (product.salePrice / product.price)) * 100) | number: '1.0-0' }}%
+          </span>          
+          <span class="wishlist-btn"></span>
+          <div class="hover-actions">
+            <button class="btn detail-btn" (click)="onViewDetail(product.productId)"> <i class="fa fa-eye"></i>Xem chi tiết</button>
+            
+            <button class="quick-view-btn"> <i class="fa fa-eye"></i>Xem nhanh</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-name">{{ product.name }}</p>
+          <p class="product-description">{{product.description}}</p>
+          <p class="product-price">
+            <span class="current-price">{{ product.salePrice || product.price | number }}đ</span>
+            <span class="old-price" *ngIf="product.salePrice">{{ product.price | number }}đ</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>

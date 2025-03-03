@@ -1,0 +1,200 @@
+// Modern fashion color scheme
+$primary-color: #2c3e50;  // Navy blue
+$accent-color: #e74c3c;   // Coral red
+$hover-color: #3498db;    // Light blue
+$text-color: #ecf0f1;    // Light gray
+$breakpoint-md: 768px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hover-effect {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: $hover-color;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+.navbar {
+  background: linear-gradient(to right, $primary-color, darken($primary-color, 10%));
+  padding: 0;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  .mobile-menu-icon {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    padding: 20px;
+    cursor: pointer;
+    
+    @media (max-width: $breakpoint-md) {
+      display: flex;
+    }
+
+    span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background-color: $text-color;
+      transition: all 0.3s ease;
+
+      &:nth-child(1) {
+        transform-origin: top left;
+      }
+      &:nth-child(3) {
+        transform-origin: bottom left;
+      }
+    }
+
+    &.active {
+      span {
+        &:nth-child(1) { transform: rotate(45deg); }
+        &:nth-child(2) { opacity: 0; }
+        &:nth-child(3) { transform: rotate(-45deg); }
+      }
+    }
+  }
+
+  ul {
+    list-style: none;
+    @include flex-center;
+    padding: 0;
+    margin: 0;
+
+    @media (max-width: $breakpoint-md) {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      background: $primary-color;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+      animation: slideDown 0.3s ease;
+
+      &.active {
+        display: flex;
+      }
+    }
+
+    li {
+      position: relative;
+      margin: 0;
+
+      a {
+        text-decoration: none;
+        color: $text-color;
+        padding: 1.2rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        @include hover-effect;
+
+        i {
+          font-size: 1.1rem;
+          transition: transform 0.3s ease;
+        }
+
+        &:hover {
+          color: $hover-color;
+          
+          i {
+            transform: translateY(-2px);
+          }
+        }
+
+        .arrow {
+          font-size: 0.8rem;
+          margin-left: 5px;
+          transition: transform 0.3s ease;
+        }
+      }
+
+      &.dropdown {
+        position: relative;
+
+        &:hover {
+          .arrow {
+            transform: rotate(180deg);
+          }
+
+          app-dropdown-menu {
+            display: block;
+            animation: fadeIn 0.3s ease;
+          }
+        }
+
+        app-dropdown-menu {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10;
+
+          @media (max-width: $breakpoint-md) {
+            position: static;
+            transform: none;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// Active states for mobile
+@media (max-width: $breakpoint-md) {
+  .navbar ul.active {
+    li {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+
+      a {
+        padding: 1rem 1.5rem;
+        justify-content: flex-start;
+      }
+    }
+  }
+}

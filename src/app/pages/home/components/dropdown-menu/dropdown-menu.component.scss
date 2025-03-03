@@ -1,0 +1,243 @@
+// Modern Fashion Color Scheme
+$primary: #1e293b;         // Dark blue-gray
+$secondary: #64748b;       // Medium blue-gray
+$accent: #f59e0b;         // Warm yellow
+$text-primary: #334155;    // Dark gray
+$text-secondary: #64748b;  // Medium gray
+$background: #ffffff;
+$hover: #f8fafc;
+$border: #e2e8f0;
+
+// Breakpoints
+$breakpoint-xl: 1200px;
+$breakpoint-lg: 992px;
+$breakpoint-md: 768px;
+$breakpoint-sm: 576px;
+
+// Mixins
+@mixin hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.dropdown-menu {
+  display: flex;
+  background: $background;
+  padding: 25px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 1200px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  border-radius: 8px;
+  animation: dropdownFade 0.3s ease;
+
+  .left-banner, .right-banner {
+    width: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    @include hover-lift;
+
+    img {
+      width: 100%;
+      transition: transform 0.5s ease;
+    }
+
+    .banner-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      padding: 20px;
+      color: white;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+
+      span {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+
+    &:hover {
+      img { transform: scale(1.05); }
+      .banner-overlay { transform: translateY(0); }
+    }
+  }
+
+  .menu-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+
+    .category {
+      position: relative;
+
+      h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: $primary;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        i {
+          color: $accent;
+          font-size: 16px;
+        }
+      }
+
+      .sale-badge, .new-badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        animation: pulse 2s infinite;
+      }
+
+      .sale-badge {
+        background: #ef4444;
+        color: white;
+      }
+
+      .new-badge {
+        background: #10b981;
+        color: white;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 8px;
+
+          a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: $text-secondary;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+
+            i {
+              font-size: 12px;
+              opacity: 0;
+              transform: translateX(-5px);
+              transition: all 0.3s ease;
+            }
+
+            &:hover {
+              color: $accent;
+              background: $hover;
+
+              i {
+                opacity: 1;
+                transform: translateX(0);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+// Responsive Design
+@media (max-width: $breakpoint-lg) {
+  .dropdown-menu {
+    width: 90%;
+    flex-direction: column;
+    
+    .menu-content {
+      padding: 20px 0;
+      flex-wrap: wrap;
+      
+      .category {
+        width: 50%;
+        padding: 0 15px;
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .dropdown-menu {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+    overflow-y: auto;
+
+    .left-banner, .right-banner {
+      display: none;
+    }
+
+    .menu-content {
+      .category {
+        width: 100%;
+      }
+    }
+  }
+
+  .mobile-close {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: $primary;
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 11;
+
+    &:hover {
+      background: $accent;
+      transform: rotate(90deg);
+    }
+  }
+}

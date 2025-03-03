@@ -1,0 +1,137 @@
+<mat-card class="role-management-container" data-aos="fade-up" data-aos-duration="800">
+    <div class="header-title" data-aos="fade-right" data-aos-delay="200">
+      <div>
+        <h1><i class="fas fa-user-tag"></i> Quản lý Vai trò</h1>
+        <p class="notes">
+          Quản lý các vai trò trong hệ thống <br>
+          Thêm, sửa, xóa các vai trò <br>
+          Phân quyền cho người dùng
+        </p>
+      </div>
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="openAddRoleDialog()" data-aos="zoom-in">
+          <i class="fas fa-plus-circle"></i> Thêm vai trò mới
+        </button>
+      </div>
+    </div>
+  
+    <div class="divider"></div>
+  
+    <!-- Stats Cards -->
+    <div class="stats-container" data-aos="fade-up" data-aos-delay="300">
+      <mat-card class="stat-card" data-aos="zoom-in" data-aos-delay="400">
+        <div class="stat-icon admin-icon">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ getAdminRolesCount() }}</h3>
+          <p>Vai trò quản trị</p>
+        </div>
+      </mat-card>
+  
+      <mat-card class="stat-card" data-aos="zoom-in" data-aos-delay="500">
+        <div class="stat-icon user-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ getUserRolesCount() }}</h3>
+          <p>Vai trò người dùng</p>
+        </div>
+      </mat-card>
+  
+      <mat-card class="stat-card" data-aos="zoom-in" data-aos-delay="600">
+        <div class="stat-icon total-icon">
+          <i class="fas fa-tasks"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ roles.length }}</h3>
+          <p>Tổng số vai trò</p>
+        </div>
+      </mat-card>
+    </div>
+  
+    <!-- Search and Filter Toolbar -->
+    <mat-card class="search-container" data-aos="fade-up" data-aos-delay="300">
+      <mat-form-field appearance="outline">
+        <mat-label>Tìm kiếm vai trò</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (input)="searchRoles()" placeholder="Nhập tên vai trò...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </mat-card>
+  
+    <!-- Roles Table -->
+    <div class="table-container mat-elevation-z8" data-aos="fade-up" data-aos-delay="400">
+      <table mat-table [dataSource]="filteredRoles" class="roles-table">
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let role"> {{role.roleId}} </td>
+        </ng-container>
+  
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Tên vai trò </th>
+          <td mat-cell *matCellDef="let role">
+            <span class="role-badge" [ngClass]="getRoleBadgeClass(role.name)">
+              {{role.name}}
+            </span>
+          </td>
+        </ng-container>
+  
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Mô tả </th>
+          <td mat-cell *matCellDef="let role"> {{role.description}} </td>
+        </ng-container>
+  
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Hành động </th>
+          <td mat-cell *matCellDef="let role">
+            <button mat-icon-button color="primary" (click)="editRole(role)" matTooltip="Chỉnh sửa">
+              <i class="fa-solid fa-file-pen"></i>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteRole(role.roleId)" matTooltip="Xóa">
+              <i class="fa-solid fa-delete-left"></i>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="['id', 'name', 'description', 'actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['id', 'name', 'description', 'actions']"
+            [class.selected-row]="selectedRoleId === row.roleId"
+            (click)="onRowClick(row)">
+        </tr>
+      </table>
+  
+      <!-- No Data Message -->
+      <div *ngIf="filteredRoles.length === 0" class="no-data-message" data-aos="fade-up">
+        <i class="fas fa-folder-open"></i>
+        <p>Không tìm thấy vai trò nào</p>
+      </div>
+    </div>
+  </mat-card>
+  
+  <!-- Edit Role Dialog -->
+  <ng-template #editRoleDialog>
+    <h2 mat-dialog-title>{{ editMode ? 'Chỉnh sửa vai trò' : 'Thêm vai trò mới' }}</h2>
+    <mat-dialog-content>
+      <form [formGroup]="roleForm" class="role-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Tên vai trò</mat-label>
+          <input matInput formControlName="name" required>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>Mô tả</mat-label>
+          <textarea matInput formControlName="description" rows="3"></textarea>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="cancelEdit()">Hủy</button>
+      <button mat-raised-button color="primary" (click)="editMode ? updateRole() : addRole()">
+        {{ editMode ? 'Cập nhật' : 'Thêm mới' }}
+      </button>
+    </mat-dialog-actions>
+  </ng-template>

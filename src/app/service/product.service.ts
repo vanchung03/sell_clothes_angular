@@ -33,6 +33,14 @@ export class ProductService {
       headers: this.getAuthHeaders(),
     });
   }
+  // Lấy danh sách sản phẩm theo categoryId
+  getProductsByCategoryId(categoryId: number): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/category/${categoryId}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+  
+
 
   // Tạo mới 1 Product
   createProduct(product: Product): Observable<Product> {
@@ -49,9 +57,12 @@ export class ProductService {
   }
 
   // Xóa Product
-  deleteProduct(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, {
+  deleteProduct(productId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${productId}`, {
       headers: this.getAuthHeaders(),
     });
   }
+  // deleteUser(userId: number): Observable<void> {
+  //   return this.http.delete<void>(`${this.apiUrl}/${userId}`, { headers: this.getAuthHeaders() });
+  // }
 }

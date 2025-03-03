@@ -1,0 +1,263 @@
+@import '~aos/dist/aos.css';
+
+// Variables
+$primary-color: #2c3e50;
+$accent-color: #27ae60;
+$danger-color: #e74c3c;
+$warning-color: #f39c12;
+$light-green: #e8f5e9;
+$border-radius: 8px;
+$box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+
+.payment-dashboard {
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 2rem;
+      color: $primary-color;
+      font-weight: 600;
+    }
+
+    .total-amount {
+      background: $light-green;
+      padding: 1rem 2rem;
+      border-radius: $border-radius;
+      font-weight: 600;
+      
+      span {
+        color: $accent-color;
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
+  .filter-section {
+    background: white;
+    padding: 1.5rem ;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .search-group, .date-group {
+      position: relative;
+      
+      i {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+      }
+
+      input {
+        width: 80%;
+        padding: 0.8rem 1rem ;
+        border: 1px solid #ddd;
+        border-radius: $border-radius;
+        transition: all 0.3s ease;
+        margin-left: auto;
+
+        &:focus {
+          border-color: $accent-color;
+          box-shadow: 0 0 0 2px rgba($accent-color, 0.1);
+        }
+      }
+    }
+
+    .select-group {
+      select {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: $border-radius;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:focus {
+          border-color: $accent-color;
+        }
+      }
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: $border-radius;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+
+        &.btn-search {
+          background: $accent-color;
+          color: white;
+          
+          &:hover {
+            background: darken($accent-color, 10%);
+          }
+        }
+
+        &.btn-reset {
+          background: #f8f9fa;
+          color: $primary-color;
+          
+          &:hover {
+            background: darken(#f8f9fa, 5%);
+          }
+        }
+
+        &.btn-export {
+          background: $primary-color;
+          color: white;
+          
+          &:hover {
+            background: darken($primary-color, 10%);
+          }
+        }
+      }
+    }
+  }
+
+  .table-container {
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    overflow: hidden;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        background: $light-green;
+        color: $primary-color;
+        font-weight: 600;
+        padding: 1rem;
+        text-align: left;
+        transition: all 0.3s ease;
+
+        &.sortable {
+          cursor: pointer;
+          
+          &:hover {
+            background: darken($light-green, 5%);
+          }
+        }
+      }
+
+      td {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+      }
+
+      tbody tr {
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #f8f9fa;
+        }
+
+        &.success { background: rgba($accent-color, 0.1); }
+        &.pending { background: rgba($warning-color, 0.1); }
+        &.failed { background: rgba($danger-color, 0.1); }
+      }
+
+      .transaction-code {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .btn-copy {
+          background: none;
+          border: none;
+          color: #666;
+          cursor: pointer;
+          padding: 0.2rem;
+          transition: all 0.3s ease;
+
+          &:hover {
+            color: $accent-color;
+          }
+        }
+      }
+
+      .payment-method {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          font-size: 1.1rem;
+          color: $primary-color;
+        }
+      }
+
+      .status-badge {
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+
+        &.success { 
+          background: rgba($accent-color, 0.1);
+          color: $accent-color;
+        }
+        &.pending { 
+          background: rgba($warning-color, 0.1);
+          color: $warning-color;
+        }
+        &.failed { 
+          background: rgba($danger-color, 0.1);
+          color: $danger-color;
+        }
+      }
+
+      .actions {
+        .btn-view {
+          background: none;
+          border: none;
+          color: $primary-color;
+          cursor: pointer;
+          padding: 0.5rem;
+          transition: all 0.3s ease;
+
+          &:hover {
+            color: $accent-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .payment-dashboard {
+    padding: 1rem;
+
+    .filter-section {
+      grid-template-columns: 1fr;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+  }
+}

@@ -1,0 +1,212 @@
+// Core variables
+$primary: #2c3e50;
+$accent: #e74c3c;
+$white: #fff;
+$gray: #f5f5f5;
+$border: #eee;
+$shadow: rgba(0,0,0,0.1);
+$trans: 0.3s ease;
+
+// Mixins
+@mixin flex($align: center) {
+  display: flex;
+  align-items: $align;
+}
+
+.cart-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  animation: fadeIn 0.5s;
+
+  .cart-title {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: $primary;
+    font-weight: 600;
+    
+    &::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: $accent;
+      margin: 0.5rem auto;
+    }
+  }
+
+  .cart-table-wrapper {
+    background: $white;
+    box-shadow: 0 0 15px $shadow;
+    
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        background: $white;
+        color: $primary;
+        padding: 1rem;
+        font-size: 0.9rem;
+        text-align: left;
+        border-bottom: 1px solid $border;
+      }
+
+      .brand-header {
+        background: $white;
+        
+        td {
+          padding: 0.8rem;
+          border-bottom: 1px solid $border;
+          @include flex;
+          
+          .brand-logo {
+            height: 25px;
+            margin-right: 1rem;
+            transition: transform $trans;
+            
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+
+      .product-info {
+        @include flex;
+        padding: 1rem;
+        gap: 1rem;
+        border-bottom: 1px solid $border;
+
+        .product-img {
+          width: 80px;
+          height: 80px;
+          object-fit: cover;
+          transition: transform $trans;
+
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+
+        div {
+          .product-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+          }
+          p {
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+          }
+        }
+      }
+
+      .quantity-control {
+        @include flex;
+        gap: 0.5rem;
+      
+
+        button {
+          width: 25px;
+          height: 25px;
+          border: none;
+          background: $primary;
+          color: $white;
+          cursor: pointer;
+          transition: $trans;
+
+          &:hover:not(:disabled) {
+            background: $accent;
+            transform: scale(1.1);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+          }
+        }
+      }
+
+      .price {
+        font-weight: 600;
+        color: $accent;
+      }
+
+      .remove-btn {
+        background: none;
+        color: $primary;
+        cursor: pointer;
+        transition: $trans;
+
+        &:hover {
+          color: $accent;
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+
+  .cart-summary {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: $white;
+    box-shadow: 0 0 15px $shadow;
+    @include flex;
+    justify-content: space-between;
+    transition: transform $trans;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    .total-amount {
+      font-size: 1.2rem;
+      
+      span {
+        color: $accent;
+        font-weight: 600;
+      }
+    }
+
+    .checkout-btn {
+      padding: 0.8rem 2rem;
+      background: $accent;
+      color: $white;
+      border: none;
+      cursor: pointer;
+      transition: $trans;
+
+      &:hover {
+        background: darken($accent, 10%);
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .cart-container {
+    padding: 0.5rem;
+
+    .cart-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .cart-summary {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+
+      .checkout-btn {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,124 +1,256 @@
-<mat-card class="user-management-container">
-  <div class="header-title">
+<mat-card class="user-management-container" data-aos="fade-up" data-aos-duration="800">
+  <div class="header-title" data-aos="fade-right" data-aos-delay="200">
     <div>
-    <span>Quản lý người dùng</span>
-    <p class="notes">
-      🔹 Quản lý thông tin tài khoản người dùng <br>
-      🔹 Có thể chỉnh sửa, xóa hoặc xuất danh sách người dùng <br>
-      🔹 Nhấn vào trạng thái để bật/tắt tài khoản  
-    </p>
-  </div>
-    <button mat-raised-button>
-      <a mat-list-item routerLink="/add-user" class="submenu-item">
+      <h1><i class="fa-solid fa-users-gear"></i> Quản lý người dùng</h1>
+      <p class="notes">
+        Quản lý thông tin tài khoản người dùng <br>
+        Có thể chỉnh sửa, xóa hoặc xuất danh sách người dùng <br>
+        Nhấn vào trạng thái để bật/tắt tài khoản
+      </p>
+    </div>
+    <div class="action-buttons">
+      <button mat-raised-button class="primary-btn add-user-btn" routerLink="/add-user">
         <i class="fa-solid fa-circle-plus"></i> Thêm người dùng
-      </a>
-    </button>
-  </div>
-  
-  <div style="border-bottom: 1px solid black;"></div>
-
-  <mat-toolbar class="header-toolbar">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Tìm kiếm</mat-label>
-      <input #searchInput matInput (input)="applyFilter($event)" placeholder="Nhập từ khóa tìm kiếm" />
-      <button mat-icon-button matSuffix (click)="clearSearch(searchInput)">
-        <mat-icon>close</mat-icon>
       </button>
-    </mat-form-field>
+      <button mat-raised-button class="secondary-btn" (click)="showDeletedUsers()">
+        <i class="fa-solid fa-trash-restore"></i> Thùng rác
+      </button>
+    </div>
+  </div>
 
-    <button mat-raised-button  (click)="deleteSelectedUsers()" [disabled]="selectedUsers.length === 0">
-      <i class="fa-solid fa-delete-left"></i> Xóa nhiều
-    </button>
-    <button mat-raised-button (click)="exportToExcel()">
-      <i class="fa-solid fa-file-excel"></i>Xuất Excel
-    </button>
+  <div class="divider"></div>
+
+  <!-- Thêm thống kê dashboard mini -->
+  <div class="stats-container" data-aos="fade-up" data-aos-delay="300">
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
+      <div class="stat-icon active-icon">
+        <i class="fa-solid fa-user-check"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ getUsersByStatus(1).length }}</h3>
+        <p>Người dùng đang hoạt động</p>
+      </div>
+    </div>
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="500">
+      <div class="stat-icon inactive-icon">
+        <i class="fa-solid fa-user-clock"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ getUsersByStatus(0).length }}</h3>
+        <p>Người dùng không hoạt động</p>
+      </div>
+    </div>
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="600">
+      <div class="stat-icon banned-icon">
+        <i class="fa-solid fa-user-slash"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ getUsersByStatus(2).length }}</h3>
+        <p>Người dùng bị cấm</p>
+      </div>
+    </div>
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="700">
+      <div class="stat-icon total-icon">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ dataSource.data.length }}</h3>
+        <p>Tổng người dùng</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar với các tính năng mở rộng -->
+  <mat-toolbar class="header-toolbar" data-aos="fade-up" data-aos-delay="300">
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Tìm kiếm</mat-label>
+        <input #searchInput matInput (input)="applyFilter($event)" placeholder="Nhập từ khóa tìm kiếm" />
+        <button mat-icon-button matSuffix (click)="clearSearch(searchInput)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div class="filter-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Lọc theo vai trò</mat-label>
+        <mat-select (selectionChange)="filterByRole($event.value)">
+          <mat-option value="all">Tất cả</mat-option>
+          <mat-option value="ROLE_ADMIN">Admin</mat-option>
+          <mat-option value="ROLE_USER">User</mat-option>
+          <mat-option value="moderator">Moderator</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Lọc theo trạng thái</mat-label>
+        <mat-select (selectionChange)="filterByStatus($event.value)">
+          <mat-option value="all">Tất cả</mat-option>
+          <mat-option value="1">Đang hoạt động</mat-option>
+          <mat-option value="0">Không hoạt động</mat-option>
+          <mat-option value="2">Bị cấm</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="action-container">
+      <button mat-raised-button class="danger-btn" (click)="deleteSelectedUsers()" [disabled]="selectedUsers.length === 0">
+        <i class="fa-solid fa-user-minus"></i> Xóa người dùng
+        <span *ngIf="selectedUsers.length > 0" class="selection-badge">{{ selectedUsers.length }}</span>
+      </button>
+      <button mat-raised-button class="success-btn" (click)="exportToExcel()">
+        <i class="fa-solid fa-file-excel"></i> Xuất Excel
+      </button>
+      <button mat-raised-button class="info-btn" (click)="exportToPDF()">
+        <i class="fa-solid fa-file-pdf"></i> Xuất PDF
+      </button>
+    </div>
   </mat-toolbar>
 
-  <!-- 🟠 Danh sách người dùng -->
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
-    <!-- 🆕 Checkbox chọn tất cả -->
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="toggleAllSelection($event)" [checked]="isAllSelected()"></mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let user">
-        <mat-checkbox (change)="toggleSelection(user)" [checked]="isSelected(user)"></mat-checkbox>
-      </td>
-    </ng-container>
+  <!-- Bảng người dùng với animation -->
+  <div class="table-container mat-elevation-z8" data-aos="fade-up" data-aos-delay="400">
+    <div *ngIf="isLoading" class="loading-overlay">
+      <mat-spinner></mat-spinner>
+    </div>
 
-    <ng-container matColumnDef="idEmailAvatar">
-      <th mat-header-cell *matHeaderCellDef><i class="fa-solid fa-icons"></i> ID, Email & Avatar</th>
-      <td mat-cell *matCellDef="let user" class="avatar-and-info">
-        <img *ngIf="user.avatar" [src]="user.avatar" alt="Avatar" class="user-avatar" />
-        <div class="info">
-          <p><strong>{{ user.userId }}</strong></p>
-          <p><strong>{{ user.email }}</strong></p>
-        </div>
-      </td>
-    </ng-container>
+    <table mat-table [dataSource]="dataSource" class="custom-table" matSort>
+      <!-- Checkbox chọn tất cả -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="toggleAllSelection($event)" [checked]="isAllSelected()" [indeterminate]="isPartiallySelected()"></mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <mat-checkbox (change)="toggleSelection(user)" [checked]="isSelected(user)"></mat-checkbox>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="username">
-      <th mat-header-cell *matHeaderCellDef><i class="fa-solid fa-circle-user"></i> Username</th>
-      <td mat-cell *matCellDef="let user">{{ user.username }}</td>
-    </ng-container>
+      <ng-container matColumnDef="idEmailAvatar">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="email">
+          <i class="fa-solid fa-id-card"></i> ID & Email
+        </th>
+        <td mat-cell *matCellDef="let user" class="avatar-and-info">
+          <div class="avatar-container">
+            <img *ngIf="user.avatar" [src]="user.avatar" alt="Avatar" class="user-avatar" />
+            <div *ngIf="!user.avatar" class="avatar-placeholder">
+              {{ getUserInitials(user) }}
+            </div>
+          </div>
+          <div class="info">
+            <p class="user-id"><strong>ID: {{ user.userId }}</strong></p>
+            <p class="user-email">{{ user.email }}</p>
+          </div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="fullName">
-      <th mat-header-cell *matHeaderCellDef><i class="fa-solid fa-signature"></i> Họ và Tên</th>
-      <td mat-cell *matCellDef="let user">{{ user.fullName }}</td>
-    </ng-container>
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <i class="fa-solid fa-user-tag"></i> Username
+        </th>
+        <td mat-cell *matCellDef="let user">{{ user.username }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef><i class="fa-solid fa-phone"></i> Số Điện Thoại</th>
-      <td mat-cell *matCellDef="let user">{{ user.phone }}</td>
-    </ng-container>
-    <ng-container matColumnDef="roles">
-      <th mat-header-cell *matHeaderCellDef><i class="fa-solid fa-circle-user"></i> Vai Trò</th>
-      <td mat-cell *matCellDef="let user">
-        <span *ngFor="let role of user.roles" class="role">{{ role.name }}</span>
-        <span *ngIf="!user.roles || user.roles.length === 0">Chưa có vai trò</span>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <i class="fa-solid fa-signature"></i> Họ và Tên
+        </th>
+        <td mat-cell *matCellDef="let user">{{ user.fullName }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>
-        <i class="fa-solid fa-toggle-on"></i> Trạng Thái
-      </th>
-      <td mat-cell *matCellDef="let user">
-        <span class="status-badge"
-          [ngClass]="{
-            'active': user.status === 1, 
-            'inactive': user.status === 0, 
-            'banned': user.status === 2
-          }">
-          {{ getStatusText(user.status) }}
-        </span>
-    
-        <mat-icon (click)="toggleStatus(user)"
-          [ngClass]="{
-            'icon-active': user.status === 1, 
-            'icon-inactive': user.status === 0, 
-            'icon-banned': user.status === 2
-          }">
-          {{ getStatusIcon(user.status) }}
-        </mat-icon>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>
+          <i class="fa-solid fa-phone"></i> Số Điện Thoại
+        </th>
+        <td mat-cell *matCellDef="let user">{{ user.phone || 'Chưa cập nhật' }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef><i class="fa-brands fa-reacteurope"></i>Hành động</th>
-      <td mat-cell *matCellDef="let user">
-        <button mat-icon-button color="primary" (click)="openEditDialog(user.userId)" matTooltip="Chỉnh sửa">
-          <i class="fa-solid fa-pen-to-square"></i>
-        </button>        
-        <button mat-icon-button color="warn" (click)="deleteUser(user.userId)" matTooltip="Xóa">
-          <i class="fa-solid fa-delete-left"></i>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="lastLogin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="lastLogin">
+          <i class="fa-solid fa-clock-rotate-left"></i> Đăng nhập cuối
+        </th>
+        <td mat-cell *matCellDef="let user">
+          {{ user.lastLogin ? (user.lastLogin | date:'dd/MM/yyyy HH:mm') : 'Chưa đăng nhập' }}
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef>
+          <i class="fa-solid fa-user-shield"></i> Vai Trò
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <span *ngFor="let role of user.roles" class="role-badge" [ngClass]="getRoleClass(role.name)">
+            {{ role.name }}
+          </span>
+          <span *ngIf="!user.roles || user.roles.length === 0" class="no-role-badge">Chưa có vai trò</span>
+        </td>
+      </ng-container>
 
-  <mat-paginator [pageSize]="3" [pageSizeOptions]="[3, 5, 7]" showFirstLastButtons></mat-paginator>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="status">
+          <i class="fa-solid fa-toggle-on"></i> Trạng Thái
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="status-container">
+            <span class="status-badge" [ngClass]="{
+              'active-badge': user.status === 1,
+              'inactive-badge': user.status === 0,
+              'banned-badge': user.status === 2
+            }">
+              {{ getStatusText(user.status) }}
+            </span>
+
+            <button mat-icon-button (click)="toggleStatus(user)" class="status-toggle-btn" [ngClass]="{
+              'active-btn': user.status === 1,
+              'inactive-btn': user.status === 0,
+              'banned-btn': user.status === 2
+            }">
+              <mat-icon>{{ getStatusIcon(user.status) }}</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <i class="fa-solid fa-gears"></i> Hành động
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="action-buttons">
+            <button mat-icon-button color="primary" class="edit-btn" (click)="openEditDialog(user.userId)" matTooltip="Chỉnh sửa">
+              <i class="fa-solid fa-file-pen"></i>
+            </button>
+            <!-- <button mat-icon-button  class="view-btn" (click)="viewUserDetails(user)" matTooltip="Xem chi tiết">
+              <i class="fas fa-eye"></i>
+            </button> -->
+            <button mat-icon-button color="warn" class="delete-btn" (click)="deleteUser(user.userId)" matTooltip="Xóa">
+              <i class="fa-solid fa-user-slash"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="user-row" [ngClass]="{'selected-row': isSelected(row)}" 
+          (click)="onRowClick(row, $event)"></tr>
+
+      <!-- Không có dữ liệu -->
+      <tr class="no-data-row" *matNoDataRow>
+        <td class="no-data-cell" colspan="8">
+          <div class="no-data-container">
+            <i class="fa-solid fa-database"></i>
+            <p>Không tìm thấy dữ liệu người dùng</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
+  </div>
+
+  <!-- Thêm floating action button -->
+  <div class="floating-action-btn">
+    <button mat-fab color="primary" matTooltip="Thêm người dùng mới" routerLink="/add-user">
+      <mat-icon>person_add</mat-icon>
+    </button>
+  </div>
 </mat-card>

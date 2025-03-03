@@ -32,13 +32,15 @@ export class CategoryService {
   }
 
   deleteCategory(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.delete(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders(),responseType: 'text'  });
   }
+  
 
-  // API search category by name
-  getCategoryByName(name: string): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.baseUrl}/search?name=${name}`, {
+  // Lấy danh mục theo từ khóa (nam, nữ)
+  searchCategories(keyword: string): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.baseUrl}/search?keyword=${keyword}`, {
       headers: this.getAuthHeaders()
     });
   }
 }
+

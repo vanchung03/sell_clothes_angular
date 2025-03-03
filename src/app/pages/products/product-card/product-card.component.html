@@ -1,0 +1,120 @@
+<div class="products-container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  
+    <!-- Products Grid -->
+    <div class="products-grid" [ngClass]="{'products-list': displayStyle === 'list'}">
+      <div class="product-card" *ngFor="let product of products" 
+           [ngClass]="{'product-card--grid': displayStyle === 'grid', 'product-card--list': displayStyle === 'list'}">
+        <div class="product-card__image-container">
+          <div class="product-card__image-wrapper">
+            <img [src]="product.thumbnail || 'assets/images/placeholder.jpg'" 
+                 [alt]="product.name" 
+                 class="product-card__image">
+            
+            <!-- Overlay Actions -->
+            <div class="product-card__overlay">
+              <button class="btn-action" (click)="toggleQuickView(product, $event)" title="Xem nhanh">
+                <i class="fa fa-eye"></i>
+              </button>
+              <button class="btn-action" (click)="goToDetail(product, $event)" title="Xem chi tiết">
+                <i class="fa fa-link"></i>
+              </button>
+              <button class="btn-action" [ngClass]="{'favorite': product.isFavorite}" 
+                      (click)="toggleFavorite(product, $event)" title="Yêu thích">
+                <i class="fa" [ngClass]="product.isFavorite ? 'fa-heart' : 'fa-heart-o'"></i>
+              </button>
+            </div>
+    
+            <!-- Sale Badge -->
+            <div *ngIf="isProductOnSale(product)" class="product-card__sale-badge">
+              -{{ getDiscountPercentage(product) }}%
+            </div>
+          </div>
+        </div>
+    
+        <div class="product-card__content">
+          <h3 class="product-card__title">{{ product.name }}</h3>
+          
+          <div class="product-card__price-container">
+            <span *ngIf="isProductOnSale(product)" class="product-card__price product-card__price--old">
+              {{ product.price | currency:'VND':'symbol':'1.0-0' }}
+            </span>
+            <span class="product-card__price product-card__price--current">
+              {{ (product.salePrice || product.price) | currency:'VND':'symbol':'1.0-0' }}
+            </span>
+          </div>
+          
+          <p *ngIf="displayStyle === 'list'" class="product-card__description">
+            {{ product.description | slice:0:150 }}{{ product.description.length > 150 ? '...' : '' }}
+          </p>
+          
+          <div class="product-card__actions">
+            <button class="btn-primary" (click)="goToDetail(product, $event)">
+              <i class="fa fa-shopping-cart"></i> Mua ngay
+            </button>
+            <button class="btn-secondary" (click)="toggleQuickView(product, $event)">
+              <i class="fa fa-eye"></i> Xem nhanh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Quick View Modal -->
+    <div class="quick-view-modal" *ngIf="showQuickView && selectedProduct" 
+         (click)="toggleQuickView(selectedProduct, $event)">
+      <div class="quick-view-content" (click)="$event.stopPropagation()">
+        <button class="quick-view-close" (click)="toggleQuickView(selectedProduct, $event)">
+          <i class="fa fa-times"></i>
+        </button>
+        
+        <div class="quick-view-grid">
+          <div class="quick-view-image">
+            <img [src]="selectedProduct.thumbnail || 'assets/images/placeholder.jpg'" 
+                 [alt]="selectedProduct.name">
+            <div *ngIf="isProductOnSale(selectedProduct)" class="sale-tag">
+              -{{ getDiscountPercentage(selectedProduct) }}%
+            </div>
+          </div>
+          
+          <div class="quick-view-details">
+            <h2>{{ selectedProduct.name }}</h2>
+            
+            <div class="price-container">
+              <span *ngIf="isProductOnSale(selectedProduct)" class="old-price">
+                {{ selectedProduct.price | currency:'VND':'symbol':'1.0-0' }}
+              </span>
+              <span class="current-price">
+                {{ (selectedProduct.salePrice || selectedProduct.price) | currency:'VND':'symbol':'1.0-0' }}
+              </span>
+            </div>
+            
+            <div class="product-description">
+              <p>{{ selectedProduct.description }}</p>
+            </div>
+            
+            <div class="quick-view-actions">
+              <button class="btn-primary">
+                <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
+              </button>
+              <button class="btn-secondary" (click)="goToDetail(selectedProduct, $event)">
+                <i class="fa fa-info-circle"></i> Xem chi tiết
+              </button>
+              <button class="btn-icon" [ngClass]="{'favorite': selectedProduct.isFavorite}" 
+                      (click)="toggleFavorite(selectedProduct, $event)">
+                <i class="fa" [ngClass]="selectedProduct.isFavorite ? 'fa-heart' : 'fa-heart-o'"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

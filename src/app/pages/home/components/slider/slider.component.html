@@ -1,0 +1,33 @@
+<div class="home-page">
+  <!-- Slider / Banner lớn -->
+  <div class="home-slider">
+    <div class="slide" *ngFor="let s of slides; let i = index" [class.active]="i === currentSlide"
+      [class.next]="i === getNextSlideIndex()" [class.prev]="i === getPrevSlideIndex()">
+      <img [src]="s.image" [alt]="s.title" />
+      <div class="slide-caption">
+        <h2>{{ s.title }}</h2>
+        <p>{{ s.description }}</p>
+        <button class="action-btn" (click)="onSlideAction(s)">Mua ngay</button>
+      </div>
+    </div>
+    <div class="slider-controls">
+      <button class="prev-btn" (click)="prevSlide()">&#10094;</button>
+      <div class="dots">
+        <span *ngFor="let s of slides; let i = index" [class.active]="i === currentSlide" (click)="goToSlide(i)">
+        </span>
+      </div>
+      <button class="next-btn" (click)="nextSlide()">&#10095;</button>
+    </div>
+  </div>
+
+  <!-- Danh mục (Category) -->
+  <div class="category-section container">
+    <h2>Danh mục nổi bật</h2>
+    <div class="category-grid">
+      <div class="category-item" *ngFor="let c of categories">
+        <img [src]="c.image" [alt]="c.name" />
+        <div class="cat-name">{{ c.name }}</div>
+      </div>
+    </div>
+  </div>
+</div>

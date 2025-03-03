@@ -1,0 +1,114 @@
+<app-header></app-header>
+<app-navbar></app-navbar>
+
+<div class="news-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Tin Tức & Xu Hướng</h1>
+      <p>Cập nhật những xu hướng thời trang mới nhất</p>
+    </div>
+  </section>
+
+  <!-- News Categories -->
+  <section class="categories-section">
+    <div class="content-wrapper">
+      <div class="category-tabs">
+        <button [class.active]="selectedCategory === 'all'" (click)="filterNews('all')">
+          Tất Cả
+        </button>
+        <button [class.active]="selectedCategory === 'trend'" (click)="filterNews('trend')">
+          Xu Hướng
+        </button>
+        <button [class.active]="selectedCategory === 'collection'" (click)="filterNews('collection')">
+          Bộ Sưu Tập
+        </button>
+        <button [class.active]="selectedCategory === 'event'" (click)="filterNews('event')">
+          Sự Kiện
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured News -->
+  <section class="featured-news">
+    <div class="content-wrapper">
+      <div class="featured-grid">
+        <div class="main-feature">
+          <div class="news-card large">
+            <div class="image-wrapper">
+              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b" alt="Fashion Week">
+              <div class="category-tag">Xu Hướng</div>
+            </div>
+            <div class="content">
+              <h2>Tuần lễ thời trang Xuân Hè 2024</h2>
+              <p class="date">01 Tháng 03, 2024</p>
+              <p class="excerpt">Khám phá những xu hướng thời trang mới nhất từ các nhà thiết kế hàng đầu thế giới.</p>
+              <a href="#" class="read-more">Xem thêm <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-features">
+          <div class="news-card">
+            <div class="image-wrapper">
+              <img src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93" alt="Summer Collection">
+              <div class="category-tag">Bộ Sưu Tập</div>
+            </div>
+            <div class="content">
+              <h3>BST Hè 2024: Sắc màu nhiệt đới</h3>
+              <p class="date">28 Tháng 02, 2024</p>
+              <a href="#" class="read-more">Xem thêm <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="news-card">
+            <div class="image-wrapper">
+              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f" alt="Fashion Event">
+              <div class="category-tag">Sự Kiện</div>
+            </div>
+            <div class="content">
+              <h3>SERENITY Fashion Show 2024</h3>
+              <p class="date">25 Tháng 02, 2024</p>
+              <a href="#" class="read-more">Xem thêm <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest News Grid -->
+  <section class="latest-news">
+    <div class="content-wrapper">
+      <h2 class="section-title">Tin Tức Mới Nhất</h2>
+      <div class="news-grid">
+        <div class="news-card" *ngFor="let news of filteredNews">
+          <div class="image-wrapper">
+            <img [src]="news.imageUrl" [alt]="news.title">
+            <div class="category-tag">{{news.category}}</div>
+          </div>
+          <div class="content">
+            <h3>{{news.title}}</h3>
+            <p class="date">{{news.date | date:'dd/MM/yyyy'}}</p>
+            <p class="excerpt">{{news.excerpt}}</p>
+            <a href="#" class="read-more">Xem thêm <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button [disabled]="currentPage === 1" (click)="changePage(-1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span>Trang {{currentPage}} / {{totalPages}}</span>
+        <button [disabled]="currentPage === totalPages" (click)="changePage(1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,121 @@
+<div class="order-dashboard" data-aos="fade-up">
+  <header class="dashboard-header" data-aos="fade-down">
+    <h2>Quản Lý Đơn Hàng</h2>
+    <div class="stats">
+      <div class="stat-item">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Tổng đơn: {{filteredOrders.length}}</span>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Tổng tiền: {{getTotalAmount() | currency:'VND'}}</span>
+      </div>
+      <button class="btn-export" (click)="exportToExcel()">
+        <i class="fa-solid fa-file-excel"></i> Export Excel
+      </button>      
+    </div>
+  </header>
+
+  <div class="filter-section" data-aos="fade-up">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        placeholder="Tìm kiếm đơn hàng..."
+        (input)="filterOrders()"
+      />
+    </div>
+
+    <div class="filter-groups">
+      <div class="filter-group" data-aos="fade-right">
+        <label><i class="fas fa-filter"></i> Trạng thái</label>
+        <select [(ngModel)]="selectedStatus" (change)="filterOrders()">
+          <option *ngFor="let option of statusOptions" [value]="option.value">
+            <i [class]="'fas ' + option.icon"></i> {{option.label}}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group" data-aos="fade-left">
+        <label><i class="fas fa-wallet"></i> Thanh toán</label>
+        <select [(ngModel)]="selectedPaymentMethod" (change)="filterOrders()">
+          <option *ngFor="let method of paymentMethods" [value]="method.value">
+            <i [class]="'fas ' + method.icon"></i> {{method.label}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-container" data-aos="fade-up" data-aos-delay="200">
+    <table>
+      <thead>
+        <tr>
+          <th>Mã đơn</th>
+          <th>Khách hàng</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+          <th>Thanh toán</th>
+          <th>TT thanh toán</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders; let i = index" 
+            [attr.data-aos]="'fade-up'"
+            [attr.data-aos-delay]="i * 50">
+          <td class="order-id">
+            <strong>#{{order.orderId}}</strong>
+          </td>
+          <td class="customer-info">
+            <span class="user-id">#{{order.userId}}</span>
+          </td>
+          <td class="amount">
+            {{order.totalAmount | currency:'VND'}}
+          </td>
+          <td class="status-cell">
+            <select 
+              [(ngModel)]="order.status" 
+              (change)="updateOrderStatus(order.orderId, order.status)"
+              [style.backgroundColor]="getStatusColor(order.status)"
+              class="status-select">
+              <option *ngFor="let option of statusOptions" 
+                      [value]="option.value"
+                      [disabled]="!option.value">
+                {{option.label}}
+              </option>
+            </select>
+          </td>
+          <td class="payment-method">
+            <i class="fas" [ngClass]="{
+              'fa-money-bill': payments[order.orderId]?.method === 'COD',
+              'fa-credit-card': payments[order.orderId]?.method === 'VNPAY',
+              'fa-wallet': payments[order.orderId]?.method === 'MOMO',
+              'fa-paypal': payments[order.orderId]?.method === 'PAYPAL'
+            }"></i>
+            {{payments[order.orderId]?.method || 'N/A'}}
+          </td>
+          <td>
+            <span class="payment-status" 
+                  [ngClass]="payments[order.orderId]?.paymentStatus?.toLowerCase()">
+              {{getPaymentStatusText(payments[order.orderId]?.paymentStatus)}}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="btn-action view" 
+                    [routerLink]="['/admin/orders', order.orderId]"
+                    matTooltip="Xem chi tiết">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn-action print" 
+                    matTooltip="In đơn hàng"
+                    (click)="printOrder(order)">
+              <i class="fas fa-print"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

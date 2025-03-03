@@ -1,0 +1,23 @@
+.topbar {
+    background: white;
+    padding: 10px 0;
+    display: flex;
+    justify-content: flex-end;
+    max-width: 1200px;
+    margin: auto;
+  
+    .btn {
+      background:#901c28;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+  
+      &:hover {
+        background: darkred;
+      }
+    }
+  }
+  

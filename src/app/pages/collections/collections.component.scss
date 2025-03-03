@@ -1,0 +1,355 @@
+@import '~aos/dist/aos.css';
+
+// Variables
+$primary: #1a1a1a;
+$accent: #d4af37;
+$text-light: #ffffff;
+$text-dark: #333333;
+$gradient-dark: linear-gradient(45deg, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hover-transform {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.collections-section {
+  // Hero Banner
+  .hero-banner {
+    height: 80vh;
+    background: $gradient-dark,
+                url('https://static.zara.net/photos///contents/mkt/spots/aw23-north-woman-new/subhome-xmedia-38//w/1920/IMAGE-landscape-fill-c43b49b3-af58-423d-b6ed-b95f0a4331f1-default_0.jpg?ts=1695312361969') center/cover;
+    @include flex-center;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+    
+    .banner-content {
+      max-width: 900px;
+      padding: 0 2rem;
+      text-align: center;
+      z-index: 2;
+      
+      h1 {
+        font-size: 4.5rem;
+        font-weight: 700;
+        color: $text-light;
+        margin-bottom: 1.5rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        line-height: 1.2;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      }
+      
+      p {
+        font-size: 1.5rem;
+        color: rgba($text-light, 0.95);
+        margin-bottom: 3rem;
+        font-weight: 300;
+      }
+      
+      .btn-discover {
+        padding: 1.2rem 3.5rem;
+        background: $text-light;
+        color: $primary;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        
+        &:hover {
+          background: $accent;
+          color: $text-light;
+          transform: translateY(-5px);
+          box-shadow: 0 10px 25px rgba($accent, 0.4);
+          
+          i {
+            transform: translateX(8px);
+          }
+        }
+        
+        i {
+          transition: transform 0.4s ease;
+        }
+      }
+    }
+  }
+
+  // Category Tabs
+  .category-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 3rem 0;
+    padding: 0 1rem;
+
+    button {
+      padding: 1rem 2rem;
+      border: none;
+      background: transparent;
+      color: $text-dark;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: $accent;
+        transition: width 0.3s ease;
+      }
+
+      &:hover, &.active {
+        color: $accent;
+        
+        &::after {
+          width: 100%;
+        }
+      }
+
+      i {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  // Collections Grid
+  .collections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2.5rem;
+    padding: 2rem;
+
+    .collection-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+
+        .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .main-image {
+          transform: scale(1.1);
+        }
+      }
+
+      .image-container {
+        position: relative;
+        padding-top: 130%;
+        overflow: hidden;
+
+        .main-image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba($primary, 0.85);
+          @include flex-center;
+          flex-direction: column;
+          gap: 2rem;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 2rem;
+
+          .actions {
+            display: flex;
+            gap: 1.5rem;
+
+            .action-btn {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              background: $text-light;
+              border: none;
+              color: $primary;
+              @include flex-center;
+              cursor: pointer;
+              transition: all 0.3s ease;
+
+              &:hover {
+                background: $accent;
+                color: $text-light;
+                transform: scale(1.1);
+              }
+
+              i {
+                font-size: 1.2rem;
+              }
+            }
+          }
+
+          .btn-view-details {
+            padding: 1rem 2.5rem;
+            background: $text-light;
+            color: $primary;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+
+            &:hover {
+              background: $accent;
+              color: $text-light;
+              transform: translateY(-2px);
+            }
+          }
+        }
+      }
+
+      .content {
+        padding: 2rem;
+        text-align: center;
+
+        .badges {
+          display: flex;
+          justify-content: center;
+          gap: 0.8rem;
+          margin-bottom: 1.2rem;
+
+          span {
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            &.new { background: #4CAF50; color: white; }
+            &.hot { background: #F44336; color: white; }
+            &.trending { background: #2196F3; color: white; }
+            &.bestseller { background: #FF9800; color: white; }
+          }
+        }
+
+        h3 {
+          font-size: 1.4rem;
+          color: $text-dark;
+          margin-bottom: 0.8rem;
+          font-weight: 600;
+        }
+
+        .subtitle {
+          color: #666;
+          margin-bottom: 1rem;
+          font-size: 1rem;
+        }
+
+        .price {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $accent;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .collections-section {
+    .hero-banner .banner-content h1 {
+      font-size: 3.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .collections-section {
+    .hero-banner {
+      height: 60vh;
+      
+      .banner-content {
+        h1 {
+          font-size: 2.5rem;
+        }
+        p {
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .category-tabs {
+      flex-wrap: wrap;
+      gap: 1rem;
+      
+      button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+
+    .collections-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .collections-section {
+    .hero-banner .banner-content {
+      h1 {
+        font-size: 2rem;
+      }
+      .btn-discover {
+        padding: 1rem 2rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,180 @@
+<div class="top-bar">
+
+  <div *ngIf="isProfileFormVisible" class="profile-form visible">
+    <div class="profile-form-container">
+      <button class="close-btn" (click)="isProfileFormVisible = false">
+        <i class="fas fa-times text-danger"></i>
+      </button>
+      <!-- Chỉnh sửa & Lưu -->
+      <div class="form-actions">
+        <button *ngIf="!isEditing" class="edit-btn" (click)="startEditing()">
+          <mat-icon>edit</mat-icon> Sửa thông tin
+        </button>
+
+        <button *ngIf="isEditing" class="save-btn" (click)="saveChanges()">
+          <mat-icon>save</mat-icon> Lưu thông tin
+        </button>
+        <!-- Nút lưu Avatar -->
+        <button *ngIf="newAvatarSelected" class="save-avatar-btn" (click)="saveAvatar()">
+          <mat-icon>save</mat-icon> Lưu Avatar
+        </button>
+      </div>
+
+      <form>
+        <!-- Avatar -->
+        <div class="avatar-container">
+          <img [src]="user.avatar" alt="Avatar" class="avatar-center" />
+          <button mat-icon-button class="edit-avatar-btn" (click)="editAvatar()">
+            <i class="fa-solid fa-cloud"></i>
+          </button>
+          <input type="file" accept="image/*" #fileInput (change)="onFileSelected($event)" hidden />
+        </div>
+
+        <!-- Form -->
+        <div class="form-fields-container">
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Username</mat-label>
+              <input matInput [(ngModel)]="user.username" name="username" [readonly]="!isEditing" />
+              <mat-icon matPrefix>person</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <mat-label>Password</mat-label>
+              <input type="password" matInput [(ngModel)]="user.newPassword" name="newPassword"
+                [readonly]="!isEditing" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput [(ngModel)]="user.email" name="email" [readonly]="!isEditing" />
+              <mat-icon matPrefix>email</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Full Name</mat-label>
+              <input matInput [(ngModel)]="user.fullName" name="fullName" [readonly]="!isEditing" />
+              <mat-icon matPrefix>account_circle</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Phone</mat-label>
+              <input matInput [(ngModel)]="user.phone" name="phone" [readonly]="!isEditing" />
+              <mat-icon matPrefix>phone</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Status</mat-label>
+              <input matInput [value]="user.status === 1 ? 'Active' : 'Inactive'" readonly />
+              <mat-icon matPrefix>check_circle</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Created At</mat-label>
+              <input matInput [value]="user.createdAt" readonly />
+              <mat-icon matPrefix>calendar_today</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Updated At</mat-label>
+              <input matInput [value]="user.updatedAt" readonly />
+              <mat-icon matPrefix>update</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Roles</mat-label>
+              <input matInput [value]="userRoles" readonly />
+              <mat-icon matPrefix>group</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Đường kẻ đỏ mảnh -->
+<div class="thin-red-line"></div>
+
+<!-- Khu vực header chính -->
+<header class="header">
+  <!-- Thanh tìm kiếm -->
+  <div class="search-container">
+    <input type="text" class="search-box" placeholder="Bạn muốn tìm gì?" [(ngModel)]="searchTerm" />
+    <button class="search-btn" (click)="onSearch()">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo">
+    <a routerLink="/">SERENITY <span>VN</span></a>
+  </div>
+
+  <!-- Icons: Kiểm tra, Yêu thích, Giỏ hàng -->
+  <div class="header-icons">
+    <a routerLink="/check" class="icon">
+      <mat-icon>assignment</mat-icon>
+      <span>Kiểm tra</span>
+    </a>
+    <a routerLink="/favorite" class="icon">
+      <mat-icon>favorite</mat-icon>
+      <span>Yêu thích</span>
+      <span class="badge" *ngIf="favoriteCount > 0">{{ favoriteCount }}</span>
+    </a>
+    <a routerLink="/cart" class="icon">
+      <mat-icon>shopping_bag</mat-icon>
+      <span>Giỏ hàng</span>
+      <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+    </a>
+
+    <!-- Nếu người dùng chưa đăng nhập -->
+    <ng-container *ngIf="!isLoggedIn; else userMenu">
+      <button mat-button class="btn top-btn" [routerLink]="'/login'">
+        <mat-icon>login</mat-icon>
+        ĐĂNG NHẬP
+      </button>
+      <button mat-button class="btn top-btn" [routerLink]="'/register'">
+        <mat-icon>person_add</mat-icon>
+        ĐĂNG KÝ
+      </button>
+    </ng-container>
+    <!-- Nếu người dùng đã đăng nhập -->
+    <ng-template #userMenu>
+      <div class="profile-menu" (mouseenter)="showMenu = true" (mouseleave)="showMenu = false">
+        <img [src]="user.avatar" alt="Avatar" class="avatar" />
+        <button mat-button class="btn top-btn">
+          {{ user.fullName | uppercase}}
+        </button>
+      
+        <div class="profile-dropdown" *ngIf="showMenu">
+          <button mat-menu-item (click)="toggleProfileForm()">
+            <mat-icon fontIcon="person"></mat-icon>
+            <span>Thông Tin Cá Nhân</span>
+          </button>
+      
+          <button mat-menu-item (click)="myOrders()">
+            <mat-icon fontIcon="list_alt"></mat-icon>
+            <span>Đơn Hàng Của Bạn</span>
+          </button>
+      
+          <button mat-menu-item (click)="logout()">
+            <mat-icon fontIcon="logout"></mat-icon>
+            <span>Đăng Xuất</span>
+          </button>
+        </div>
+      </div>
+      <!-- Modal hiển thị danh sách đơn hàng -->
+      <div *ngIf="showOrders" class="modal-overlay">
+        <app-order-list (closeModal)="closeOrders()"></app-order-list>
+      </div>
+    </ng-template>
+
+  </div>
+</header>

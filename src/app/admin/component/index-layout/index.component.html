@@ -25,17 +25,17 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>person</mat-icon>
-            <span>Users</span>
+            <span>Quản Lý Người Dùng</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
           <a mat-list-item routerLink="/users" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>list</mat-icon>
-            <span>User List</span>
+            <span>Danh Sách Người Dùng </span>
           </a>
           <a mat-list-item routerLink="/add-user" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>account_circle</mat-icon>
-            <span>Add User</span>
+            <span>Thêm Người Dùng</span>
           </a>
         </mat-nav-list>
       </mat-expansion-panel>
@@ -45,18 +45,18 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>account_circle</mat-icon>
-            <span>Roles</span>
+            <span>Quản Lý Vai Trò</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
-          <a mat-list-item routerLink="/users" routerLinkActive="active-menu" class="submenu-item">
-            <mat-icon>list</mat-icon>
-            <span>Roles List</span>
-          </a>
           <a mat-list-item routerLink="/roles" routerLinkActive="active-menu" class="submenu-item">
-            <mat-icon>account_circle</mat-icon>
-            <span>Add Roles</span>
+            <mat-icon>list</mat-icon>
+            <span>Danh Vai Trò</span>
           </a>
+          <!-- <a mat-list-item routerLink="#" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>account_circle</mat-icon>
+            <span>Thêm Quyền</span>
+          </a> -->
         </mat-nav-list>
       </mat-expansion-panel>
 
@@ -65,25 +65,45 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>shopping_bag</mat-icon>
-            <span>Products</span>
+            <span>Quản Lý Sản Phẩm</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
           <a mat-list-item routerLink="/products" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>list</mat-icon>
-            <span>List Product</span>
+            <span>Danh Sách Sản Phẩm</span>
           </a>
           <a mat-list-item routerLink="add-product" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>shopping_bag</mat-icon>
-            <span>Add Product </span>
+            <span>Thêm Sản Phẩm</span>
           </a>
-          <a mat-list-item routerLink="/product-image" routerLinkActive="active-menu" class="submenu-item">
+          <!-- <a mat-list-item routerLink="/product-image" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>image</mat-icon>
             <span>Product Image</span>
           </a>
           <a mat-list-item routerLink="/product-size" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>straighten</mat-icon>
             <span>Product Size</span>
+          </a> -->
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <!-- Nested Menu for Users -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>category</mat-icon>
+            <span>Thương hiệu & Danh mục</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/brand" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>list</mat-icon>
+            <span>Thương Hiệu</span>
+          </a>
+          <a mat-list-item routerLink="/category" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>category</mat-icon>
+            <span>Danh Mục</span>
           </a>
         </mat-nav-list>
       </mat-expansion-panel>
@@ -93,30 +113,51 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>shopping_cart</mat-icon>
-            <span>Orders</span>
+            <span>Quản Lý Đơn Hàng</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
           <!-- All Orders -->
-          <a mat-list-item routerLink="/all-orders" routerLinkActive="active-menu" class="submenu-item">
+          <a mat-list-item routerLink="/order" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>list</mat-icon>
-            <span>All Orders</span>
+            <span>Danh Sách Đơn Hàng</span>
           </a>
           <!-- Pending Orders -->
-          <a mat-list-item routerLink="/pending-orders" routerLinkActive="active-menu" class="submenu-item">
+          <!-- <a mat-list-item routerLink="/pending-orders" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>hourglass_empty</mat-icon>
             <span>Pending Orders</span>
-          </a>
+          </a> -->
           <!-- Completed Orders -->
-          <a mat-list-item routerLink="/completed-orders" routerLinkActive="active-menu" class="submenu-item">
+          <!-- <a mat-list-item routerLink="/completed-orders" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>check_circle</mat-icon>
             <span>Completed Orders</span>
-          </a>
+          </a> -->
           <!-- Cancelled Orders -->
-          <a mat-list-item routerLink="/cancelled-orders" routerLinkActive="active-menu" class="submenu-item">
+          <!-- <a mat-list-item routerLink="/cancelled-orders" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>cancel</mat-icon>
             <span>Cancelled Orders</span>
+          </a> -->
+        </mat-nav-list>
+      </mat-expansion-panel>
+       <!-- Nested Menu for Orders -->
+       <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>history</mat-icon>
+            <span>QuẢN lÝ Giao dỊCH</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <!-- All Orders -->
+          <a mat-list-item routerLink="/payment" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>list</mat-icon>
+            <span>Giao dỊCH</span>
           </a>
+          <a mat-list-item routerLink="/payment-history" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>list</mat-icon>
+            <span>LỊCH sỬ giao DỊCH</span>
+          </a>
+    
         </mat-nav-list>
       </mat-expansion-panel>
 
@@ -125,7 +166,7 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>bar_chart</mat-icon>
-            <span>Reports</span>
+            <span>Thống Kê Báo Cáo</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
@@ -151,7 +192,7 @@
       <!-- Settings -->
       <a mat-list-item routerLink="/settings" routerLinkActive="active-menu" class="menu-item">
         <mat-icon>settings</mat-icon>
-        <span>Settings</span>
+        <span>Cài Đặt</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -178,15 +219,15 @@
       </button>
       <div class="profile-menu" (mouseenter)="showMenu = true" (mouseleave)="showMenu = false">
         <img [src]="user.avatar" alt="Avatar" class="avatar" />
-          <span class="username-username">{{ user.fullName }}</span>
+          <span class="username-username">{{ user.fullName | uppercase}}</span>
         <div class="profile-dropdown" *ngIf="showMenu">
           <button mat-menu-item (click)="toggleProfileForm()">
             <mat-icon>person</mat-icon>
-            <span>Profile</span>
+            <span> Thông Tin Cá nhân</span>
           </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
-            <span>Logout</span>
+            <span> Đăng Xuất</span>
           </button>
         </div>
       </div>

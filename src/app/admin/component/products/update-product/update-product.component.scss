@@ -1,133 +1,291 @@
-@use "sass:math";
-
-.update-product-container {
-  max-width: 900px;
-  margin: 2rem auto;
+@import '~aos/dist/aos.css';
+[data-aos] {
+    opacity: 1 !important; 
+    transform: none !important;
+  }
+  
+// Variables
+$primary: #2c3e50;
+$accent: #27ae60;
+$warning: #f39c12;
+$danger: #e74c3c;
+$info: #3498db;
+$light-bg: #f8f9fa;
+$card-shadow: 0 2px 12px rgba(0,0,0,0.08);
+$border-radius: 12px;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.product-update-wrapper {
   padding: 2rem;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: $light-bg;
+  position: relative;
 
-  h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-
-  form {
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(white, 0.8);
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
   }
 
-  .form-section {
+  .page-header {
+    background: white;
     padding: 1.5rem;
-    border-radius: 8px;
-    background-color: #fafafa;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #333;
-      padding-left: 0.5rem;
-    }
-
-    > div {
+    h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: $primary;
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       gap: 1rem;
-      margin-bottom: 1rem;
 
-      label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 0.3rem;
-      }
-
-      input[type="text"],
-      input[type="number"],
-      textarea,
-      select {
-        width: 100%;
-        padding: 0.6rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-      }
-
-      img {
-        max-width: 100px;
-        max-height: 100px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-top: 0.5rem;
-      }
-
-      &:nth-last-of-type(1) {
-        margin-bottom: 0;
+      i {
+        color: $accent;
       }
     }
 
-    button[type="button"] {
-      background-color: #f0f0f0;
-      color: #333;
+    .btn-back {
+      padding: 0.8rem 1.5rem;
       border: none;
-      border-radius: 4px;
-      padding: 0.4rem 0.8rem;
+      background: rgba($primary, 0.1);
+      color: $primary;
+      border-radius: 8px;
       cursor: pointer;
-      transition: 0.3s ease;
-      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: $transition;
 
       &:hover {
-        background-color: #e2e2e2;
+        background: $primary;
+        color: white;
       }
     }
   }
 
-  [formArrayName="images"],
-  [formArrayName="variants"] {
+  .product-update-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    .form-card {
+      background: white;
+      border-radius: $border-radius;
+      padding: 2rem;
+      box-shadow: $card-shadow;
+
+      h3 {
+        margin: 0 0 2rem;
+        color: $primary;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid rgba($primary, 0.1);
+
+        i {
+          color: $accent;
+        }
+      }
+    }
+
+    .basic-info {
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .thumbnail-upload {
+        grid-column: 1 / -1;
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: rgba($primary, 0.7);
+        }
+
+        .upload-zone {
+          aspect-ratio: 1;
+          border: 2px dashed #ddd;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: $transition;
+          position: relative;
+          overflow: hidden;
+
+          &:hover {
+            border-color: $accent;
+          }
+
+          &.has-image {
+            border: none;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 8px;
+            }
+          }
+
+          .upload-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: #666;
+
+            i {
+              font-size: 2rem;
+            }
+          }
+        }
+      }
+    }
+
+    .product-images {
+      grid-column: 2 / -1;
+      .images-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+
+        .image-item {
+          .image-preview {
+            aspect-ratio: 1;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: $transition;
+            position: relative;
+            overflow: hidden;
+
+            &:hover {
+              border-color: $accent;
+            }
+
+            &.has-image {
+              border: none;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 8px;
+              }
+            }
+
+            .upload-placeholder {
+              @extend .flex-center;
+              position: absolute;
+              inset: 0;
+              font-size: 1.5rem;
+              color: #666;
+            }
+          }
+
+          .image-controls {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          }
+        }
+      }
+    }
+
+    .product-variants {
+      grid-column: 1 / -1;
+
+      .variants-container {
+        .variant-form {
+          padding: 1rem 0;
+
+          .variant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+          }
+
+          .variant-image {
+            margin: 1rem 0;
+            max-width: 200px;
+
+            .image-preview {
+              @extend .upload-zone;
+              img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 8px;
+              }
+            }
+          }
+
+          .variant-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+          }
+        }
+      }
+    }
+  }
+  
+
+  .form-actions {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    justify-content: flex-end;
+    gap: 1rem;
+    position: sticky;
+    bottom: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
 
-    > div {
-      border-radius: 6px;
-      padding: 1rem;
-      background-color: #fff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-
-      label {
-        margin-top: 0.5rem;
-      }
-
-      input[type="checkbox"] {
-        transform: scale(1.2);
-        margin-right: 0.3rem;
-      }
+    button {
+      min-width: 120px;
     }
   }
+}
 
-  button[type="submit"] {
-    align-self: center;
-    font-size: 16px;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 8px;
-    background-color: #28a745;
-    color: #fff;
-    cursor: pointer;
-    transition: 0.3s ease;
+// Utilities
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    &:hover {
-      background-color: #218838;
+.full-width {
+  width: 100%;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .product-update-wrapper {
+    padding: 1rem;
+
+    .product-update-layout {
+      grid-template-columns: 1fr;
     }
   }
 }

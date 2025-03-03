@@ -1,0 +1,253 @@
+@import '~aos/dist/aos.css';
+
+// Variables
+$primary: #2c3e50;
+$accent: #27ae60;
+$warning: #f39c12;
+$danger: #e74c3c;
+$info: #3498db;
+$purple: #9b59b6;
+$light-bg: #f8f9fa;
+$card-shadow: 0 2px 12px rgba(0,0,0,0.08);
+$border-radius: 12px;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.order-detail-container {
+  padding: 2rem;
+  background: $light-bg;
+  min-height: 100vh;
+
+  .detail-header {
+    background: white;
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+    margin-bottom: 2rem;
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        font-size: 2rem;
+        color: $primary;
+        margin: 0;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 1rem;
+
+        .btn-action {
+          width: 40px;
+          height: 40px;
+          border: none;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: $transition;
+          background: rgba($primary, 0.1);
+          color: $primary;
+
+          &:hover {
+            background: $primary;
+            color: white;
+            transform: translateY(-2px);
+          }
+        }
+      }
+    }
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    .info-card {
+      background: white;
+      border-radius: $border-radius;
+      box-shadow: $card-shadow;
+      overflow: hidden;
+
+      .card-header {
+        background: rgba($accent, 0.1);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        i {
+          color: $accent;
+          font-size: 1.2rem;
+        }
+
+        h3 {
+          margin: 0;
+          color: $primary;
+          font-size: 1.2rem;
+        }
+      }
+
+      .card-content {
+        padding: 1.5rem;
+
+        .info-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid rgba($primary, 0.1);
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &.total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid rgba($primary, 0.1);
+            font-size: 1.2rem;
+          }
+
+          .label {
+            color: #666;
+          }
+
+          .status-badge, .payment-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+
+            &.pending { background: rgba($warning, 0.1); color: $warning; }
+            &.confirmed { background: rgba($info, 0.1); color: $info; }
+            &.shipping { background: rgba($purple, 0.1); color: $purple; }
+            &.completed { background: rgba($accent, 0.1); color: $accent; }
+            &.cancelled { background: rgba($danger, 0.1); color: $danger; }
+          }
+
+          .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+              color: $primary;
+            }
+          }
+
+          .transaction-code {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .btn-copy {
+              background: none;
+              border: none;
+              color: #666;
+              cursor: pointer;
+              padding: 0.2rem;
+              transition: $transition;
+
+              &:hover {
+                color: $accent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .products-section {
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+    padding: 1.5rem;
+    [data-aos] {
+      opacity: 1 !important; 
+      transform: none !important;
+    }
+
+    h3 {
+      margin: 0 0 1.5rem;
+      color: $primary;
+    }
+
+    .table-container {
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th {
+          background: rgba($accent, 0.1);
+          color: $primary;
+          font-weight: 600;
+          padding: 1rem;
+          text-align: left;
+          white-space: nowrap;
+        }
+
+        td {
+          padding: 1rem;
+          border-bottom: 1px solid #eee;
+          vertical-align: middle;
+        }
+
+        .product-image {
+          width: 80px;
+          height: 80px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+          }
+        }
+
+        .color-badge {
+          padding: 0.3rem 0.8rem;
+          border-radius: 15px;
+          font-size: 0.9rem;
+          color: rgb(10, 1, 1);
+          text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .quantity {
+          font-weight: 500;
+        }
+
+        .total {
+          font-weight: 600;
+          color: $accent;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .order-detail-container {
+    padding: 1rem;
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .products-section {
+      .table-container {
+        table {
+          min-width: 800px;
+        }
+      }
+    }
+  }
+}

@@ -16,6 +16,13 @@ import { AddUserComponent } from './component/users/add-user/add-user.component'
 import { UpdateUserComponent } from './component/users/update-user/update-user.component';
 import { StatisticsComponent } from './component/reports/statistics/statistics.component';
 import { UpdateProductComponent } from './component/products/update-product/update-product.component';
+import { BrandComponent } from './component/brand/brand.component';
+import { CategoryComponent } from './component/category/category.component';
+import { RoleComponent } from './component/role/role.component';
+import { OrderComponent } from './component/order/order.component';
+import { OrderDetailComponent } from './component/order/order-detail/order-detail.component';
+import { PaymentHistoryComponent } from './component/payment-history/payment-history.component';
+import { PaymentComponent } from './component/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +37,13 @@ import { UpdateProductComponent } from './component/products/update-product/upda
     UpdateUserComponent,
     StatisticsComponent,
     UpdateProductComponent,
+    BrandComponent,
+    CategoryComponent,
+    RoleComponent,
+    OrderComponent,
+    OrderDetailComponent,
+    PaymentHistoryComponent,
+    PaymentComponent,
   ],
   imports: [
     CommonModule,

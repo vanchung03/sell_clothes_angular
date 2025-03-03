@@ -1,0 +1,62 @@
+<section class="collections-section">
+    <div class="hero-banner" data-aos="fade">
+      <div class="banner-content" data-aos="fade-up" data-aos-delay="200">
+        <h1>Bộ Sưu Tập Cao Cấp 2024</h1>
+        <p>Khám phá phong cách thời trang đẳng cấp mới</p>
+        <button class="btn-discover" data-aos="fade-up" data-aos-delay="400">
+          <span>Khám phá ngay</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  
+    <div class="container">
+      <div class="category-tabs" data-aos="fade-up">
+        <button *ngFor="let cat of categories" 
+                [class.active]="activeTab === cat.id"
+                (click)="setActiveTab(cat.id)">
+          <i [class]="cat.icon"></i>
+          <span>{{cat.name}}</span>
+        </button>
+      </div>
+  
+      <div class="collections-grid">
+        <div class="collection-card" 
+             *ngFor="let collection of filteredCollections(); let i = index"
+             data-aos="fade-up"
+             [attr.data-aos-delay]="i * 100">
+          <div class="image-container">
+            <img [src]="collection.mainImage" 
+                 [alt]="collection.title" 
+                 class="main-image"
+                 loading="lazy">
+            
+            <div class="overlay">
+              <div class="actions">
+                <button class="action-btn" matTooltip="Yêu thích">
+                  <i class="fas fa-heart"></i>
+                </button>
+                <button class="action-btn" matTooltip="Xem nhanh">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <button class="btn-view-details">
+                <span>Xem chi tiết</span>
+                <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+  
+          <div class="content">
+            <div class="badges">
+              <span *ngFor="let badge of collection.badges" 
+                    [class]="badge">{{badge}}</span>
+            </div>
+            <h3>{{collection.title}}</h3>
+            <p class="subtitle">{{collection.subtitle}}</p>
+            <p class="price">{{collection.price}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

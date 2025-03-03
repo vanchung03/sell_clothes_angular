@@ -1,0 +1,39 @@
+<h2>Lịch sử giao dịch</h2>
+
+<!-- 🔍 Form Tìm Kiếm -->
+<div class="filter-section">
+  <input [(ngModel)]="searchTransactionCode" placeholder="Nhập mã giao dịch" />
+  <input [(ngModel)]="startDate" type="date" placeholder="Từ ngày" />
+  <input [(ngModel)]="endDate" type="date" placeholder="Đến ngày" />
+  <button (click)="filterPaymentHistories()">Tìm kiếm</button>
+  <button (click)="exportToExcel()">Xuất Excel</button>
+</div>
+
+<!-- 📋 Bảng hiển thị giao dịch -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Mã giao dịch</th>
+      <th>Phương thức</th>
+      <th>Số tiền</th>
+      <th>Trạng thái</th>
+      <th>Thời gian</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let history of filteredHistories">
+      <td>{{ history.historyId }}</td>
+      <td>
+        <button class="copy" (click)="copyToClipboard(history.transactionCode)"><i class="fa-solid fa-copy"></i></button> {{ history.transactionCode }}
+      </td>
+      <td>{{ history.paymentMethod }}</td>
+      <td>{{ history.amount | currency:'VND' }}</td>
+      <td>{{ history.status }}</td>
+      <td>{{ history.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td hidden>
+        <button class="delete" (click)="deletePaymentHistory(history.historyId)">Xóa</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

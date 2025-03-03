@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartOptions } from 'chart.js';
+import { StatisticsService } from 'src/app/service/statistics.service';
+import Chart from 'chart.js/auto';
+import { initAOS } from 'src/app/aos-init';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,62 +9,175 @@ import { ChartOptions } from 'chart.js';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  totalRevenue: number = 0;
+  totalOrders: number = 0;
+  orderStatusData: any[] = [];
+  paymentMethodData: any[] = [];
+  topProducts: any[] = [];
+  revenueChart: any;
+  orderStatusChart: any;
 
-  // Cấu hình dữ liệu cho biểu đồ Sales
-  salesData: any[] = [
-    {
-      data: [65, 59, 80, 81, 56, 55, 40],
-      label: 'Sales',
-      borderColor: 'rgba(0,123,255,1)',  // Màu đường biên
-      backgroundColor: 'rgba(0,123,255,0.2)',  // Màu nền dưới đường
-      pointBackgroundColor: 'rgba(0,123,255,1)',  // Màu điểm
-      pointBorderColor: '#fff',  // Màu viền điểm
-      pointHoverBackgroundColor: '#fff',  // Màu nền khi hover điểm
-      pointHoverBorderColor: 'rgba(0,123,255,0.8)',  // Màu viền khi hover điểm
-    }
-  ];
-
-  salesLabels: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
-
-  // Cấu hình dữ liệu cho biểu đồ Customer Growth
-  growthData: any[] = [
-    {
-      data: [50, 55, 60, 65, 70, 75, 80],
-      label: 'Customer Growth',
-      borderColor: 'rgba(0,255,0,1)',  // Màu đường biên cho biểu đồ khách hàng
-      backgroundColor: 'rgba(0,255,0,0.2)',  // Màu nền dưới đường
-      pointBackgroundColor: 'rgba(0,255,0,1)',  // Màu điểm
-      pointBorderColor: '#fff',  // Màu viền điểm
-      pointHoverBackgroundColor: '#fff',  // Màu nền khi hover điểm
-      pointHoverBorderColor: 'rgba(0,255,0,0.8)',  // Màu viền khi hover điểm
-    }
-  ];
-
-  growthLabels: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
-
-  // Cấu hình options cho biểu đồ
-  chartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        grid: {
-          drawOnChartArea: false
-        }
-      },
-      y: {
-        beginAtZero: true
-      }
-    }
-  };
-
-  // Định nghĩa loại biểu đồ (line và bar)
-  lineChartType: string = 'line';
-  barChartType: string = 'bar';
-
-  constructor() { }
+  constructor(private statisticsService: StatisticsService) {}
 
   ngOnInit(): void {
+    // Khởi tạo thư viện AOS cho hiệu ứng
+    initAOS();
+    this.loadStatistics();
   }
 
+  loadStatistics(): void {
+    this.statisticsService.getTotalRevenue().subscribe(data => this.totalRevenue = data);
+    this.statisticsService.getTotalOrders().subscribe(data => this.totalOrders = data);
+    
+    this.statisticsService.getOrderStatusRatio().subscribe(data => {
+      this.orderStatusData = this.processOrderStatusData(data);
+      this.loadOrderStatusChart(this.orderStatusData);
+    });
+    
+    this.statisticsService.getPopularPaymentMethods().subscribe(data => {
+      this.paymentMethodData = this.processPaymentMethodData(data);
+    });
+    
+    this.statisticsService.getTopSellingProducts().subscribe(data => this.topProducts = data);
+    
+    this.statisticsService.getRevenueByDate().subscribe(data => this.loadRevenueChart(data));
+  }
+
+  // Xử lý dữ liệu trạng thái đơn hàng
+  processOrderStatusData(data: any[]): any[] {
+    const colors = ['#4e73df', '#1cc88a', '#f6c23e', '#e74a3b', '#36b9cc'];
+    
+    return data.map((item, index) => ({
+      ...item,
+      color: colors[index % colors.length]
+    }));
+  }
+
+  // Xử lý dữ liệu phương thức thanh toán
+  processPaymentMethodData(data: any[]): any[] {
+    const icons = ['fas fa-credit-card', 'fas fa-wallet', 'fas fa-money-bill-alt', 'fas fa-mobile-alt'];
+    
+    return data.map((item, index) => ({
+      ...item,
+      icon: icons[index % icons.length]
+    }));
+  }
+
+  loadRevenueChart(data: any[]): void {
+    const labels = data.map(item => item[0]);
+    const revenue = data.map(item => item[1]);
+    
+    const ctx = document.getElementById('revenueChart') as HTMLCanvasElement;
+    if (!ctx) return;
+    
+    this.revenueChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Doanh thu theo ngày',
+          data: revenue,
+          backgroundColor: 'rgba(78, 115, 223, 0.2)',
+          borderColor: 'rgba(78, 115, 223, 1)',
+          borderWidth: 2,
+          tension: 0.3, // Làm mềm đường line
+          pointRadius: 3,
+          pointBackgroundColor: '#4e73df',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointHoverRadius: 5,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: '#fff',
+            titleColor: '#5a5c69',
+            bodyColor: '#5a5c69',
+            borderColor: '#e3e6f0',
+            borderWidth: 1,
+            padding: 10,
+            displayColors: false,
+            callbacks: {
+              label: function(context) {
+                return 'Doanh thu: ' + context.parsed.y.toLocaleString() + ' VND';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              borderDash: [2],
+              drawBorder: false,
+              color: 'rgba(0, 0, 0, 0.05)'
+            },
+            ticks: {
+              callback: function(value) {
+                return value.toLocaleString() + ' VND';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  loadOrderStatusChart(data: any[]): void {
+    const ctx = document.getElementById('orderStatusChart') as HTMLCanvasElement;
+    if (!ctx) return;
+    
+    const labels = data.map(item => item.label);
+    const values = data.map(item => item.value);
+    const colors = data.map(item => item.color);
+    
+    this.orderStatusChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors,
+          borderWidth: 0,
+          hoverOffset: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: '#fff',
+            titleColor: '#5a5c69',
+            bodyColor: '#5a5c69',
+            borderColor: '#e3e6f0',
+            borderWidth: 1,
+            padding: 10,
+            displayColors: true,
+            callbacks: {
+              label: function(context) {
+                return context.label + ': ' + context.parsed + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
 }

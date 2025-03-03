@@ -1,0 +1,158 @@
+<div class="order-detail-container" data-aos="fade-up">
+  <header class="detail-header" data-aos="fade-down">
+    <div class="header-content">
+      <h2>Chi Tiết Đơn Hàng #{{order?.orderId}}</h2>
+      <div class="header-actions">
+        <button class="btn-action" matTooltip="In đơn hàng">
+          <i class="fas fa-print"></i>
+        </button>
+        <!-- Button Xuất PDF -->
+        <button class="btn-action" matTooltip="Xuất PDF" (click)="exportOrderToPDF()">
+          <i class="fas fa-file-pdf"></i>
+        </button>
+
+        <!-- Button xuất Excel -->
+        <button class="btn-action" matTooltip="Xuất Excel" (click)="exportOrderToExcel()">
+          <i class="fas fa-file-excel"></i>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <div class="info-grid" data-aos="fade-up">
+    <!-- Order Info Card -->
+    <div class="info-card order-summary">
+      <div class="card-header">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Thông Tin Đơn Hàng</h3>
+      </div>
+      <div class="card-content">
+        <div class="info-row">
+          <span class="label">Mã đơn:</span>
+          <strong>#{{order?.orderId}}</strong>
+        </div>
+        <div class="info-row">
+          <span class="label">Trạng thái:</span>
+          <span class="status-badge" [ngClass]="order?.status?.toLowerCase()">
+            {{getStatusText(order?.status)}}
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="label">Phí vận chuyển:</span>
+          <strong>{{order?.shippingFee | currency:'VND'}}</strong>
+        </div>
+        <div class="info-row total">
+          <span class="label">Tổng tiền:</span>
+          <strong>{{order?.totalAmount | currency:'VND'}}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Info Card -->
+    <div class="info-card customer-info">
+      <div class="card-header">
+        <i class="fas fa-user"></i>
+        <h3>Thông Tin Khách Hàng</h3>
+      </div>
+      <div class="card-content">
+        <div class="info-row">
+          <span class="label">Họ tên:</span>
+          <strong>{{order?.user?.fullName || 'N/A'}}</strong>
+        </div>
+        <div class="info-row">
+          <span class="label">Email:</span>
+          <span>{{order?.user?.email || 'N/A'}}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Điện thoại:</span>
+          <span>{{order?.user?.phone || 'N/A'}}</span>
+        </div>
+        <div class="info-row address">
+          <span class="label">Địa chỉ:</span>
+          <span>
+            {{order?.address?.addressLine || 'N/A'}},
+            {{order?.address?.district}},
+            {{order?.address?.city}}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Info Card -->
+    <div class="info-card payment-info">
+      <div class="card-header">
+        <i class="fas fa-credit-card"></i>
+        <h3>Thông Tin Thanh Toán</h3>
+      </div>
+      <div class="card-content">
+        <div class="info-row">
+          <span class="label">Phương thức:</span>
+          <span class="payment-method">
+            <i [class]="'fas ' + getPaymentIcon(payment?.method)"></i>
+            {{payment?.method || 'N/A'}}
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="label">Trạng thái:</span>
+          <span class="payment-status" [ngClass]="payment?.paymentStatus?.toLowerCase()">
+            {{getPaymentStatusText(payment?.paymentStatus)}}
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="label">Số tiền:</span>
+          <strong>{{payment?.amount | currency:'VND'}}</strong>
+        </div>
+        <div class="info-row">
+          <span class="label">Mã GD:</span>
+          <span class="transaction-code">
+            {{payment?.transactionCode || 'N/A'}}
+            <button *ngIf="payment?.transactionCode" class="btn-copy" (click)="copyToClipboard(payment.transactionCode)"
+              matTooltip="Sao chép">
+              <i class="fas fa-copy"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Table -->
+  <div class="products-section" data-aos="fade-up" data-aos-delay="200">
+    <h3>Danh Sách Sản Phẩm</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã SP</th>
+            <th>Ảnh</th>
+            <th>Màu sắc</th>
+            <th>Size</th>
+            <th>SKU</th>
+            <th>Đơn giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of orderItems; let i = index" data-aos="fade-up" [attr.data-aos-delay]="i * 50">
+            <td class="product-id">#{{item.variant?.variantId}}</td>
+            <td class="product-image">
+              <img [src]="item.variant?.imageUrl" [alt]="'Product ' + item.variant?.variantId">
+            </td>
+            <td>
+              <span class="color-badge" [style.backgroundColor]="item.variant?.color">
+                {{item.variant?.color || 'N/A'}}
+              </span>
+            </td>
+            <td>{{item.variant?.size || 'N/A'}}</td>
+            <td>{{item.variant?.sku || 'N/A'}}</td>
+            <td>{{item.variant?.price | currency:'VND'}}</td>
+            <td class="quantity">{{item.quantity}}</td>
+            <td class="total">{{item.totalPrice | currency:'VND'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

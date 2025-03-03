@@ -1,0 +1,261 @@
+// Variables
+$primary-color: #901c28;
+$secondary-color: #fff;
+$transition-duration: 0.5s;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin slide-button {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    @include flex-center;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+.home-page {
+    overflow: hidden;
+}
+
+.home-slider {
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+
+    @media (max-width: 768px) {
+        height: 400px;
+    }
+
+    @media (max-width: 480px) {
+        height: 300px;
+    }
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all $transition-duration ease;
+
+    &.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    &.prev {
+        transform: translateX(-100%);
+    }
+
+    &.next {
+        transform: translateX(100%);
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.slide-caption {
+    position: absolute;
+    bottom: 20%;
+    left: 10%;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all 0.8s ease;
+
+    .active & {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    h2 {
+        font-size: 2.5em;
+        margin-bottom: 0.5em;
+
+        @media (max-width: 768px) {
+            font-size: 1.8em;
+        }
+    }
+
+    p {
+        font-size: 1.2em;
+        margin-bottom: 1.5em;
+
+        @media (max-width: 768px) {
+            font-size: 1em;
+        }
+    }
+
+    .action-btn {
+        padding: 12px 30px;
+        background: $primary-color;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: darken($primary-color, 10%);
+            transform: translateY(-2px);
+        }
+    }
+}
+
+.slider-controls {
+    position: absolute;
+    bottom: 5%;
+    left: 0;
+    right: 0;
+    @include flex-center;
+    gap: 20px;
+
+    .prev-btn, .next-btn {
+        @include slide-button;
+    }
+
+    .dots {
+        display: flex;
+        gap: 10px;
+
+        span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &.active {
+                background: white;
+                transform: scale(1.2);
+            }
+        }
+    }
+}
+
+// Add these variables at the top with your existing variables
+$category-transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+$category-hover-scale: 1.08;
+
+// Update the category section styles
+.category-section {
+    padding: 60px 0;
+    background: #f8f9fa;
+
+    h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .category-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        padding: 0 20px;
+
+        @media (max-width: 992px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 480px) {
+            grid-template-columns: repeat(1, 1fr);
+            max-width: 280px;
+        }
+    }
+
+    .category-item {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 1;
+        border-radius: 12px;
+        cursor: pointer;
+        background: #fff;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+            opacity: 0;
+            transition: opacity $category-transition;
+            z-index: 1;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform $category-transition;
+        }
+
+        .cat-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transform: translateY(100%);
+            transition: transform $category-transition;
+            z-index: 2;
+            
+            @media (max-width: 768px) {
+                font-size: 1rem;
+                padding: 12px;
+            }
+        }
+
+        &:hover {
+            &::before {
+                opacity: 1;
+            }
+
+            img {
+                transform: scale($category-hover-scale);
+            }
+
+            .cat-name {
+                transform: translateY(0);
+            }
+        }
+    }
+}

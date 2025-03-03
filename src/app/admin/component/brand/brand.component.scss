@@ -1,0 +1,634 @@
+// Variables
+$primary-color: #4a6cf7;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$border-color: #e0e0e0;
+$text-color: #333;
+$text-muted: #6c757d;
+$bg-light: #f8f9fa;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+// Mixins
+@mixin flex($justify: flex-start, $align: stretch, $direction: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+@mixin button-style($bg-color, $text-color: white) {
+  background-color: $bg-color;
+  color: $text-color;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  
+  &:hover {
+    background-color: darken($bg-color, 10%);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    background-color: lighten($bg-color, 20%);
+    cursor: not-allowed;
+  }
+  
+  i {
+    font-size: 16px;
+  }
+}
+
+// Global styles
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.brand-container {
+  padding: 30px;
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: $text-color;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 40px $shadow-color;
+}
+
+// Header section
+.brand-header {
+  @include flex(space-between, center);
+  margin-bottom: 30px;
+  border-bottom: 2px solid $border-color;
+  padding-bottom: 20px;
+  
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: $primary-color;
+    
+    i {
+      margin-right: 8px;
+    }
+  }
+  
+  .action-buttons {
+    @include flex(flex-end, center);
+    gap: 12px;
+    
+    .btn-add {
+      @include button-style($primary-color);
+    }
+    
+    .btn-export {
+      @include button-style($secondary-color);
+    }
+  }
+}
+
+// Search and filter section
+.filter-section {
+  @include flex(space-between, center);
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+  
+  .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 250px;
+    
+    i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $secondary-color;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.2s;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+      }
+    }
+  }
+  
+  .filter-options {
+    @include flex(flex-end, center);
+    gap: 12px;
+    
+    select {
+      padding: 10px 16px;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      background-color: white;
+      font-size: 14px;
+      cursor: pointer;
+      min-width: 150px;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+  }
+}
+
+// Table styles
+.table-responsive {
+  overflow-x: auto;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba($shadow-color, 0.1);
+  border-radius: 8px;
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid $border-color;
+    }
+    
+    th {
+      background-color: #f5f7ff;
+      font-weight: 600;
+      color: $primary-color;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    tr {
+      transition: background-color 0.2s;
+      
+      &:hover {
+        background-color: rgba($primary-color, 0.03);
+      }
+    }
+    
+    td {
+      vertical-align: middle;
+    }
+  }
+  
+  .logo-cell {
+    width: 80px;
+    text-align: center;
+    
+    img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 4px;
+      border: 1px solid $border-color;
+      background-color: white;
+    }
+    
+    .no-logo {
+      display: block;
+      font-size: 12px;
+      color: $text-muted;
+      padding: 8px;
+      background-color: $bg-light;
+      border-radius: 4px;
+    }
+  }
+  
+  .description-text {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+    &:hover {
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    
+    &.active {
+      background-color: rgba($success-color, 0.1);
+      color: $success-color;
+      border: 1px solid rgba($success-color, 0.2);
+    }
+    
+    &.inactive {
+      background-color: rgba($secondary-color, 0.1);
+      color: $secondary-color;
+      border: 1px solid rgba($secondary-color, 0.2);
+    }
+  }
+  
+  .actions-cell {
+    @include flex(flex-start, center);
+    gap: 10px;
+    white-space: nowrap;
+    
+    .btn-edit {
+      @include button-style($primary-color);
+      padding: 8px;
+    }
+    
+    .btn-delete {
+      @include button-style($danger-color);
+      padding: 8px;
+    }
+    
+    button {
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+// Empty state
+.empty-state {
+  @include flex(center, center, column);
+  padding: 60px 20px;
+  text-align: center;
+  background-color: $bg-light;
+  border-radius: 8px;
+  
+  i {
+    font-size: 48px;
+    color: $text-muted;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: $secondary-color;
+  }
+  
+  p {
+    margin-bottom: 20px;
+    color: $text-muted;
+  }
+  
+  .btn-reset {
+    @include button-style($primary-color);
+  }
+}
+
+// Modal styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  @include flex(center, center);
+  z-index: 1000;
+  overflow-y: auto;
+  backdrop-filter: blur(2px);
+}
+
+// Brand Form
+.brand-form {
+  background-color: white;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  
+  .form-header {
+    @include flex(space-between, center);
+    color: black;
+    padding: 20px;
+    
+    h3 {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    
+    .btn-close {
+      background: none;
+      border: none;
+      color: rgb(12, 5, 5);
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+  
+  form {
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      font-size: 16px;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+      }
+    }
+    
+    textarea {
+      resize: vertical;
+    }
+  }
+  
+  .logo-upload {
+    border: 2px dashed $border-color;
+    border-radius: 8px;
+    min-height: 120px;
+    @include flex(center, center);
+    overflow: hidden;
+    position: relative;
+    
+    .logo-preview {
+      width: 100%;
+      height: 150px;
+      position: relative;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      
+      .btn-remove {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.8);
+        }
+      }
+    }
+    
+    .upload-area {
+      padding: 30px;
+      text-align: center;
+      width: 100%;
+      
+      .file-input {
+        display: none;
+      }
+      
+      .upload-label {
+        @include flex(center, center, column);
+        gap: 10px;
+        cursor: pointer;
+        
+        i {
+          font-size: 36px;
+          color: $primary-color;
+        }
+        
+        span {
+          color: $text-muted;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  
+  .switch-group {
+    @include flex(space-between, center);
+  }
+  
+  // Toggle Switch
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      
+      &:checked + .slider {
+        background-color: $success-color;
+      }
+      
+      &:checked + .slider:before {
+        transform: translateX(30px);
+      }
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: $secondary-color;
+      transition: .4s;
+      
+      &:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+      }
+      
+      &.round {
+        border-radius: 34px;
+        
+        &:before {
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+  
+  .form-actions {
+    @include flex(flex-end, center);
+    gap: 15px;
+    margin-top: 30px;
+    
+    .btn-cancel {
+      @include button-style($secondary-color);
+    }
+    
+    .btn-submit {
+      @include button-style($primary-color);
+    }
+  }
+}
+
+// Confirmation Dialog
+.confirm-dialog {
+  background-color: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 25px;
+  
+  .confirm-header {
+    @include flex(center, center);
+    gap: 10px;
+    margin-bottom: 20px;
+    
+    i {
+      font-size: 24px;
+      color: $warning-color;
+    }
+    
+    h3 {
+      font-size: 20px;
+      color: $dark-color;
+    }
+  }
+  
+  p {
+    margin-bottom: 10px;
+    text-align: center;
+    line-height: 1.5;
+  }
+  
+  .warning-text {
+    color: $danger-color;
+    font-weight: 500;
+  }
+  
+  .confirm-actions {
+    @include flex(center, center);
+    gap: 15px;
+    margin-top: 25px;
+    
+    .btn-cancel {
+      @include button-style($secondary-color);
+    }
+    
+    .btn-delete {
+      @include button-style($danger-color);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .brand-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    
+    .action-buttons {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+  
+  .filter-section {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .search-box {
+      width: 100%;
+    }
+    
+    .filter-options {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+  
+  .table-responsive {
+    table {
+      th, td {
+        padding: 12px 8px;
+      }
+    }
+  }
+}
+
+// Animation effects (in addition to AOS)
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fadeIn {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.slideIn {
+  animation: slideIn 0.5s ease-out;
+}

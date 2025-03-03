@@ -63,6 +63,15 @@ export class TokenService {
     const decodedToken = this.decodeToken();
     return decodedToken?.status ? decodedToken.status.toString() : null;
   }
+  // Kiểm tra token có bị lỗi hoặc chỉnh sửa không
+  isTokenMalformed(token: string): boolean {
+    try {
+      jwt_decode(token);
+      return false;
+    } catch (error) {
+      return true;
+    }
+  }
 
   // Kiểm tra token còn hiệu lực không
   isTokenExpired(): boolean {

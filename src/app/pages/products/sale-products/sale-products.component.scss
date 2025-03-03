@@ -1,0 +1,333 @@
+// Variables
+$primary-color: #4285f4;
+$secondary-color: #ff5252;
+$text-color: #333;
+$light-gray: #f5f5f5;
+$medium-gray: #e0e0e0;
+$dark-gray: #757575;
+$yellow-star: #ffca28;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$transition-time: 0.3s;
+
+// Product Container
+.product-container {
+  padding: 15px;
+  
+  h2 {
+    font-size: 22px;
+    color: $text-color;
+    margin-bottom: 20px;
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 50px;
+      height: 3px;
+      background-color: $secondary-color;
+    }
+  }
+}
+
+// Product List
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Product Card
+.product-card {
+  background-color: white;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px $shadow-color;
+  transition: transform $transition-time, box-shadow $transition-time;
+  border: 1px solid $medium-gray;
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  
+  .favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    transition: all $transition-time;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: $dark-gray;
+      transition: fill $transition-time;
+    }
+    
+    &:hover, &.active {
+      transform: scale(1.1);
+      
+      svg {
+        fill: $secondary-color;
+      }
+    }
+    
+    &.active svg {
+      fill: $secondary-color;
+    }
+  }
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    
+    .product-image-container {
+      img {
+        transform: scale(1.08);
+      }
+      
+      .product-overlay {
+        opacity: 1;
+        visibility: visible;
+        
+        button {
+          opacity: 1;
+          transform: translateY(0);
+          
+          &:nth-child(2) {
+            transition-delay: 0.05s;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Product Image Container
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background-color: white;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform 0.4s ease;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+    backface-visibility: hidden;
+  }
+  
+  .product-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all $transition-time;
+    
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      transform: translateY(10px);
+      opacity: 0;
+      flex: 1;
+      max-width: 120px;
+      white-space: nowrap;
+      
+      &.detail-btn {
+        background-color: white;
+        color: $text-color;
+        
+        &:hover {
+          background-color: $light-gray;
+          transform: translateY(-2px);
+        }
+      }
+      
+      &.cart-btn {
+        background-color: $primary-color;
+        color: white;
+        
+        &:hover {
+          background-color: darken($primary-color, 10%);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+  
+  // Discount Badge
+  .discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: $secondary-color;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+}
+
+// Product Info
+.product-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  
+  .product-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: $text-color;
+    margin-bottom: 6px;
+    height: 36px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+  
+  .rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    
+    .stars {
+      display: flex;
+      margin-right: 8px;
+      
+      .star {
+        color: $yellow-star;
+        font-size: 14px;
+        margin-right: 2px;
+      }
+    }
+    
+    .reviews-count {
+      font-size: 12px;
+      color: $dark-gray;
+    }
+  }
+  
+  .product-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    
+    .current-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: $secondary-color;
+    }
+    
+    .original-price {
+      font-size: 13px;
+      color: $dark-gray;
+      text-decoration: line-through;
+    }
+  }
+}
+
+// Empty State
+.product-container p {
+  font-size: 15px;
+  color: $dark-gray;
+  text-align: center;
+  padding: 25px;
+  background-color: $light-gray;
+  border-radius: 6px;
+}
+
+// Animations
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Initial loading animation
+.product-list {
+  .product-card {
+    animation: fade-in 0.5s ease-out forwards;
+    opacity: 0;
+    
+    @for $i from 1 through 16 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.075}s;
+      }
+    }
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

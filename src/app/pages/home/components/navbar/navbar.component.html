@@ -1,0 +1,41 @@
+<nav class="navbar">
+  <div class="mobile-menu-icon" (click)="toggleMobileMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <ul [class.active]="isMobileMenuOpen">
+    <li>
+      <a href="/home">
+        <i class="fas fa-home"></i>
+        <span>Trang chủ</span>
+      </a>
+    </li>
+    <li>
+      <a href="/introduction">
+        <i class="fas fa-store"></i>
+        <span>Giới thiệu</span>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a>
+        <i class="fas fa-tshirt"></i>
+        <span>Sản phẩm</span>
+        <i class="fas fa-chevron-down arrow"></i>
+      </a>
+      <app-dropdown-menu></app-dropdown-menu>
+    </li>
+    <li>
+      <a href="/news">
+        <i class="fas fa-newspaper"></i>
+        <span>Tin tức</span>
+      </a>
+    </li>
+    <li>
+      <a href="/contact">
+        <i class="fas fa-envelope"></i>
+        <span>Liên hệ</span>
+      </a>
+    </li>
+  </ul>
+</nav>

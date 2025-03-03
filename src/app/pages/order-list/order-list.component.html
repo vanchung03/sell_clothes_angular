@@ -1,0 +1,139 @@
+<div class="overlay-container">
+  <div class="container">
+    <h2 class="title">
+      Danh sách đơn hàng của bạn
+      <button class="close-btn" (click)="closeOrders()"></button>
+    </h2>
+    
+    <div class="content-area">
+      <!-- Filter and Search Area -->
+      <div class="filter-container">
+        <h3>Tìm kiếm & Lọc đơn hàng</h3>
+        <div class="filter-form">
+          <div class="form-group">
+            <label for="orderIdSearch">Mã đơn hàng</label>
+            <input type="text" id="orderIdSearch" [(ngModel)]="searchFilters.orderId" placeholder="Nhập mã đơn hàng...">
+          </div>
+          
+          <div class="form-group">
+            <label for="statusFilter">Trạng thái</label>
+            <select id="statusFilter" [(ngModel)]="searchFilters.status">
+              <option value="">Tất cả trạng thái</option>
+              <option value="PENDING">Chờ xử lý</option>
+              <option value="CONFIRMED">Đã xác nhận</option>
+              <option value="SHIPPING">Đang giao hàng</option>
+              <option value="COMPLETED">Hoàn thành</option>
+              <option value="CANCELLED">Đã hủy</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="dateFrom">Từ ngày</label>
+            <input type="date" id="dateFrom" [(ngModel)]="searchFilters.dateFrom">
+          </div>
+          
+          <div class="form-group">
+            <label for="dateTo">Đến ngày</label>
+            <input type="date" id="dateTo" [(ngModel)]="searchFilters.dateTo">
+          </div>
+          
+          <div class="action-buttons">
+            <button class="search-btn" (click)="searchOrders()">
+              <i class="fas fa-search"></i> Tìm kiếm
+            </button>
+            <button class="reset-btn" (click)="resetFilters()">
+              <i class="fas fa-undo"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading">Đang tải dữ liệu...</div>
+      
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      
+      <!-- Empty State -->
+      <div *ngIf="filteredOrders.length === 0 && !isLoading" class="empty-message">
+        Không tìm thấy đơn hàng nào phù hợp với điều kiện tìm kiếm.
+      </div>
+      
+      <!-- Orders Table -->
+      <div *ngIf="filteredOrders.length > 0">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th (click)="sortBy('orderId')">
+                Mã đơn
+                <i class="fas" [ngClass]="getSortIcon('orderId')"></i>
+              </th>
+              <th (click)="sortBy('orderDate')">
+                Ngày đặt
+                <i class="fas" [ngClass]="getSortIcon('orderDate')"></i>
+              </th>
+              <th (click)="sortBy('shippingFee')">
+                Phí vận chuyển
+                <i class="fas" [ngClass]="getSortIcon('shippingFee')"></i>
+              </th>
+              <th (click)="sortBy('totalAmount')">
+                Tổng tiền
+                <i class="fas" [ngClass]="getSortIcon('totalAmount')"></i>
+              </th>
+              <th (click)="sortBy('status')">
+                Trạng thái
+                <i class="fas" [ngClass]="getSortIcon('status')"></i>
+              </th>
+              <th>Chi tiết</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of paginatedOrders">
+              <td>{{ order.orderId }}</td>
+               <!-- {{ logDateInfo(order.orderDate) }} -->
+                 
+              <td>{{ parseDate(order.orderDate) }}</td>
+              <td>{{ order.shippingFee | currency:'VND' }}</td>
+              <td>{{ order.totalAmount | currency:'VND' }}</td>
+              <td>
+                <span class="status" [ngClass]="{
+                  'status-completed': order.status === 'COMPLETED',
+                  'status-cancelled': order.status === 'CANCELLED',
+                  'status-pending': order.status === 'PENDING',
+                  'status-confirmed': order.status === 'CONFIRMED',
+                  'status-shipping': order.status === 'SHIPPING',
+                  
+                }">{{ getStatusText(order.status) }}</span>
+              </td>
+              <td>
+                <button class="detail-btn" (click)="viewOrderDetails(order.orderId)">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="totalPages > 1">
+          <div class="page-item prev" (click)="goToPage(currentPage - 1)" [class.disabled]="currentPage === 1">
+            &lsaquo;
+          </div>
+          
+          <ng-container *ngFor="let page of getPageNumbers()">
+            <div class="page-item" 
+                [class.active]="page === currentPage"
+                (click)="goToPage(page)">
+              {{ page }}
+            </div>
+          </ng-container>
+          
+          <div class="page-item next" (click)="goToPage(currentPage + 1)" [class.disabled]="currentPage === totalPages">
+            &rsaquo;
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

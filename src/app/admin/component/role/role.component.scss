@@ -1,0 +1,227 @@
+@import '~aos/dist/aos.css';
+$primary: #3f51b5;
+$accent: #ff4081;
+$warn: #f44336;
+$success: #4caf50;
+$info: #2196f3;
+
+// Custom colors
+$light-bg: #f5f7fa;
+$border-color: #e0e0e0;
+$text-primary: rgba(0, 0, 0, 0.87);
+$text-secondary: rgba(0, 0, 0, 0.54);
+
+.role-management-container {
+  padding: 24px;
+  margin: 16px;
+  background: white;
+  border-radius: 8px;
+
+  .header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      color: $primary;
+
+      i {
+        margin-right: 12px;
+        font-size: 28px;
+      }
+    }
+
+    .notes {
+      color: $text-secondary;
+      margin: 8px 0 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, $primary, transparent);
+    margin: 24px 0;
+  }
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .stat-card {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+
+      i {
+        font-size: 24px;
+        color: white;
+      }
+
+      &.admin-icon {
+        background: $primary;
+      }
+
+      &.user-icon {
+        background: $accent;
+      }
+
+      &.total-icon {
+        background: $info;
+      }
+    }
+
+    .stat-info {
+      h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 500;
+      }
+
+      p {
+        margin: 4px 0 0;
+        color: $text-secondary;
+      }
+    }
+  }
+}
+
+.search-container {
+  margin-bottom: 24px;
+  padding: 16px;
+
+  mat-form-field {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+.table-container {
+  overflow: auto;
+  border-radius: 8px;
+
+  .roles-table {
+    width: 100%;
+
+    .mat-header-cell {
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .mat-row {
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: rgba($primary, 0.04);
+      }
+
+      &.selected-row {
+        background: rgba($primary, 0.08);
+      }
+    }
+
+    .role-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+
+      &.admin {
+        background: rgba($primary, 0.1);
+        color: $primary;
+      }
+
+      &.user {
+        background: rgba($accent, 0.1);
+        color: $accent;
+      }
+
+      &.moderator {
+        background: rgba($info, 0.1);
+        color: $info;
+      }
+    }
+  }
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 48px;
+  color: $text-secondary;
+
+  i {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.role-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .header-title {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .action-buttons {
+      margin-top: 16px;
+    }
+  }
+
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}

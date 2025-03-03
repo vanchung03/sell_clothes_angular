@@ -1,101 +1,96 @@
+<!-- dashboard.component.html -->
 <div class="dashboard-container">
-  <!-- Dashboard Widgets -->
-  <div class="dashboard-widgets">
-    <div class="widget-card">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Total Sales</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="widget-info">
-            <h3>$12,450</h3>
-            <span>+15% from last month</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
+  <!-- Header Section -->
+  <div class="dashboard-header" data-aos="fade-down" data-aos-duration="800">
+    <h1>Tổng quan kinh doanh</h1>
+    <p class="subtitle">Thống kê hoạt động cửa hàng</p>
+  </div>
+
+  <!-- KPI Cards Section -->
+  <div class="kpi-cards">
+    <div class="card" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
+      <div class="card-icon">
+        <i class="fas fa-money-bill-wave"></i>
+      </div>
+      <div class="card-content">
+        <h3>Tổng doanh thu</h3>
+        <p class="card-value">{{ totalRevenue | currency:'VND':'symbol':'1.0-0' }}</p>
+      </div>
     </div>
 
-    <div class="widget-card">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Active Users</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="widget-info">
-            <h3>1500</h3>
-            <span>+5% from last month</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <div class="widget-card">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>New Orders</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="widget-info">
-            <h3>320</h3>
-            <span>-3% from last month</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
+    <div class="card" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
+      <div class="card-icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="card-content">
+        <h3>Tổng đơn hàng</h3>
+        <p class="card-value">{{ totalOrders }}</p>
+      </div>
     </div>
   </div>
 
   <!-- Charts Section -->
-  <div class="charts-section">
-    <div class="chart-card">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Sales Over Time</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="chart">
-            <canvas baseChart
-              [datasets]="salesData"
-              [labels]="salesLabels"
-              [options]="chartOptions"
-              [legend]="true">
-            </canvas>
-          </div>
-        </mat-card-content>
-      </mat-card>
+  <div class="charts-container">
+    <!-- Revenue Chart -->
+    <div class="chart-card" data-aos="fade-up" data-aos-duration="800">
+      <h2>Doanh thu theo thời gian</h2>
+      <div class="chart-wrapper">
+        <canvas id="revenueChart"></canvas>
+      </div>
     </div>
 
-    <div class="chart-card">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Customer Growth</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="chart">
-            <canvas baseChart
-              [datasets]="growthData"
-              [labels]="growthLabels"
-              [options]="chartOptions"
-              [legend]="true">
-            </canvas>
-          </div>
-        </mat-card-content>
-      </mat-card>
+    <!-- Order Status Donut Chart -->
+    <div class="chart-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+      <h2>Trạng thái đơn hàng</h2>
+      <div class="chart-wrapper">
+        <canvas id="orderStatusChart"></canvas>
+      </div>
+      <div class="chart-legend">
+        <div *ngFor="let item of orderStatusData" class="legend-item">
+          <span class="legend-color" [style.background-color]="item.color"></span>
+          <span class="legend-label">{{ item.label }}: {{ item.percentage }}%</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Recent Activities -->
-  <div class="recent-activities">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Recent Activities</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <ul>
-          <li>User John Doe registered</li>
-          <li>Order #3456 completed</li>
-          <li>New product added to inventory</li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+  <!-- Third Row -->
+  <div class="dashboard-row">
+    <!-- Payment Methods -->
+    <div class="chart-card" data-aos="fade-right" data-aos-duration="800">
+      <h2>Phương thức thanh toán</h2>
+      <div class="payment-methods">
+        <div *ngFor="let method of paymentMethodData" class="payment-method-item">
+          <div class="payment-method-icon">
+            <i [class]="method.icon"></i>
+          </div>
+          <div class="payment-method-info">
+            <h4>{{ method.name }}</h4>
+            <div class="progress-bar">
+              <div class="progress" [style.width.%]="method.percentage"></div>
+            </div>
+            <span class="percentage">{{ method.percentage }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="chart-card" data-aos="fade-left" data-aos-duration="800">
+      <h2>Sản phẩm bán chạy</h2>
+      <div class="top-products">
+        <div *ngFor="let product of topProducts; let i = index" class="product-item" [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="i * 100">
+          <div class="product-rank">{{ i + 1 }}</div>
+          <div class="product-image">
+            <img [src]="product.image || 'assets/images/placeholder.png'" alt="{{ product.name }}">
+          </div>
+          <div class="product-info">
+            <h4>{{ product.name }}</h4>
+            <p class="product-sales">Đã bán: {{ product.soldCount }}</p>
+            <p class="product-price">{{ product.price | currency:'VND':'symbol':'1.0-0' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

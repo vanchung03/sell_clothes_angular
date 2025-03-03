@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { ProductVariant } from '../types/product-variant';
 
 @Injectable({
@@ -22,6 +22,29 @@ export class ProductVariantService {
   // Lấy tất cả biến thể của 1 product
   getAllVariantsByProductId(productId: number): Observable<ProductVariant[]> {
     return this.http.get<ProductVariant[]>(`${this.apiUrl}/${productId}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+  /**
+   * 🏷 **Lấy thông tin Brand theo `variantId`**
+   * @param variantId ID của biến thể sản phẩm
+   * @returns Observable chứa thông tin brand
+   */
+  getBrandByVariantId(variantId: number): Observable<any> {
+    return this.http
+      .get<any>(`${this.apiUrl}/${variantId}/brand`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Lỗi khi lấy Brand:', error);
+          return throwError(() => new Error('Không thể lấy thương hiệu!'));
+        })
+      );
+  }
+   // ✅ Lấy thông tin chi tiết của một biến thể sản phẩm theo `variantId`
+   getVariantById(variantId: number): Observable<ProductVariant> {
+    return this.http.get<ProductVariant>(`${this.apiUrl}/variant/${variantId}`, {
       headers: this.getAuthHeaders(),
     });
   }

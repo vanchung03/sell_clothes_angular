@@ -1,0 +1,131 @@
+<div class="payment-dashboard" data-aos="fade-up">
+  <header class="dashboard-header">
+    <h2>Lịch sử thanh toán</h2>
+    <div class="total-amount">
+      Tổng tiền: <span>{{ totalAmount | currency:'VND' }}</span>
+    </div>
+  </header>
+
+  <div class="filter-section" data-aos="fade-up" data-aos-delay="100">
+    <div class="search-group">
+      
+      <input 
+        [(ngModel)]="searchTransactionCode" 
+        placeholder="Tìm mã giao dịch..."
+        class="search-input"
+      />
+    </div>
+
+    <div class="date-filters">
+      <div class="date-group">
+        <i class="fas fa-calendar"></i>
+        <input 
+          [(ngModel)]="startDate" 
+          type="date" 
+          class="date-input"
+        />
+      </div>
+      <span class="separator">-</span>
+      <div class="date-group">
+        <input 
+          [(ngModel)]="endDate" 
+          type="date" 
+          class="date-input"
+        />
+      </div>
+    </div>
+
+    <div class="select-group">
+      <select [(ngModel)]="methodFilter">
+        <option *ngFor="let method of paymentMethods" 
+                [value]="method.value">
+          {{method.label}}
+        </option>
+      </select>
+    </div>
+
+    <div class="select-group">
+      <select [(ngModel)]="statusFilter">
+        <option *ngFor="let status of paymentStatuses" 
+                [value]="status.value">
+          {{status.label}}
+        </option>
+      </select>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-search" (click)="filterPayments()">
+        <i class="fas fa-filter"></i> Lọc
+      </button>
+      <button class="btn-reset" (click)="resetFilters()">
+        <i class="fas fa-redo"></i> Đặt lại
+      </button>
+      <button class="btn-export" (click)="exportToExcel()">
+        <i class="fas fa-file-excel"></i> Xuất Excel
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container" data-aos="fade-up" data-aos-delay="200">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Mã giao dịch</th>
+          <th>Phương thức</th>
+          <th>Số tiền</th>
+          <th>Trạng thái</th>
+          <th class="sortable" (click)="sortByDate()">
+            Thời gian
+            <i class="fas" [ngClass]="{'fa-sort-up': sortDirection === 'asc', 
+                                     'fa-sort-down': sortDirection === 'desc'}">
+            </i>
+          </th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of filteredPayments" 
+            [ngClass]="{'success': payment.paymentStatus === 'SUCCESS',
+                       'pending': payment.paymentStatus === 'PENDING',
+                       'failed': payment.paymentStatus === 'FAILED'}"
+            data-aos="fade-up">
+          <td>{{payment.paymentId}}</td>
+          <td>
+            <div class="transaction-code">
+              <button class="btn-copy" (click)="copyToClipboard(payment.transactionCode)"
+                      matTooltip="Sao chép">
+                <i class="fas fa-copy"></i>
+              </button>
+              {{payment.transactionCode || "N/A"}}
+              
+            </div>
+          </td>
+          <td>
+            <span class="payment-method">
+              <i class="fas" [ngClass]="{
+                'fa-money-bill': payment.method === 'COD',
+                'fa-credit-card': payment.method === 'VNPAY',
+                'fa-wallet': payment.method === 'MOMO'
+              }"></i>
+              {{payment.method || "N/A"}}
+            </span>
+          </td>
+          <td class="amount">{{payment.amount | currency:'VND'}}</td>
+          <td>
+            <span class="status-badge" [ngClass]="payment.paymentStatus?.toLowerCase()">
+              {{payment.paymentStatus || "N/A"}}
+            </span>
+          </td>
+          <td>{{payment.createdAt !== "N/A" ? 
+               (payment.createdAt | date:'dd/MM/yyyy HH:mm') : "N/A"}}</td>
+          <td class="actions">
+            <button class="btn-view" matTooltip="Xem chi tiết">
+              <i class="fas fa-eye"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

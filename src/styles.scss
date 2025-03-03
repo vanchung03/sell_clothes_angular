@@ -2,8 +2,10 @@
 @import 'node_modules/ngx-toastr/toastr.css';
 /* To enable Material themes and animations */
 @import '@angular/material/theming';
+
 /* Use the deeppurple-amber theme */
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 /* Global styles */
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

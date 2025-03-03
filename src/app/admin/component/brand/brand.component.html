@@ -1,0 +1,181 @@
+<!-- Main container with AOS animation -->
+<div class="brand-container" data-aos="fade-in" data-aos-duration="800">
+  <!-- Thay đổi nút "New Brand" để gọi phương thức openCreateForm() -->
+<div class="brand-header">
+  <h1><i class="fa-solid fa-tags"></i> Quản Lý Thương Hiệu</h1>
+  <div class="action-buttons">
+    <button class="btn-add" (click)="openCreateForm()">
+      <i class="fa-solid fa-plus"></i> New Brand
+    </button>
+    <button class="btn-export" (click)="exportToExcel()">
+      <i class="fa-solid fa-file-excel"></i> Export Excel
+    </button>
+    <!-- <button  class="btn-export" (click)="exportToPDF()">
+      <i class="fa-solid fa-file-pdf"></i> Export PDF
+    </button> -->
+  </div>
+</div>
+
+  <!-- Search and Filter Section -->
+  <div class="filter-section" data-aos="fade-up" data-aos-delay="100">
+    <div class="search-box">
+      <i class="fa-solid fa-search"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="searchBrands()" 
+        placeholder="Search for a brand...">
+    </div>
+    <div class="filter-options">
+      <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+        <option value="all">All Status</option>
+        <option value="active">Active Only</option>
+        <option value="inactive">Inactive Only</option>
+      </select>
+      <select [(ngModel)]="sortOption" (change)="applyFilters()">
+        <option value="nameAsc">Name (A-Z)</option>
+        <option value="nameDesc">Name (Z-A)</option>
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Brand List Table -->
+  <div class="table-responsive" data-aos="fade-up" data-aos-delay="200">
+    <table *ngIf="filteredBrands.length > 0">
+      <thead>
+        <tr>
+          <th>Brand Name</th>
+          <th>Logo</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let brand of filteredBrands; let i = index" [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="200 + (i * 50)">
+          <td>{{ brand.name }}</td>
+          <td class="logo-cell">
+            <img *ngIf="brand.logoUrl" [src]="brand.logoUrl" alt="logo">
+            <span *ngIf="!brand.logoUrl" class="no-logo">No Logo</span>
+          </td>
+          <td>
+            <div class="description-text">{{ brand.description || 'No description available' }}</div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="brand.status ? 'active' : 'inactive'">
+              {{ brand.status ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="btn-edit" (click)="selectBrand(brand)" title="Edit">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button class="btn-delete" (click)="confirmDelete(brand)" title="Delete">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Empty state when no brands match filters -->
+    <div class="empty-state" *ngIf="filteredBrands.length === 0">
+      <i class="fa-solid fa-search"></i>
+      <h3>No brands found</h3>
+      <p>Try adjusting your search or filters</p>
+      <button class="btn-reset" (click)="resetFilters()">Reset Filters</button>
+    </div>
+  </div>
+
+  <!-- Brand Form (Modal) -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="closeForm()">
+    <div class="brand-form" (click)="$event.stopPropagation()" data-aos="zoom-in" data-aos-duration="400">
+  
+      <div class="form-header">
+        <h3>{{ isEditing ? 'Cập nhật thương hiệu' : 'Thêm thương hiệu' }}</h3>
+        <button class="btn-close" (click)="closeForm()">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      
+      <form (ngSubmit)="isEditing ? updateBrand() : createBrand()">
+        <div class="form-group">
+          <label for="brandName">Brand Name *</label>
+          <input
+            type="text"
+            id="brandName"
+            [(ngModel)]="selectedBrand.name"
+            name="name"
+            placeholder="Enter brand name"
+            required>
+        </div>
+        
+        <div class="form-group">
+          <label for="brandDescription">Description</label>
+          <textarea
+            id="brandDescription"
+            [(ngModel)]="selectedBrand.description"
+            name="description"
+            placeholder="Enter brand description"
+            rows="4"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Logo Image</label>
+          <div class="logo-upload">
+            <div class="logo-preview" *ngIf="selectedBrand.logoUrl">
+              <img [src]="selectedBrand.logoUrl" alt="Brand Logo">
+              <button type="button" class="btn-remove" (click)="removeLogo()">
+                <i class="fa-solid fa-times"></i>
+              </button>
+            </div>
+            
+            <div class="upload-area" *ngIf="!selectedBrand.logoUrl">
+              <input type="file" id="logo-file" (change)="onFileChange($event)" accept="image/*" class="file-input">
+              <label for="logo-file" class="upload-label">
+                <i class="fa-solid fa-cloud-upload-alt"></i>
+                <span>Click to upload logo</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group switch-group">
+          <label>Active Status</label>
+          <label class="switch">
+            <input
+              type="checkbox"
+              [(ngModel)]="selectedBrand.status"
+              name="status">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeForm()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="!selectedBrand.name">
+            {{ isEditing ? 'Update Brand' : 'Create Brand' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteConfirm" (click)="cancelDelete()">
+    <div class="confirm-dialog" (click)="$event.stopPropagation()" data-aos="zoom-in" data-aos-duration="300">
+      <div class="confirm-header">
+        <i class="fa-solid fa-exclamation-triangle"></i>
+        <h3>Confirm Deletion</h3>
+      </div>
+      <p>Are you sure you want to delete the brand <strong>"{{brandToDelete?.name}}"</strong>?</p>
+      <p class="warning-text">This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-delete" (click)="confirmDeleteAction()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

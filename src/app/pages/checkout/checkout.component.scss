@@ -1,0 +1,683 @@
+// Variables
+$primary-color: #5a67d8;
+$secondary-color: #4c51bf;
+$accent-color: #6875f5;
+$text-color: #333;
+$light-text: #666;
+$lighter-text: #999;
+$background-color: #f7fafc;
+$border-color: #e2e8f0;
+$success-color: #48bb78;
+$error-color: #f56565;
+$warning-color: #ed8936;
+$hover-transition: all 0.3s ease;
+
+// Mixins
+@mixin card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: $hover-transition;
+  
+  &:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+}
+
+@mixin button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: $hover-transition;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+// Main Styles
+.checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  color: $text-color;
+  background-color: $background-color;
+  min-height: 100vh;
+  
+  .page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: $primary-color;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    
+    i {
+      color: $accent-color;
+    }
+  }
+}
+
+.checkout-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 30px;
+  
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Left Side - Checkout Form
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form-section {
+  @include card;
+  padding: 25px;
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    i {
+      color: $primary-color;
+    }
+  }
+}
+
+// Address List
+.address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.address-item {
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: $hover-transition;
+  
+  &:hover {
+    border-color: $accent-color;
+    transform: translateY(-2px);
+  }
+  
+  &.selected {
+    border-color: $primary-color;
+    border-width: 2px;
+    background-color: rgba($primary-color, 0.05);
+  }
+  
+  .address-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .address-info {
+    flex: 1;
+    
+    .address-line {
+      font-weight: 600;
+      margin-bottom: 5px;
+      
+      i {
+        color: $primary-color;
+        margin-right: 5px;
+      }
+    }
+    
+    .address-location {
+      color: $light-text;
+      margin-bottom: 10px;
+      
+      i {
+        color: $accent-color;
+        margin-right: 5px;
+      }
+    }
+    
+    .default-label {
+      display: inline-flex;
+      align-items: center;
+      background-color: rgba($success-color, 0.15);
+      color: $success-color;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      
+      i {
+        margin-right: 5px;
+      }
+    }
+  }
+  
+  .address-actions {
+    display: flex;
+    gap: 10px;
+    
+    .edit-btn, .delete-btn {
+      @include button;
+      border: 0;
+      background-color: white;
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+}
+
+.add-address-btn {
+  @include button;
+  background-color: white;
+  color: $primary-color;
+  border: 1px dashed $primary-color;
+  padding: 10px 0px;
+  width: 100%;
+  
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+  }
+  
+  i {
+    margin-right: 8px;
+  }
+}
+
+// Address Form
+.address-form {
+  background-color: rgba($primary-color, 0.02);
+  border-radius: 8px;
+  padding: 20px;
+  animation: slideDown 0.3s ease;
+  
+  .form-group {
+    margin-bottom: 15px;
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: $primary-color;
+      
+      i {
+        margin-right: 5px;
+      }
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: $hover-transition;
+      
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+    }
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  
+  .checkbox-group {
+    label {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      input[type="checkbox"] {
+        accent-color: $primary-color;
+        width: 16px;
+        height: 16px;
+      }
+      
+      span {
+        display: flex;
+        align-items: center;
+        
+        i {
+          color: $primary-color;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    
+    .cancel-btn {
+      @include button;
+      background-color: white;
+      border: 1px solid $border-color;
+      color: $light-text;
+      flex: 1;
+      
+      &:hover {
+        background-color: $border-color;
+      }
+    }
+    
+    .save-btn {
+      @include button;
+      background-color: $primary-color;
+      color: white;
+      flex: 2;
+      
+      &:hover {
+        background-color: $secondary-color;
+      }
+    }
+  }
+}
+
+// Empty state
+.no-address-message {
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 0;
+    
+    i {
+      font-size: 3rem;
+      color: $lighter-text;
+      margin-bottom: 15px;
+    }
+    
+    p {
+      color: $light-text;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+// Shipping Options
+.shipping-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.shipping-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: $hover-transition;
+  
+  &:hover {
+    border-color: $accent-color;
+  }
+  
+  &.selected {
+    border-color: $primary-color;
+    border-width: 2px;
+    background-color: rgba($primary-color, 0.05);
+  }
+  
+  .shipping-radio {
+    margin-right: 15px;
+    
+    input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid $border-color;
+      border-radius: 50%;
+      outline: none;
+      transition: $hover-transition;
+      position: relative;
+      
+      &:checked {
+        border-color: $primary-color;
+        
+        &:after {
+          content: '';
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          background-color: $primary-color;
+          border-radius: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+  
+  .shipping-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba($primary-color, 0.1);
+    border-radius: 8px;
+    margin-right: 15px;
+    
+    i {
+      color: $primary-color;
+      font-size: 1.2rem;
+    }
+  }
+  
+  .shipping-info {
+    flex: 1;
+    
+    .shipping-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .shipping-description {
+      color: $light-text;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .shipping-price {
+    font-weight: 600;
+    color: $primary-color;
+  }
+}
+
+// Payment Options
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: $hover-transition;
+  
+  &:hover {
+    border-color: $accent-color;
+  }
+  
+  &.selected {
+    border-color: $primary-color;
+    border-width: 2px;
+    background-color: rgba($primary-color, 0.05);
+  }
+  
+  .payment-radio {
+    margin-right: 15px;
+    
+    input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid $border-color;
+      border-radius: 50%;
+      outline: none;
+      transition: $hover-transition;
+      position: relative;
+      
+      &:checked {
+        border-color: $primary-color;
+        
+        &:after {
+          content: '';
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          background-color: $primary-color;
+          border-radius: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+  
+  .payment-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    
+    .payment-icon {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+  
+  .payment-info {
+    flex: 1;
+    
+    .payment-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .payment-description {
+      color: $light-text;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Right Side - Order Summary
+.order-summary {
+  .summary-section {
+    @include card;
+    padding: 25px;
+    position: sticky;
+    top: 20px;
+  }
+}
+
+// Cart Items
+.cart-items-container {
+  max-height: 350px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $border-color;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $accent-color;
+    border-radius: 10px;
+  }
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid $border-color;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .item-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+  }
+  
+  .item-details {
+    flex: 1;
+    
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .item-variant {
+      color: $light-text;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      
+      .variant-size, .variant-color {
+        display: flex;
+        align-items: center;
+        
+        i {
+          margin-right: 5px;
+          color: $accent-color;
+        }
+      }
+    }
+    
+    .item-price {
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+  
+  .item-quantity {
+    .quantity-badge {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $primary-color;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-weight: 600;
+    }
+  }
+}
+
+// Order Note
+.order-note {
+  margin-bottom: 20px;
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: $primary-color;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 70px;
+    padding: 12px 15px;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    resize: none;
+    transition: $hover-transition;
+    
+    &:focus {
+      border-color: $primary-color;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+  }
+}
+
+// Price Summary
+.price-summary {
+  margin-bottom: 25px;
+  
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px dashed $border-color;
+    font-size: 0.95rem;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    &.discount {
+      color: $success-color;
+    }
+    
+    &.total {
+      border-top: 2px solid $border-color;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-top: 10px;
+      padding-top: 15px;
+      color: $primary-color;
+    }
+  }
+}
+
+// Checkout Button
+.checkout-btn {
+  @include button;
+  background-color: $primary-color;
+  color: white;
+  width: 100%;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  height: 54px;
+  
+  i {
+    font-size: 1.2rem;
+  }
+}

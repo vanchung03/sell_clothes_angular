@@ -1,0 +1,11 @@
+.payment-result {
+  text-align: center;
+  margin-top: 50px;
+
+  .success-text { color: green; }
+  .warning-text { color: orange; }
+  .error-text { color: red; }
+
+  p { font-size: 18px; margin-top: 10px; }
+  .btn { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+}

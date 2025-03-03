@@ -1,0 +1,74 @@
+<footer class="footer">
+  <div class="footer-content">
+    <!-- Company Info -->
+    <div class="footer-section">
+      <div class="brand">
+        <h2>SERENITY <span>VN</span></h2>
+        <p>Định nghĩa phong cách thời trang của riêng bạn</p>
+      </div>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-section">
+      <h3>Liên Kết Nhanh</h3>
+      <ul>
+        <li><a routerLink="/home">Trang Chủ</a></li>
+        <li><a routerLink="/products">Sản Phẩm</a></li>
+        <li><a routerLink="/news">Tin Tức</a></li>
+        <li><a routerLink="/about">Về Chúng Tôi</a></li>
+        <li><a routerLink="/contact">Liên Hệ</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="footer-section">
+      <h3>Thông Tin Liên Hệ</h3>
+      <ul class="contact-info">
+        <li>
+          <i class="fas fa-map-marker-alt"></i>
+          <span>88 Đ. Di Ái ,Nam Từ Liêm, Hà Nội</span>
+        </li>
+        <li>
+          <i class="fas fa-phone"></i>
+          <span>0123 456 789</span>
+        </li>
+        <li>
+          <i class="fas fa-envelope"></i>
+          <span>contact-serenity.vn</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="footer-section">
+      <h3>Đăng Ký Nhận Tin</h3>
+      <p>Nhận thông tin về sản phẩm mới và khuyến mãi</p>
+      <form class="newsletter-form" (ngSubmit)="onSubscribe()">
+        <div class="input-group">
+          <input type="email" [(ngModel)]="email" name="email" placeholder="Email của bạn">
+          <button type="submit">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bottom">
+    <div class="footer-content">
+      <p>&copy; 2024 SERENITY. Tất cả quyền được bảo lưu.</p>
+      <div class="payment-methods">
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-paypal"></i>
+      </div>
+    </div>
+  </div>
+</footer>

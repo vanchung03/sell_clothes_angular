@@ -1,0 +1,94 @@
+<app-header></app-header>
+<!-- Icon giỏ hàng (để ảnh bay tới) -->
+<div class="cart-icon" hidden>
+  <img src="#"alt="Giỏ hàng">
+</div>
+
+<app-navbar></app-navbar>
+<div class="product-detail">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/home">Trang chủ</a>
+    <span class="separator"> &gt; </span>
+    <span>{{ product?.name }}</span>
+  </div>
+
+  <!-- Nội dung trang sản phẩm -->
+  <div class="product-container">
+    <!-- Cột trái: Hình ảnh -->
+    <div class="product-images">
+      <div class="main-image">
+        <img [src]="selectedImage" alt="Ảnh chính" />
+      </div>
+
+      <div class="thumbnails">
+        <div class="thumbnail" *ngFor="let img of productImages" (click)="onSelectImage(img.imageUrl)">
+          <img [src]="img.imageUrl" alt="Thumbnail" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Cột phải: Thông tin -->
+    <div class="product-info">
+      <h1 class="product-title">{{ product?.name }}</h1>
+      <div class="product-status">
+        Trạng thái:
+        <span [ngClass]="{'in-stock': product.status, 'out-of-stock': !product.status}">
+          {{ product.status ? 'Đang Hoạt Động' : 'Ngừng Hoạt Động' }}
+        </span>
+      </div>
+
+      <!-- Giá -->
+      <div class="product-price">
+        <span class="current-price">{{ product.salePrice || product.price | number }}đ</span>
+        <span class="original-price" *ngIf="product.salePrice">{{ product.price | number }}đ</span>
+      </div>
+
+      <div class="color-choices">
+        <label>Màu sắc:</label>
+        <div class="color-option" *ngFor="let variant of productVariants | unique: 'color'"
+          [ngClass]="{ 'active': selectedColor === variant.color, 'out-of-stock': !variant.stockQuantity }"
+          (click)="onSelectColor(variant.color)">
+          {{ variant.color }}
+        </div>
+      </div>
+
+      <div class="size-choices">
+        <label>Size:</label>
+        <div class="size-option" *ngFor="let variant of productVariants | unique: 'size'"
+          [ngClass]="{ 'active': selectedSize === variant.size, 'out-of-stock': !variant.stockQuantity }"
+          (click)="onSelectSize(variant.size)">
+          {{ variant.size }}
+        </div>
+      </div>
+
+      <div class="product-status">
+        Trạng thái:
+        <span
+          [ngClass]="{ 'in-stock': selectedVariant?.stockQuantity, 'out-of-stock': !selectedVariant?.stockQuantity }">
+          {{ selectedVariant?.stockQuantity ? 'Còn hàng' : 'Hết hàng' }}
+        </span>
+      </div>
+
+
+      <!-- Số lượng -->
+      <div class="quantity-control">
+        <label>Số lượng:</label>
+        <div class="qty-box">
+          <button (click)="onDecreaseQuantity()">-</button>
+          <input type="number" [(ngModel)]="quantity" min="1" />
+          <button (click)="onIncreaseQuantity()">+</button>
+        </div>
+      </div>
+
+
+      <!-- Nút thêm vào giỏ hàng -->
+      <div class="action-buttons">
+        <button class="btn add-to-cart" (click)="onAddToCart($event)"><i class="fa fa-link"></i>Thêm vào giỏ</button>
+        <button class="btn buy-now" (click)="onBuyNow()"><i class="fa fa-link"></i>Mua ngay</button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">

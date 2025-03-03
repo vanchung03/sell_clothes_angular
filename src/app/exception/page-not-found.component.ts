@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
       <div class="not-found-content">
         <h1>404</h1>
         <p>Xin lỗi, trang bạn đang tìm không tồn tại.</p>
-        <a routerLink="/" class="btn-back">
+        <a routerLink="/login" class="btn-back">
           <i class="fas fa-home"></i> Quay lại trang chủ
         </a>
       </div>

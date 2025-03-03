@@ -1,0 +1,261 @@
+// Variables
+$primary-color: #000;
+$secondary-color: #ff0000;
+$white: #fff;
+$gray-light: #f0f0f0;
+$gray-dark: #999;
+$transition: all 0.3s ease;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin hover-transform {
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-8px);
+  }
+}
+
+.product-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .product-filters {
+    @include flex-center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+
+    .filter-btn {
+      padding: 0.8rem 1.5rem;
+      background: transparent;
+      border: 2px solid $primary-color;
+      color: $primary-color;
+      cursor: pointer;
+      transition: $transition;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 25px;
+
+      &:hover {
+        background: $primary-color;
+        color: $white;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 1rem 0;
+
+    .product-card {
+      position: relative;
+      background: $white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      @include hover-transform;
+
+      .product-image {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 3/4;
+
+        &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 100%);
+          opacity: 0;
+          transition: $transition;
+          z-index: 1;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .discount-badge {
+          position: absolute;
+          top: 1rem;
+          left: 1rem;
+          background: $secondary-color;
+          color: $white;
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          border-radius: 20px;
+          z-index: 2;
+          animation: pulse 2s infinite;
+        }
+
+        .hover-actions {
+          position: absolute;
+          bottom: 1.5rem;
+          left: 0;
+          width: 100%;
+          @include flex-center;
+          gap: 1rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: $transition;
+          z-index: 2;
+
+          button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-radius: 25px;
+            transition: $transition;
+            
+            i {
+              margin-right: 0.5rem;
+            }
+
+            &.detail-btn {
+              background: $primary-color;
+              color: $white;
+
+              &:hover {
+                background: lighten($primary-color, 15%);
+                transform: translateY(-2px);
+              }
+            }
+
+            &.quick-view-btn {
+              background: $white;
+              color: $primary-color;
+
+              &:hover {
+                background: $gray-light;
+                transform: translateY(-2px);
+              }
+            }
+          }
+        }
+      }
+
+      &:hover {
+        .product-image {
+          img {
+            transform: scale(1.1);
+          }
+
+          &::before {
+            opacity: 1;
+          }
+
+          .hover-actions {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      }
+
+      .product-info {
+        padding: 1.5rem 5px 5px 5px;
+        text-align: left;
+
+        .product-name {
+          font-size: 1.1rem;
+          color: $primary-color;
+          font-weight: 600;
+          line-height: 1.4;
+          height: 3rem;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+        }
+
+        .product-price {
+          gap: 1rem;
+
+          .current-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: $primary-color;
+          }
+
+          .old-price {
+            font-size: 1rem;
+            color: $gray-dark;
+            text-decoration: line-through;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+// Responsive Design
+@media (max-width: 1400px) {
+  .product-section .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .product-section .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-section {
+    padding: 1rem;
+
+    .product-filters .filter-btn {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .product-grid {
+      gap: 1rem;
+      
+      .product-card {
+        .product-info {
+          padding: 1rem;
+          
+          .product-name {
+            font-size: 1rem;
+          }
+          
+          .product-price {
+            .current-price {
+              font-size: 1.1rem;
+            }
+            
+            .old-price {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .product-section .product-grid {
+    grid-template-columns: 1fr;
+  }
+}

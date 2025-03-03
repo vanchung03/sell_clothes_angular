@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { forkJoin, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { initAOS } from 'src/app/aos-init';
 
-// Import 3 service tách biệt
+// Services
 import { ProductService } from 'src/app/service/product.service';
 import { BrandService } from 'src/app/service/brand.service';
 import { CategoryService } from 'src/app/service/category.service';
 import { ProductImageService } from 'src/app/service/product-image.service';
 import { ProductVariantService } from 'src/app/service/product-variant.service';
-import { CloudinaryService } from 'src/app/service/cloudinary.service'; // <-- import
+import { CloudinaryService } from 'src/app/service/cloudinary.service';
 
-// Import các interface
+// Interfaces
 import { Product } from 'src/app/types/products';
 import { ProductImage } from 'src/app/types/product-image';
 import { ProductVariant } from 'src/app/types/product-variant';
@@ -21,18 +26,29 @@ import { Category } from 'src/app/types/category';
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.scss']
 })
-export class AddProductComponent implements OnInit {
-  productForm!: FormGroup;       // Form cho Product
-  imagesForm!: FormArray;        // FormArray quản lý list hình ảnh
-  variantsForm!: FormArray;      // FormArray quản lý list biến thể
+export class AddProductComponent implements OnInit, OnDestroy {
+  // Form Controls
+  productForm!: FormGroup;
+  imagesForm!: FormArray;
+  variantsForm!: FormArray;
+
+  // Component State
+  isLoading = false;
+  isSubmitting = false;
+  private destroy$ = new Subject<void>();
+
+  // Data Collections
   categories: Category[] = [];
   brands: Brand[] = [];
 
-  availableColors = ['Red', 'Blue', 'Green'];
-  availableSizes = ['S', 'M', 'L', 'XL'];
+  // Constants
+  readonly availableColors = ['Đỏ', 'Xanh', 'Be', 'Nâu', 'Vàng', 'Đen', 'Trắng', 'Cam', 'Hồng', 'Xám'];
+  readonly availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', '4XL'];
 
   constructor(
     private fb: FormBuilder,
+    private router: Router,
+    private toastr: ToastrService,
     private productService: ProductService,
     private productImageService: ProductImageService,
     private productVariantService: ProductVariantService,
@@ -42,57 +58,57 @@ export class AddProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    initAOS();
     this.buildProductForm();
-    this.loadCategories();
-    this.loadBrands();
+    this.loadInitialData();
   }
 
-  // Khởi tạo Form
-  buildProductForm(): void {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private buildProductForm(): void {
     this.productForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
-      price: [0, Validators.required],
-      salePrice: [0],
-      thumbnail: [''],
+      price: [0, [Validators.required, Validators.min(0)]],
+      salePrice: [0, [Validators.min(0)]],
+      thumbnail: ['', Validators.required],
       categoryId: [null, Validators.required],
       brandId: [null, Validators.required],
       status: [true],
-
-      images: this.fb.array([]),    // Mảng các hình ảnh
-      variants: this.fb.array([])   // Mảng các biến thể
+      images: this.fb.array([this.createImageFormGroup()]),
+      variants: this.fb.array([this.createVariantFormGroup()])
     });
 
     this.imagesForm = this.productForm.get('images') as FormArray;
     this.variantsForm = this.productForm.get('variants') as FormArray;
   }
-  // ========== CATEGORY ==========
-  // Load categories from API
-  loadCategories() {
-    this.categoryService.getAllCategories().subscribe({
-      next: (cats: Category[]) => {
-        this.categories = cats;
+
+  private loadInitialData(): void {
+    this.isLoading = true;
+    forkJoin({
+      categories: this.categoryService.getAllCategories(),
+      brands: this.brandService.getAllBrands()
+    })
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (data) => {
+        this.categories = data.categories;
+        this.brands = data.brands;
+        this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Lỗi khi load categories:', err);
+      error: (error) => {
+        console.error('Error loading initial data:', error);
+        this.toastr.error('Không thể tải dữ liệu ban đầu');
+        this.isLoading = false;
       }
     });
   }
 
-  // Load brands from API
-  loadBrands() {
-    this.brandService.getAllBrands().subscribe({
-      next: (bds: Brand[]) => {
-        this.brands = bds;
-      },
-      error: (err) => {
-        console.error('Lỗi khi load brands:', err);
-      }
-    });
-  }
-
-  // ========== IMAGE ==========
-  createImageFormGroup(): FormGroup {
+  // Form Array Methods
+  private createImageFormGroup(): FormGroup {
     return this.fb.group({
       imageUrl: ['', Validators.required],
       isPrimary: [false],
@@ -100,163 +116,125 @@ export class AddProductComponent implements OnInit {
     });
   }
 
-  addImage() {
-    this.imagesForm.push(this.createImageFormGroup());
-  }
-
-  removeImage(index: number) {
-    this.imagesForm.removeAt(index);
-  }
-
-  // ========== VARIANT ==========
-  createVariantFormGroup(): FormGroup {
+  private createVariantFormGroup(): FormGroup {
     return this.fb.group({
-      size: [''],
-      color: [''],
-      sku: [''],
-      price: [0],
-      stockQuantity: [0],
+      size: ['', Validators.required],
+      color: ['', Validators.required],
+      sku: ['', Validators.required],
+      price: [0, [Validators.required, Validators.min(0)]],
+      stockQuantity: [0, [Validators.required, Validators.min(0)]],
       imageUrl: [''],
       status: [true]
     });
   }
 
-  addVariant() {
+  // File Upload Methods
+  onFileSelected(event: Event, index: number): void {
+    this.handleFileUpload(event, (url) => {
+      const imageForm = this.imagesForm.at(index);
+      imageForm.get('imageUrl')?.setValue(url);
+    });
+  }
+
+  onVariantFileSelected(event: Event, index: number): void {
+    this.handleFileUpload(event, (url) => {
+      const variantForm = this.variantsForm.at(index);
+      variantForm.get('imageUrl')?.setValue(url);
+    });
+  }
+
+  onFileSelected_imageproduct(event: Event): void {
+    this.handleFileUpload(event, (url) => {
+      this.productForm.patchValue({ thumbnail: url });
+    });
+  }
+
+  private handleFileUpload(event: Event, callback: (url: string) => void): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    this.cloudinaryService.uploadProductImage(file)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          callback(response.imageUrl);
+          this.toastr.success('Tải ảnh lên thành công');
+        },
+        error: (error) => {
+          console.error('Upload error:', error);
+          this.toastr.error('Tải ảnh lên thất bại');
+        }
+      });
+  }
+
+  // Form Array Actions
+  addImage(): void {
+    this.imagesForm.push(this.createImageFormGroup());
+  }
+
+  removeImage(index: number): void {
+    this.imagesForm.removeAt(index);
+  }
+
+  addVariant(): void {
     this.variantsForm.push(this.createVariantFormGroup());
   }
 
-  removeVariant(index: number) {
+  removeVariant(index: number): void {
     this.variantsForm.removeAt(index);
   }
-  // ========== UPLOAD IMAGE TO CLOUDINARY ==========
-  onFileSelected(event: Event, index: number) {
-    const fileInput = event.target as HTMLInputElement;
-    if (!fileInput.files || fileInput.files.length === 0) {
-      return;
-    }
 
-    const file = fileInput.files[0];
-
-    // Gửi file lên Cloudinary
-    this.cloudinaryService.uploadProductImage(file).subscribe({
-      next: (res) => {
-        console.log('Upload kết quả:', res);
-        // Giả sử server trả về: { success: true, imageUrl: 'https://cloudinary.com/...' }
-        const imageUrl = res.imageUrl;
-        // Gán URL vào formControl
-        const imageForm = this.imagesForm.at(index);
-        imageForm.get('imageUrl')?.setValue(imageUrl);
-      },
-      error: (err) => {
-        console.error('Lỗi upload ảnh:', err);
-        // Tùy trường hợp bạn có thể reset input, hiển thị thông báo...
-      }
-    });
-  }
-
-  // ----------  UPLOAD ảnh biến thể ----------
-  onVariantFileSelected(event: Event, index: number) {
-    const fileInput = event.target as HTMLInputElement;
-    if (!fileInput.files || fileInput.files.length === 0) {
-      return;
-    }
-  
-    const file = fileInput.files[0];
-  
-    // Upload lên Cloudinary
-    this.cloudinaryService.uploadProductImage(file).subscribe({
-      next: (res) => {
-        console.log('Upload kết quả (variant):', res);
-        const imageUrl = res.imageUrl;
-  
-        // Gán URL vào variantsForm thay vì imagesForm
-        const variantForm = this.variantsForm.at(index);
-        variantForm.get('imageUrl')?.setValue(imageUrl);
-      },
-      error: (err) => {
-        console.error('Lỗi upload ảnh biến thể:', err);
-      }
-    });
-  }
-  
-  // Xử lý khi người dùng chọn file
-  onFileSelected_imageproduct(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) {
-      return; // không có file
-    }
-
-    const file = input.files[0];
-
-    // Gọi service upload lên Cloudinary
-    this.cloudinaryService.uploadProductImage(file).subscribe({
-      next: (res) => {
-        // Giả sử server trả về res.imageUrl
-        const url = res.imageUrl; 
-        // Gán URL vào formControl
-        this.productForm.patchValue({ thumbnail: url });
-      },
-      error: (err) => {
-        console.error('Lỗi upload ảnh:', err);
-        alert('Upload ảnh thất bại!');
-      }
-    });
-  }
-
-
-  // ========== SUBMIT FORM ==========
-  onSubmit() {
+  // Form Submission
+  onSubmit(): void {
     if (this.productForm.invalid) {
-      this.productForm.markAllAsTouched();
+      this.markFormGroupTouched(this.productForm);
+      this.toastr.warning('Vui lòng điền đầy đủ thông tin bắt buộc');
       return;
     }
 
-    // Tách dữ liệu product, images, variants
+    this.isSubmitting = true;
     const { images, variants, ...productData } = this.productForm.value;
 
-    // 1. Gọi API tạo sản phẩm
-    this.productService.createProduct(productData).subscribe({
-      next: (createdProduct: Product) => {
-        const productId = createdProduct.productId;
-
-        // 2. Tạo images
-        if (images && images.length > 0) {
-          images.forEach((img: any) => {
-            const newImage: ProductImage = {
-              productId: productId!,
-              imageUrl: img.imageUrl,
-              isPrimary: img.isPrimary,
-              displayOrder: img.displayOrder
-            };
-            this.productImageService.createProductImage(newImage).subscribe();
+    this.productService.createProduct(productData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (createdProduct: Product) => {
+          const productId = createdProduct.productId;
+          
+          // Create images and variants in parallel
+          forkJoin([
+            ...images.map((img: ProductImage) => 
+              this.productImageService.createProductImage({ ...img, productId })),
+            ...variants.map((variant: ProductVariant) => 
+              this.productVariantService.createProductVariant({ ...variant, productId }))
+          ])
+          .subscribe({
+            next: () => {
+              this.toastr.success('Thêm sản phẩm thành công');
+              this.router.navigate(['/admin/add-product']);
+            },
+            error: (error) => {
+              console.error('Error creating product details:', error);
+              this.toastr.error('Có lỗi xảy ra khi tạo chi tiết sản phẩm');
+            }
           });
+        },
+        error: (error) => {
+          console.error('Error creating product:', error);
+          this.toastr.error('Có lỗi xảy ra khi tạo sản phẩm');
+          this.isSubmitting = false;
         }
+      });
+  }
 
-        // 3. Tạo variants
-        if (variants && variants.length > 0) {
-          variants.forEach((v: any) => {
-            const newVariant: ProductVariant = {
-              productId: productId!,
-              size: v.size,
-              color: v.color,
-              sku: v.sku,
-              price: v.price,
-              stockQuantity: v.stockQuantity,
-              imageUrl: v.imageUrl,
-              status: v.status
-            };
-            this.productVariantService.createProductVariant(newVariant).subscribe();
-          });
-        }
-
-        // Sau khi tạo xong, bạn có thể điều hướng hoặc reset form
-        alert('Thêm sản phẩm thành công!');
-        this.productForm.reset();
-      },
-      error: (err) => {
-        console.error('Lỗi khi tạo sản phẩm:', err);
-        alert('Đã xảy ra lỗi khi thêm sản phẩm.');
-      },
+  // Helper Methods
+  private markFormGroupTouched(formGroup: FormGroup | FormArray): void {
+    Object.values(formGroup.controls).forEach(control => {
+      if (control instanceof FormGroup || control instanceof FormArray) {
+        this.markFormGroupTouched(control);
+      } else {
+        control.markAsTouched();
+      }
     });
   }
 }

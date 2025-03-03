@@ -1,0 +1,21 @@
+<div class="product-container">
+  <h2>Danh sách sản phẩm</h2>
+  <div class="product-grid">
+    <div *ngFor="let product of products" class="product-card">
+      <div class="product-image-container">
+        <img 
+          *ngIf="currentImageIndex[product.productId] !== undefined" 
+          [src]="productImages[product.productId]?.[currentImageIndex[product.productId]]?.imageUrl" 
+          alt="Product Image"
+        />
+        <div class="overlay">
+          <button class="detail-button"(click)="onViewDetail(product.productId)"> <i class="fa fa-eye"></i>Xem chi tiết</button>
+          <button class="quick-view-button"> <i class="fa fa-eye"></i>Xem nhanh</button>
+        </div>
+      </div>
+      <h3 class="product-name">{{ product.name }}</h3>
+      <p class="product-description">{{ product.description }}</p>
+      <p class="product-price">{{ product.salePrice || product.price | currency :'VND' }}</p>
+    </div>
+  </div>
+</div>
