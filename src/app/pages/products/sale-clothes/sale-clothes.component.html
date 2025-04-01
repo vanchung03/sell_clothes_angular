@@ -1,36 +1,70 @@
-<div class="product-section">
-    <!-- Bộ lọc sản phẩm -->
-    <div class="product-filters">
-      <button class="filter-btn" (click)="sortBy('name-asc')">Tên A-Z</button>
-      <button class="filter-btn" (click)="sortBy('name-desc')">Tên Z-A</button>
-      <button class="filter-btn" (click)="sortBy('newest')">Hàng mới</button>
-      <button class="filter-btn" (click)="sortBy('price-asc')">Giá thấp đến cao</button>
-      <button class="filter-btn" (click)="sortBy('price-desc')">Giá cao xuống thấp</button>
-    </div>
+<!-- HTML Template -->
+<div class="sale-clothes-container">
+  <div class="section-header" data-aos="fade-up" data-aos-duration="800">
+    <h2 class="section-title">Sản phẩm giảm giá</h2>
+    <p class="section-subtitle">Khám phá bộ sưu tập mới với giá ưu đãi</p>
+  </div>
   
-    <!-- Lưới sản phẩm -->
-    <div class="product-grid">
-      <div class="product-card" *ngFor="let product of filteredProducts">
-        <div class="product-image">
-          <img [src]="product.thumbnail || 'assets/images/default-product.jpg'" [alt]="product.name" />
-          <span class="discount-badge" *ngIf="product.salePrice && product.price">
+  <div class="filters" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+    <button class="filter-btn" (click)="sortBy('name-asc')">
+      <i class="fas fa-sort-alpha-down"></i> A-Z
+    </button>
+    <button class="filter-btn" (click)="sortBy('name-desc')">
+      <i class="fas fa-sort-alpha-up"></i> Z-A
+    </button>
+    <button class="filter-btn" (click)="sortBy('newest')">
+      <i class="fas fa-calendar-alt"></i> Mới nhất
+    </button>
+    <button class="filter-btn" (click)="sortBy('price-asc')">
+      <i class="fas fa-sort-numeric-down"></i> Giá tăng
+    </button>
+    <button class="filter-btn" (click)="sortBy('price-desc')">
+      <i class="fas fa-sort-numeric-up"></i> Giá giảm
+    </button>
+  </div>
+  
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let product of filteredProducts; let i = index" 
+         data-aos="fade-up" 
+         [attr.data-aos-delay]="100 * (i % 4)">
+      <div class="product-image">
+        <img [src]="product.thumbnail || 'assets/images/default-product.jpg'" [alt]="product.name" />
+        
+        <span class="discount-badge" *ngIf="product.salePrice && product.price">
           -{{ ((1 - (product.salePrice / product.price)) * 100) | number: '1.0-0' }}%
-          </span>          
-          <span class="wishlist-btn"></span>
-          <div class="hover-actions">
-            <button class="btn detail-btn" (click)="onViewDetail(product.productId)"> <i class="fa fa-eye"></i>Xem chi tiết</button>
-            
-            <button class="quick-view-btn"> <i class="fa fa-eye"></i>Xem nhanh</button>
-          </div>
+        </span>
+        
+        <button class="btn-favorite" (click)="toggleFavorite(product)" [class.active]="product.isFavorite">
+          <i class="fas" [ngClass]="product.isFavorite ? 'fa-heart' : 'fa-heart'"></i>
+        </button>
+        
+        <div class="product-actions">
+          <button class="action-btn view-details" (click)="onViewDetail(product.productId)">
+            <i class="fas fa-eye"></i>
+            <span>Xem Chi Tiết</span>
+          </button>
+          <button class="action-btn add-to-cart" (click)="openQuickView(product.productId)">
+            <mat-icon>link</mat-icon>
+            <span>Xem Nhanh</span>
+          </button>
         </div>
-        <div class="product-info">
-          <p class="product-name">{{ product.name }}</p>
-          <p class="product-description">{{product.description}}</p>
-          <p class="product-price">
-            <span class="current-price">{{ product.salePrice || product.price | number }}đ</span>
-            <span class="old-price" *ngIf="product.salePrice">{{ product.price | number }}đ</span>
-          </p>
+      </div>
+      
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <div class="product-price">
+          <span class="current-price">{{ product.salePrice || product.price | currency:'VND':'symbol':'1.0-0' }}</span>
+          <span class="old-price" *ngIf="product.salePrice">{{ product.price | currency:'VND':'symbol':'1.0-0' }}</span>
         </div>
       </div>
     </div>
   </div>
+  
+  <!-- Show "No products found" message if filtered list is empty -->
+  <div class="no-products" *ngIf="filteredProducts.length === 0" data-aos="fade-up">
+    <i class="fas fa-box-open"></i>
+    <p>Không tìm thấy sản phẩm nào phù hợp</p>
+  </div>
+</div>
+
+<app-quick-view *ngIf="quickViewProductId > 0" [productId]="quickViewProductId"></app-quick-view>

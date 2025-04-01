@@ -1,22 +1,11 @@
 
-$primary: #1a1a1a;
-$secondary: #f8f8f8;
-$accent: #d4af37;
-$text-light: #ffffff;
-$text-muted: rgba(255, 255, 255, 0.7);
-$border: rgba(255, 255, 255, 0.1);
+$primary: White;
+$secondary: #000000;
+$accent: #5f7d61;
+$text-light: #000000;
+$text-muted: rgba(0, 0, 0, 0.7);
+$border: rgba(0, 0, 0, 0.1);
 
-// Animations
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .footer {
   background: $primary;
@@ -31,7 +20,7 @@ $border: rgba(255, 255, 255, 0.1);
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(to right, $accent, darken($accent, 20%));
+    border-bottom: 1px solid $border;
   }
 
   .footer-content {
@@ -172,8 +161,7 @@ $border: rgba(255, 255, 255, 0.1);
 
           button {
             padding: 0 20px;
-            background: $accent;
-            border: none;
+            background: white;
             color: $text-light;
             border-radius: 4px;
             cursor: pointer;

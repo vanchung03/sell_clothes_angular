@@ -99,82 +99,142 @@
 </div>
 
 
-<!-- Đường kẻ đỏ mảnh -->
-<div class="thin-red-line"></div>
+<nav class="navbar-header"[ngClass]="{'hidden': isHidden}">
+  <header class="header">
+    <!-- Logo (Left) -->
+    <div id="logo">
+      <a routerLink="/home">
+        <img src="https://res.cloudinary.com/dynjp5ooj/image/upload/v1741247662/avatars/user_21741247660921_Se.png"
+          alt="SERENITY Logo" />
+      </a>
+    </div>
 
-<!-- Khu vực header chính -->
-<header class="header">
-  <!-- Thanh tìm kiếm -->
-  <div class="search-container">
-    <input type="text" class="search-box" placeholder="Bạn muốn tìm gì?" [(ngModel)]="searchTerm" />
-    <button class="search-btn" (click)="onSearch()">
-      <i class="fa fa-search"></i>
-    </button>
-  </div>
+    <!-- Main Navigation (Center) -->
+    <nav class="navbar">
+      <div class="mobile-menu-icon" (click)="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul [class.active]="isMobileMenuOpen">
+        <li>
+          <a href="/home">
+            <span>Trang chủ</span>
+          </a>
+        </li>
+        <li>
+          <a href="/introduction">
+            <span>Giới thiệu</span>
+          </a>
+        </li>
+        <li class="dropdown">
+          <a href="/products-card">
+            <span>Sản phẩm</span>
+            <i class="fas fa-chevron-down arrow"></i>
+          </a>
+          <app-dropdown-menu></app-dropdown-menu>
+        </li>
+        <li>
+          <a href="/news">
+            <span>Tin tức</span>
+          </a>
+        </li>
+        <li>
+          <a href="/contact">
+            <span>Liên hệ</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 
-  <!-- Logo -->
-  <div class="logo">
-    <a routerLink="/">SERENITY <span>VN</span></a>
-  </div>
-
-  <!-- Icons: Kiểm tra, Yêu thích, Giỏ hàng -->
-  <div class="header-icons">
-    <a routerLink="/check" class="icon">
-      <mat-icon>assignment</mat-icon>
-      <span>Kiểm tra</span>
-    </a>
-    <a routerLink="/favorite" class="icon">
-      <mat-icon>favorite</mat-icon>
-      <span>Yêu thích</span>
-      <span class="badge" *ngIf="favoriteCount > 0">{{ favoriteCount }}</span>
-    </a>
-    <a routerLink="/cart" class="icon">
-      <mat-icon>shopping_bag</mat-icon>
-      <span>Giỏ hàng</span>
-      <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
-    </a>
-
-    <!-- Nếu người dùng chưa đăng nhập -->
-    <ng-container *ngIf="!isLoggedIn; else userMenu">
-      <button mat-button class="btn top-btn" [routerLink]="'/login'">
-        <mat-icon>login</mat-icon>
-        ĐĂNG NHẬP
+    <!-- Right Side Icons -->
+    <div class="header-icons">
+      <!-- Search Icon -->
+      <button class="search-btn" (click)="toggleSearch()">
+        <i class="fa fa-search"></i>
+        <!-- <span>Tìm kiếm</span> -->
       </button>
-      <button mat-button class="btn top-btn" [routerLink]="'/register'">
-        <mat-icon>person_add</mat-icon>
-        ĐĂNG KÝ
-      </button>
-    </ng-container>
-    <!-- Nếu người dùng đã đăng nhập -->
-    <ng-template #userMenu>
-      <div class="profile-menu" (mouseenter)="showMenu = true" (mouseleave)="showMenu = false">
-        <img [src]="user.avatar" alt="Avatar" class="avatar" />
-        <button mat-button class="btn top-btn">
-          {{ user.fullName | uppercase}}
+
+
+      <!-- Favorites Icon -->
+      <a routerLink="/favorite" class="icon">
+        <mat-icon>favorite</mat-icon>
+        <span>Yêu thích</span>
+        <span class="badge" *ngIf="favoriteCount > 0">{{ favoriteCount }}</span>
+      </a>
+      
+      <!-- Cart Icon -->
+      <a routerLink="/cart" class="icon">
+        <mat-icon>shopping_bag</mat-icon>
+        <span>Giỏ hàng</span>
+        <span class="badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+      </a>
+
+      <!-- Login/Register Buttons or User Profile -->
+      <ng-container *ngIf="!isLoggedIn; else userMenu">
+        <button mat-button class="btn top-btn" [routerLink]="'/login'">
+          <mat-icon>login</mat-icon>
+          ĐĂNG NHẬP
         </button>
+        <button mat-button class="btn top-btn" [routerLink]="'/register'">
+          <mat-icon>person_add</mat-icon>
+          ĐĂNG KÝ
+        </button>
+      </ng-container>
       
-        <div class="profile-dropdown" *ngIf="showMenu">
-          <button mat-menu-item (click)="toggleProfileForm()">
-            <mat-icon fontIcon="person"></mat-icon>
-            <span>Thông Tin Cá Nhân</span>
+      <!-- User Profile Menu -->
+      <ng-template #userMenu>
+        <div class="profile-menu" (mouseenter)="showMenu = true" (mouseleave)="showMenu = false">
+          <img [src]="user.avatar || 'assets/images/default-avatar.png'" alt="Avatar" class="avatar" />
+          <button mat-button class="btn top-btn">
+            {{ user.fullName | uppercase}}
           </button>
-      
-          <button mat-menu-item (click)="myOrders()">
-            <mat-icon fontIcon="list_alt"></mat-icon>
-            <span>Đơn Hàng Của Bạn</span>
-          </button>
-      
-          <button mat-menu-item (click)="logout()">
-            <mat-icon fontIcon="logout"></mat-icon>
-            <span>Đăng Xuất</span>
-          </button>
+
+          <div class="profile-dropdown" *ngIf="showMenu">
+            <button mat-menu-item (click)="toggleProfileForm()">
+              <mat-icon fontIcon="person"></mat-icon>
+              <span>Thông Tin Cá Nhân</span>
+            </button>
+            <button mat-menu-item routerLink="/orders-list-new">
+              <mat-icon fontIcon="list_alt"></mat-icon>
+              <span>Đơn Hàng Của Bạn</span>
+            </button>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon fontIcon="logout"></mat-icon>
+              <span>Đăng Xuất</span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </header>
+
+  <!-- Search Container (appears below header when search button is clicked) -->
+  <div class="search-container-wrapper" [class.active]="isSearchActive">
+    <div class="search-container">
+      <input type="text" placeholder="Bạn muốn tìm gì?" [(ngModel)]="searchTerm" (input)="onSearch()" />
+      <button (click)="onSearch()">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+    
+    <!-- Search Results -->
+    <div class="search-results" *ngIf="searchResults.length > 0">
+      <div class="search-header">Có {{ searchResults.length }} sản phẩm</div>
+
+      <div class="search-item" *ngFor="let product of searchResults" (click)="goToProductDetail(product.productId)">
+        <img [src]="product.thumbnail || 'assets/images/default-product.png'" alt="{{ product.name }}" />
+        <div class="product-info">
+          <div class="product-name">{{ product.description }}</div>
+          <div class="product-price">{{ product.salePrice | number }}₫</div>
+          <div class="product-old-price" *ngIf="product.salePrice < product.price">
+            {{ product.price | number }}₫
+          </div>
         </div>
       </div>
-      <!-- Modal hiển thị danh sách đơn hàng -->
-      <div *ngIf="showOrders" class="modal-overlay">
-        <app-order-list (closeModal)="closeOrders()"></app-order-list>
-      </div>
-    </ng-template>
 
+      <!-- View All Products -->
+      <a class="view-all" *ngIf="searchResults.length > 5" (click)="goToSearchPage()">Xem tất cả</a>
+    </div>
   </div>
-</header>
+</nav>

@@ -1,11 +1,113 @@
+/* -----------------------------------------------------
+   Biến màu sắc (tùy ý điều chỉnh cho phù hợp brand)
+----------------------------------------------------- */
+$success-color: #28a745;
+$warning-color: #ffc107;
+$error-color: #dc3545;
+$text-color: #333;
+$primary-bg: #f8f9fa;
+
+/* Phần container chính */
 .payment-result {
-  text-align: center;
-  margin-top: 50px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary-bg;
+  padding: 2rem;
 
-  .success-text { color: green; }
-  .warning-text { color: orange; }
-  .error-text { color: red; }
+  /* Tiêu đề thông báo */
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    line-height: 1.2;
+    
+    &.success-text {
+      color: $success-color;
+      /* Hiệu ứng rung nhẹ (demo) */
+      animation: bounce 1s ease forwards;
+    }
+    &.warning-text {
+      color: $warning-color;
+    }
+    &.error-text {
+      color: $error-color;
+      animation: shake 0.5s ease-out;
+    }
+  }
 
-  p { font-size: 18px; margin-top: 10px; }
-  .btn { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+  p {
+    margin-bottom: 2rem;
+    color: darken($text-color, 10%);
+  }
+
+  /* Liên kết / nút điều hướng */
+  a.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    margin: 0.25rem;
+
+    &.btn-success {
+      background-color: $success-color;
+      color: #fff;
+      &:hover {
+        background-color: darken($success-color, 10%);
+      }
+    }
+    &.btn-warning {
+      background-color: $warning-color;
+      color: #fff;
+      &:hover {
+        background-color: darken($warning-color, 10%);
+      }
+    }
+    &.btn-danger {
+      background-color: $error-color;
+      color: #fff;
+      &:hover {
+        background-color: darken($error-color, 10%);
+      }
+    }
+  }
+}
+
+/* -----------------------------------------------------
+   Demo animation
+----------------------------------------------------- */
+/* Lắc nhẹ (cho error-text) */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+/* Nảy (cho success-text) */
+@keyframes bounce {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  30% {
+    transform: scale(1.1) translateY(-8px);
+  }
+  50% {
+    transform: scale(0.95) translateY(4px);
+  }
+  70% {
+    transform: scale(1) translateY(-2px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
 }

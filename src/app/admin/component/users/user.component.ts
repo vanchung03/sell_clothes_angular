@@ -8,7 +8,7 @@ import { UpdateUserComponent } from './update-user/update-user.component';
 import { MatDialog } from '@angular/material/dialog';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 @Component({

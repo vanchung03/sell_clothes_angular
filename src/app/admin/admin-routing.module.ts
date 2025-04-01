@@ -20,6 +20,10 @@ import { OrderDetailComponent } from './component/order/order-detail/order-detai
 
 import { PaymentHistoryComponent } from './component/payment-history/payment-history.component';
 import { PaymentComponent } from './component/payment/payment.component';
+import { AddExcelProductComponent } from './component/products/add-excel-product/add-excel-product.component';
+import { AddExcelProductImageComponent } from './component/products/add-excel-product-image/add-excel-product-image.component';
+import { AddExcelProductVariantComponent } from './component/products/add-excel-product-variant/add-excel-product-variant.component';
+import { VoucherComponent } from './component/voucher/voucher.component';
 const routes: Routes = [
   { 
     path: '', 
@@ -32,10 +36,17 @@ const routes: Routes = [
       { path: 'roles', component:RoleComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'add-product', component: AddProductComponent },  
+
+
+      
       { path: 'statistics', component: StatisticsComponent },
       { path: 'products', component: ProductsComponent },
+      { path: 'add-excel-product', component: AddExcelProductComponent },  // Thêm sản phẩm từ file Excel
+      { path: 'add-excel-product-image', component: AddExcelProductImageComponent },  // Thêm ảnh cho sản phẩm từ file Excel
+      { path: 'add-excel-product-variant', component: AddExcelProductVariantComponent },  // Thêm variant cho sản phẩm từ file Excel
       { path: 'update-product/:id', component: UpdateProductComponent }, 
       { path: 'order', component: OrderComponent }, 
+      { path: 'vouchers', component: VoucherComponent },  // Thêm mã giảm giá
       { path: 'orders/:id', component: OrderDetailComponent}, 
       { path: 'payment-history', component: PaymentHistoryComponent }, 
       { path: 'payment', component: PaymentComponent },

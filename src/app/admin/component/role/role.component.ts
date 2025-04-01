@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToastrService } from 'ngx-toastr';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
 
 @Component({
   selector: 'app-role',

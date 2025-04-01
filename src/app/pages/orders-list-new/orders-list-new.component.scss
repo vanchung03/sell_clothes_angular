@@ -1,0 +1,231 @@
+// Color Palette
+$primary-color: #898ead;        // Deep Indigo
+$secondary-color: #fcd4d4;      // Vibrant Pink
+$background-light: #f5f7fa;     // Soft light blue-gray
+$text-primary: #9c8a8a;         // Dark gray for main text
+$text-secondary: #666666;       // Lighter gray for secondary text
+
+// Status Colors
+$status-colors: (
+  'pending': #FFA500,    // Warm Orange
+  'confirmed': #4CAF50,  // Fresh Green
+  'shipping': #2196F3,   // Bright Blue
+  'completed': #9C27B0,  // Deep Purple
+  'cancelled': #F44336   // Vibrant Red
+);
+
+// Mixins for reusable styles
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin smooth-shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+@mixin hover-effect {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.orders-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: $background-light;
+  border-radius: 12px;
+
+  .title {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    h2 {
+      color: $primary-color;
+      font-size: 2rem;
+      font-weight: 600;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background-color: $secondary-color;
+      }
+    }
+  }
+
+  .search-bar {
+    margin-bottom: 1.5rem;
+    
+    input {
+      width: 100%;
+      padding: 12px 0;
+      border: 2px solid $primary-color;
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: white;
+      transition: border-color 0.3s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: $secondary-color;
+      }
+    }
+  }
+
+  .status-filter {
+    @include flex-center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    
+    .status-item {
+      padding: 10px 20px;
+      margin: 0 10px 10px;
+      border: 2px solid transparent;
+      border-radius: 25px;
+      cursor: pointer;
+      color: $text-secondary;
+      font-weight: 500;
+      @include hover-effect;
+      
+      &:hover {
+        color: $primary-color;
+        border-color: $primary-color;
+      }
+      
+      &.active {
+        background-color: $primary-color;
+        color: white;
+        border-color: $primary-color;
+      }
+    }
+  }
+
+  .loading, .error-message, .no-results {
+    @include flex-center;
+    padding: 2rem;
+    color: $text-secondary;
+    font-size: 1.2rem;
+    background-color: white;
+    border-radius: 8px;
+    @include smooth-shadow;
+  }
+
+  .orders-table {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: white;
+    @include smooth-shadow;
+
+    thead {
+      background-color: $primary-color;
+      color: white;
+      
+      th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+
+    tbody {
+      tr {
+        transition: background-color 0.2s;
+        
+        &:nth-child(even) {
+          background-color: $background-light;
+        }
+        
+        &:hover {
+          background-color: rgba($primary-color, 0.05);
+        }
+
+        td {
+          padding: 15px;
+          color: $text-primary;
+          border-bottom: 1px solid #eee;
+        }
+      }
+    }
+
+    // Status-specific coloring
+    @each $status, $color in $status-colors {
+      .status-#{$status} {
+        color: $color;
+        font-weight: bold;
+        position: relative;
+        
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: $color;
+          margin-right: 8px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  .details-btn {
+    @include flex-center;
+    padding: 8px 15px;
+    background-color: $secondary-color;
+    color: rgb(32, 26, 26);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    @include hover-effect;
+
+    .material-icons {
+      margin-right: 5px;
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+}
+
+// Responsive Adjustments
+@media screen and (max-width: 768px) {
+  .orders-container {
+    padding: 1rem;
+
+    .status-filter {
+      flex-direction: column;
+      align-items: stretch;
+
+      .status-item {
+        text-align: center;
+        margin: 5px 0;
+      }
+    }
+
+    .orders-table {
+      font-size: 0.9rem;
+
+      thead, tbody {
+        th, td {
+          padding: 10px;
+        }
+      }
+    }
+  }
+}

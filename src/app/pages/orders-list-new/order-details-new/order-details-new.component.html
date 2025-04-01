@@ -1,0 +1,204 @@
+<app-header></app-header>
+
+
+<div class="order-details-wrapper" *ngIf="!isLoading; else loadingTpl">
+  <!-- Header Section -->
+  <div class="header-section" data-aos="fade-in" data-aos-duration="800">
+    <h2>
+      <i class="material-icons icon-order">shopping_bag</i>
+      Chi Tiết Đơn Hàng #{{ order?.orderId }}
+    </h2>
+    <div
+      class="order-status-badge"
+      [ngClass]="{
+        'pending': order.status === 'PENDING',
+        'confirmed': order.status === 'CONFIRMED',
+        'completed': order.status === 'COMPLETED',
+        'shipping': order.status === 'SHIPPING',
+        'cancelled': order.status === 'CANCELLED'
+      }"
+    >
+      {{ getStatusLabel(order.status) }}
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="order-status-tracker" *ngIf="order" data-aos="fade-up" data-aos-duration="1000">
+    <ul class="progress-bar">
+      <li class="step" [class.completed]="checkStepCompleted('PENDING')" [class.active]="order.status === 'PENDING'">
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock-arrow-down"><path d="M12.338 21.994A10 10 0 1 1 21.925 13.227"/><path d="M12 6v6l2 1"/><path d="m14 18 4 4 4-4"/><path d="M18 14v8"/></svg>
+        </div>
+        <span class="step-label">Chờ Xử Lý</span>
+      </li>
+      <li class="step" [class.completed]="checkStepCompleted('CONFIRMED')" [class.active]="order.status === 'CONFIRMED'">
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check-2"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="M3 10h18"/><path d="m16 20 2 2 4-4"/></svg>
+        </div>
+        <span class="step-label">Xác Nhận</span>
+      </li>
+      <li class="step" [class.completed]="checkStepCompleted('SHIPPING')" [class.active]="order.status === 'SHIPPING'">
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+        </div>
+        <span class="step-label">Đang Giao</span>
+      </li>
+      <li class="step" [class.completed]="checkStepCompleted('COMPLETED')" [class.active]="order.status === 'COMPLETED'">
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+        </div>
+        <span class="step-label">Hoàn Thành</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Bố cục 2 cột -->
+  <div class="two-column-layout" *ngIf="order">
+    <!-- Cột trái: Thông tin chung, địa chỉ, vận chuyển, thanh toán -->
+    <div class="left-column">
+      <!-- Card thông tin đơn -->
+      <div class="info-card" data-aos="slide-right" data-aos-duration="800" data-aos-delay="100">
+        <h3 class="info-card-title">
+          <i class="material-icons icon">info</i>
+          Thông Tin Đơn Hàng
+        </h3>
+        <div class="info-card-content">
+          <div class="row">
+            <div class="label">Mã đơn hàng</div>
+            <div class="value">{{ order.orderId }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Ngày đặt</div>
+            <div class="value">{{ parseDate(orderCreatedDate) }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Giảm Giá</div>
+            <div class="value">{{ order.discountAmount | currency:'VND' }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Tổng tiền</div>
+            <div class="value total-value">{{ order.totalAmount | currency:'VND' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card địa chỉ giao hàng -->
+      <div class="info-card" *ngIf="userAddress" data-aos="slide-right" data-aos-duration="800" data-aos-delay="200">
+        <h3 class="info-card-title">
+          <i class="material-icons icon">location_on</i>
+          Địa Chỉ Giao Hàng
+        </h3>
+        <div class="info-card-content">
+          <div class="row">
+            <div class="label">Địa chỉ</div>
+            <div class="value">
+              {{ userAddress.addressLine }},<br />
+              {{ userAddress.ward }}, {{ userAddress.district }}, {{ userAddress.city }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card vận chuyển -->
+      <div class="info-card" *ngIf="shipMethod" data-aos="slide-right" data-aos-duration="800" data-aos-delay="300">
+        <h3 class="info-card-title">
+          <i class="material-icons icon">local_shipping</i>
+          Vận Chuyển
+        </h3>
+        <div class="info-card-content">
+          <div class="row">
+            <div class="label">Phương thức</div>
+            <div class="value">{{ shipMethod.name }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Phí ship</div>
+            <div class="value">{{ shipMethod.shippingFee | currency:'VND' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card thanh toán -->
+      <div class="info-card" *ngIf="payment" data-aos="slide-right" data-aos-duration="800" data-aos-delay="400">
+        <h3 class="info-card-title">
+          <i class="material-icons icon">credit_card</i>
+          Thanh Toán
+        </h3>
+        <div class="info-card-content">
+          <div class="row">
+            <div class="label">Phương thức</div>
+            <div class="value">{{ payment.method }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Mã Giao Dịch</div>
+            <div class="value">{{ payment.transactionCode }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Trạng thái</div>
+            <div class="value">{{ payment.paymentStatus }}</div>
+          </div>
+        </div>
+        <!-- Nếu trạng thái thanh toán là PENDING hoặc FAILED và phương thức là paypal hoặc vnpay, hiển thị nút Thanh Toán Ngay -->
+        <div class="payment-action" *ngIf="(payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'FAILED') && (payment.method === 'PAYPAL' || payment.method === 'VNPAY')">
+          <button class="pay-now-btn" (click)="payNow(order.orderId)">Thanh Toán Ngay</button>
+        </div>
+      </div>
+    </div> <!-- End left-column -->
+
+    <!-- Cột phải: Danh sách sản phẩm -->
+    <div class="right-column" *ngIf="orderItems && orderItems.length > 0">
+      <div class="info-card product-section" data-aos="slide-left" data-aos-duration="800" data-aos-delay="100">
+        <h3 class="info-card-title">
+          <i class="material-icons icon">inventory_2</i>
+          Sản Phẩm Trong Đơn
+        </h3>
+        <div class="product-table-wrapper">
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>Sản Phẩm (Size / Màu)</th>
+                <th>Số Lượng</th>
+                <th>Đơn Giá</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of orderItems">
+                <td>
+                  <div class="product-details">
+                    <img [src]="item.variant?.imageUrl" alt="{{ item.variant?.variantId }}" class="product-image" />
+                    <div class="product-info">
+                      <span class="product-name">{{ item.variant?.variantId }}</span>
+                      <span class="product-attributes">
+                        Size: {{ item.variant?.size }} | Màu: {{ item.variant?.color }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unitPrice | currency:'VND' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Nút Hủy đơn -->
+      <div class="cancel-section" *ngIf="canCancelOrder(order.status)" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+        <button class="cancel-order-btn" (click)="onCancelOrder(order.orderId)">
+          <i class="material-icons icon-cancel">cancel</i>
+          Hủy Đơn Hàng
+        </button>
+      </div>
+    </div> <!-- End right-column -->
+  </div>
+</div>
+
+<!-- Loading Template -->
+<ng-template #loadingTpl>
+  <div class="loading-container">
+    <div class="loading-spinner">
+      <i class="material-icons">autorenew</i>
+    </div>
+    <p>Đang tải thông tin đơn hàng...</p>
+  </div>
+</ng-template>
+
+<app-footer></app-footer>

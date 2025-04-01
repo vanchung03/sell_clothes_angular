@@ -1,17 +1,19 @@
 <div class="add-product-wrapper" data-aos="fade">
-    <header class="page-header" data-aos="fade-down">
-      <div><h2><i class="fas fa-plus-circle"></i> Thêm sản phẩm mới</h2></div>
-      <div class="header-actions">
-        <button mat-stroked-button routerLink="/admin/products">
-          <mat-icon>arrow_back</mat-icon>
-          Quay lại
-        </button>
-      </div>
-    </header>
-  
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <!-- Basic Info Section -->
-      <mat-card class="form-section" data-aos="fade-up" data-aos-delay="100">
+  <header class="page-header" data-aos="fade-down">
+    <div><h2><i class="fas fa-plus-circle"></i> Thêm sản phẩm mới</h2></div>
+    <div class="header-actions">
+      <button mat-stroked-button routerLink="/admin/products">
+        <mat-icon>arrow_back</mat-icon>
+        Quay lại
+      </button>
+    </div>
+  </header>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <!-- Two column layout for basic info and images -->
+    <mat-card class="form-section basic-info-section" data-aos="fade-up" data-aos-delay="100">
+      <!-- Left column - Basic info -->
+      <div class="info-column">
         <mat-card-header>
           <mat-card-title><i class="fas fa-info-circle"></i> Thông tin cơ bản</mat-card-title>
         </mat-card-header>
@@ -29,7 +31,7 @@
                 Vui lòng chọn danh mục
               </mat-error>
             </mat-form-field>
-  
+
             <mat-form-field appearance="outline">
               <mat-label>Thương hiệu</mat-label>
               <mat-select formControlName="brandId" required>
@@ -41,7 +43,7 @@
                 Vui lòng chọn thương hiệu
               </mat-error>
             </mat-form-field>
-  
+
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Tên sản phẩm</mat-label>
               <input matInput formControlName="name" placeholder="Nhập tên sản phẩm" required>
@@ -49,11 +51,12 @@
                 Vui lòng nhập tên sản phẩm
               </mat-error>
             </mat-form-field>
-  
+
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Mô tả sản phẩm</mat-label>
               <textarea matInput formControlName="description" rows="4" placeholder="Nhập mô tả sản phẩm"></textarea>
             </mat-form-field>
+            
             <div class="price-group">
               <mat-form-field appearance="outline">
                 <mat-label>Giá gốc</mat-label>
@@ -62,194 +65,198 @@
                   Vui lòng nhập giá
                 </mat-error>
               </mat-form-field>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Giá khuyến mãi</mat-label>
                 <input matInput type="number" formControlName="salePrice">
               </mat-form-field>
             </div>
-            <div class="thumbnail-upload">
-              <label>Ảnh đại diện</label>
-              <div class="upload-zone" 
-                   (click)="thumbnailInput.click()"
-                   [class.has-image]="productForm.value.thumbnail">
-                <input #thumbnailInput type="file" 
-                       (change)="onFileSelected_imageproduct($event)" 
-                       accept="image/*" hidden>
-                <img *ngIf="productForm.value.thumbnail" 
-                     [src]="productForm.value.thumbnail" 
-                     alt="Thumbnail preview">
-                <div class="upload-placeholder" *ngIf="!productForm.value.thumbnail">
-                  <i class="fas fa-cloud-upload-alt"></i>
-                  <span>Click để tải ảnh lên</span>
-                </div>
-              </div>
-            </div>
-  
-            
-  
+
             <mat-slide-toggle formControlName="status" color="primary">
               {{productForm.get('status')?.value ? 'Đang bán' : 'Ngừng bán'}}
             </mat-slide-toggle>
           </div>
         </mat-card-content>
-      </mat-card>
-  
-      <!-- Images Section -->
-      <mat-card class="form-section" data-aos="fade-up" data-aos-delay="200">
+      </div>
+      
+      <!-- Right column - Image section -->
+      <div class="image-column">
         <mat-card-header>
-          <mat-card-title><i class="fas fa-images"></i> Thư viện ảnh</mat-card-title>
+          <mat-card-title><i class="fas fa-image"></i> Ảnh sản phẩm</mat-card-title>
         </mat-card-header>
         
         <mat-card-content>
-          <div class="images-grid" formArrayName="images">
-            <div *ngFor="let imgCtrl of imagesForm.controls; let i = index" 
-                 [formGroupName]="i"
-                 class="image-item"
-                 data-aos="fade-up"
-                 [attr.data-aos-delay]="100 * (i + 1)">
-              
-              <div class="image-preview" 
-                   (click)="imageInput.click()"
-                   [class.has-image]="imgCtrl.value.imageUrl">
-                <input #imageInput type="file" 
-                       (change)="onFileSelected($event, i)" 
-                       accept="image/*" hidden>
-                <img *ngIf="imgCtrl.value.imageUrl" 
-                     [src]="imgCtrl.value.imageUrl" 
-                     alt="Image preview">
-                <div class="upload-placeholder" *ngIf="!imgCtrl.value.imageUrl">
-                  <i class="fas fa-plus"></i>
-                </div>
-              </div>
-  
-              <div class="image-controls">
-                <mat-checkbox formControlName="isPrimary" style="display:none">Ảnh chính</mat-checkbox>
-                <mat-form-field appearance="outline">
-                  <mat-label>Thứ tự</mat-label>
-                  <input matInput type="number" formControlName="displayOrder">
-                </mat-form-field>
-                <button mat-icon-button color="black" (click)="removeImage(i)">
-                  <i class="fa-solid fa-times"></i>
-                </button>
+          <div class="thumbnail-upload">
+            <label>Ảnh đại diện</label>
+            <div class="upload-zone" 
+                 (click)="thumbnailInput.click()"
+                 [class.has-image]="productForm.value.thumbnail">
+              <input #thumbnailInput type="file" 
+                     (change)="onFileSelected_imageproduct($event)" 
+                     accept="image/*" hidden>
+              <img *ngIf="productForm.value.thumbnail" 
+                   [src]="productForm.value.thumbnail" 
+                   alt="Thumbnail preview">
+              <div class="upload-placeholder" *ngIf="!productForm.value.thumbnail">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Click để tải ảnh lên</span>
               </div>
             </div>
           </div>
-  
-          <button mat-stroked-button color="primary" (click)="addImage()">
-            <mat-icon>add_photo_alternate</mat-icon>
-            Thêm ảnh
-          </button>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Variants Section -->
-      <mat-card class="form-section" data-aos="fade-up" data-aos-delay="300">
-        <mat-card-header>
-          <mat-card-title><i class="fas fa-cubes"></i> Biến thể sản phẩm</mat-card-title>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <div class="variants-container" formArrayName="variants">
-            <mat-accordion>
-              <mat-expansion-panel *ngFor="let variantCtrl of variantsForm.controls; let i = index"
-                                 [formGroupName]="i"
-                                 data-aos="fade-up"
-                                 [attr.data-aos-delay]="100 * (i + 1)">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Biến thể #{{i + 1}}: {{variantCtrl.value.size}} - {{variantCtrl.value.color}}
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-  
-                <div class="variant-form">
-                  <div class="variant-grid">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Size</mat-label>
-                      <mat-select formControlName="size" required>
-                        <mat-option *ngFor="let s of availableSizes" [value]="s">
-                          {{s}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-  
-                    <mat-form-field appearance="outline">
-                      <mat-label>Màu sắc</mat-label>
-                      <mat-select formControlName="color" required>
-                        <mat-option *ngFor="let c of availableColors" [value]="c">
-                          {{c}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-  
-                    <mat-form-field appearance="outline">
-                      <mat-label>SKU</mat-label>
-                      <input matInput formControlName="sku" required>
-                    </mat-form-field>
-  
-                    <mat-form-field appearance="outline">
-                      <mat-label>Giá</mat-label>
-                      <input matInput type="number" formControlName="price" required>
-                    </mat-form-field>
-  
-                    <mat-form-field appearance="outline">
-                      <mat-label>Số lượng</mat-label>
-                      <input matInput type="number" formControlName="stockQuantity" required>
-                    </mat-form-field>
-                  </div>
-  
-                  <div class="variant-image">
-                    <div class="image-preview" 
-                         (click)="variantImageInput.click()"
-                         [class.has-image]="variantCtrl.value.imageUrl">
-                      <input #variantImageInput type="file" 
-                             (change)="onVariantFileSelected($event, i)" 
-                             accept="image/*" hidden>
-                      <img *ngIf="variantCtrl.value.imageUrl" 
-                           [src]="variantCtrl.value.imageUrl" 
-                           alt="Variant image">
-                      <div class="upload-placeholder" *ngIf="!variantCtrl.value.imageUrl">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Ảnh biến thể</span>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="variant-footer">
-                    <mat-slide-toggle formControlName="status" color="primary">
-                      {{variantCtrl.get('status')?.value ? 'Đang bán' : 'Ngừng bán'}}
-                    </mat-slide-toggle>
-                    
-                    <button mat-stroked-button color="warn" (click)="removeVariant(i)">
-                      <mat-icon>delete</mat-icon>
-                      Xóa biến thể
-                    </button>
+          
+          <!-- Product gallery -->
+          <div class="images-section" formArrayName="images">
+            <h3>Thư viện ảnh</h3>
+            <div class="images-grid">
+              <div *ngFor="let imgCtrl of imagesForm.controls; let i = index" 
+                   [formGroupName]="i"
+                   class="image-item"
+                   data-aos="fade-up"
+                   [attr.data-aos-delay]="100 * (i + 1)">
+                
+                <div class="image-preview" 
+                     (click)="imageInput.click()"
+                     [class.has-image]="imgCtrl.value.imageUrl">
+                  <input #imageInput type="file" 
+                         (change)="onFileSelected($event, i)" 
+                         accept="image/*" hidden>
+                  <img *ngIf="imgCtrl.value.imageUrl" 
+                       [src]="imgCtrl.value.imageUrl" 
+                       alt="Image preview">
+                  <div class="upload-placeholder" *ngIf="!imgCtrl.value.imageUrl">
+                    <i class="fas fa-plus"></i>
                   </div>
                 </div>
-              </mat-expansion-panel>
-            </mat-accordion>
-  
-            <button mat-stroked-button color="primary" (click)="addVariant()">
-              <mat-icon>add</mat-icon>
-              Thêm biến thể
+
+                <div class="image-controls">
+                  <mat-checkbox formControlName="isPrimary" style="display:none">Ảnh chính</mat-checkbox>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Thứ tự</mat-label>
+                    <input matInput type="number" formControlName="displayOrder">
+                  </mat-form-field>
+                  <button mat-icon-button color="black" (click)="removeImage(i)">
+                    <i class="fa-solid fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button mat-stroked-button color="primary" (click)="addImage()">
+              <mat-icon>add_photo_alternate</mat-icon>
+              Thêm ảnh
             </button>
           </div>
         </mat-card-content>
-      </mat-card>
-  
-      <!-- Submit Section -->
-      <div class="form-actions" data-aos="fade-up" data-aos-delay="400">
-        <button type="button" mat-stroked-button routerLink="/admin/products">
-          <mat-icon>close</mat-icon>
-          Hủy
-        </button>
-        <button type="submit" 
-                mat-raised-button 
-                color="primary"
-                [disabled]="productForm.invalid || isSubmitting">
-          <mat-icon>save</mat-icon>
-          {{isSubmitting ? 'Đang lưu...' : 'Lưu sản phẩm'}}
-        </button>
       </div>
-    </form>
-  </div>
+    </mat-card>
+
+    <!-- Variants Section -->
+    <mat-card class="form-section" data-aos="fade-up" data-aos-delay="300">
+      <mat-card-header>
+        <mat-card-title><i class="fas fa-cubes"></i> Biến thể sản phẩm</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="variants-container" formArrayName="variants">
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let variantCtrl of variantsForm.controls; let i = index"
+                               [formGroupName]="i"
+                               data-aos="fade-up"
+                               [attr.data-aos-delay]="100 * (i + 1)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Biến thể #{{i + 1}}: {{variantCtrl.value.size}} - {{variantCtrl.value.color}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="variant-form">
+                <div class="variant-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Size</mat-label>
+                    <mat-select formControlName="size" required>
+                      <mat-option *ngFor="let s of availableSizes" [value]="s">
+                        {{s}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Màu sắc</mat-label>
+                    <mat-select formControlName="color" required>
+                      <mat-option *ngFor="let c of availableColors" [value]="c">
+                        {{c}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>SKU</mat-label>
+                    <input matInput formControlName="sku" required>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Giá</mat-label>
+                    <input matInput type="number" formControlName="price" required>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Số lượng</mat-label>
+                    <input matInput type="number" formControlName="stockQuantity" required>
+                  </mat-form-field>
+                </div>
+
+                <div class="variant-image">
+                  <div class="image-preview" 
+                       (click)="variantImageInput.click()"
+                       [class.has-image]="variantCtrl.value.imageUrl">
+                    <input #variantImageInput type="file" 
+                           (change)="onVariantFileSelected($event, i)" 
+                           accept="image/*" hidden>
+                    <img *ngIf="variantCtrl.value.imageUrl" 
+                         [src]="variantCtrl.value.imageUrl" 
+                         alt="Variant image">
+                    <div class="upload-placeholder" *ngIf="!variantCtrl.value.imageUrl">
+                      <i class="fas fa-cloud-upload-alt"></i>
+                      <span>Ảnh biến thể</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="variant-footer">
+                  <mat-slide-toggle formControlName="status" color="primary">
+                    {{variantCtrl.get('status')?.value ? 'Đang bán' : 'Ngừng bán'}}
+                  </mat-slide-toggle>
+                  
+                  <button mat-stroked-button color="warn" (click)="removeVariant(i)">
+                    <mat-icon>delete</mat-icon>
+                    Xóa biến thể
+                  </button>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <button mat-stroked-button color="primary" (click)="addVariant()">
+            <mat-icon>add</mat-icon>
+            Thêm biến thể
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Submit Section -->
+    <div class="form-actions" data-aos="fade-up" data-aos-delay="400">
+      <button type="button" mat-stroked-button routerLink="/admin/products">
+        <mat-icon>close</mat-icon>
+        Hủy
+      </button>
+      <button type="submit" 
+              mat-raised-button 
+              color="primary"
+              [disabled]="productForm.invalid || isSubmitting">
+        <mat-icon>save</mat-icon>
+        {{isSubmitting ? 'Đang lưu...' : 'Lưu sản phẩm'}}
+      </button>
+    </div>
+  </form>
+</div>

@@ -174,6 +174,7 @@ mat-toolbar {
   height: 32px;
   border-radius: 50%;
   margin-right: 8px;
+  margin-left: 20px;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -190,7 +191,7 @@ mat-toolbar {
 
 .profile-dropdown {
   position: absolute;
-  top: 35px;
+  top: 34px;
   right: 0;
   background-color: #34495e;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -199,7 +200,11 @@ mat-toolbar {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  width: 150px;
+  width: 180px;
+  mat-icon{
+    font-size: 18px;
+    margin-right: 5px;
+  }
 }
 
 .profile-dropdown button {
@@ -219,7 +224,8 @@ mat-toolbar {
 }
 
 mat-menu-item {
-  padding: 8px 16px;
+  padding: 8px 20px;
+
 
 }
 

@@ -1,46 +1,62 @@
-<div class="auth-container">
-  <div class="auth-form">
-    <h1 class="store-name">Serenity</h1>
-    <div class="triangle">Clothes</div>
-
-    <h2>Login</h2>
-    <form (ngSubmit)="onLogin()">
-      <mat-form-field class="full-width">
-        <mat-label>Username</mat-label>
-        <input matInput [(ngModel)]="loginRequest.username" name="username" required />
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" [(ngModel)]="loginRequest.password" name="password" required />
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" type="submit">Login</button>
-    </form>
-
-    <p class="or-login">Or login with:</p>
-    <div class="social-login">
-      <!-- Google Login Button -->
-      <button mat-raised-button class="google-login">
-        <i class="fa-brands fa-google"></i> Google
-      </button>
-    
-      <!-- Facebook Login Button -->
-      <button mat-raised-button class="facebook-login">
-        <i class="fa-brands fa-facebook-f"></i> Facebook
-      </button>
+<div class="login-page" data-aos="fade-up">
+  <div class="login-container">
+    <!-- Left Column: Thông tin thương hiệu & giới thiệu -->
+    <div class="left-column" data-aos="fade-right">
+      <div class="brand-section">
+        <!-- Có thể sử dụng logo nếu có -->
+        <!-- <img src="assets/images/logo.png" alt="Serenity Logo" class="brand-logo" /> -->
+        <h2 class="brand-name">SERENITY</h2>
+        <p class="brand-slogan">Elevate Your Style</p>
+      </div>
+      <div class="intro-section">
+        <h3>Welcome Back!</h3>
+        <p>
+          Đăng nhập để trải nghiệm không gian thời trang cao cấp từ Serenity.
+          Khám phá những ưu đãi độc quyền khi trở thành thành viên của chúng tôi.
+        </p>
+      </div>
     </div>
     
-
-    <p class="auth-action">
-      Don't have an account? <a routerLink="/auth/register">Register</a>
-    </p>
-    <p class="forgot-password">
-      <a routerLink="/auth/forgot-password">Forgot password?</a>
-    </p>
-    <div class="footer-left">
-      <mat-icon>copyright</mat-icon>
-      <span>2025 Serenity. All rights reserved by Mr. Chungcoder !</span>
+    <!-- Right Column: Form đăng nhập -->
+    <div class="right-column" data-aos="fade-left">
+      <div class="login-card">
+        <h2 class="login-title">Sign In</h2>
+        <form (ngSubmit)="onLogin()" class="login-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Username</mat-label>
+            <input matInput [(ngModel)]="loginRequest.username" name="username" required />
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" [(ngModel)]="loginRequest.password" name="password" required />
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit" class="btn-submit">
+            Login
+          </button>
+        </form>
+  
+        <p class="or-divider">Or sign in with</p>
+  
+        <div class="social-row">
+          <button mat-raised-button class="social-btn google-btn">
+            <i class="fa-brands fa-google"></i> Google
+          </button>
+          <button mat-raised-button class="social-btn facebook-btn">
+            <i class="fa-brands fa-facebook-f"></i> Facebook
+          </button>
+        </div>
+  
+        <div class="extra-links">
+          <p>Don't have an account? <a routerLink="/auth/register">Register Now</a></p>
+          <p><a routerLink="/auth/forgot-password">Forgot Password?</a></p>
+        </div>
+      </div>
+  
+      <div class="footer-note">
+        <span>© 2025 Serenity. All rights reserved by Mr. Chungcoder!</span>
+      </div>
     </div>
   </div>
 </div>

@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../../../service/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/types/User';
-
+import { TokenService } from 'src/app/service/token.service';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -17,6 +18,7 @@ export class AdminLayoutComponent {
   isProfileFormVisible = false;
   userRoles: string = '';
   newAvatarSelected: boolean = false; 
+  isLoggedIn = false;
 
   @ViewChild('fileInput') fileInput: any;
   selectedFile: File | null = null; 
@@ -25,7 +27,9 @@ export class AdminLayoutComponent {
     private router: Router,
     private renderer: Renderer2,
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private tokenService: TokenService ,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -83,8 +87,7 @@ export class AdminLayoutComponent {
   }
 
   logout(): void {
-    localStorage.removeItem('accessToken');
-    this.router.navigateByUrl('/login');
+    this.authService.logout();
   }
 
   editAvatar() {

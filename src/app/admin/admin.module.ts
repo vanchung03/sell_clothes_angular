@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
-import { MaterialModule } from '../material.module';  // Import MaterialModule
+import { MaterialModule } from '../../assets/material.module';  // Import MaterialModule
 
 import { NgChartsModule } from 'ng2-charts';  // Import ChartsModule
+import { NgxChartsModule } from '@swimlane/ngx-charts'; // 🔥 Import ngx-charts
 
 import { DashboardComponent } from './component/dashboard/dashboard.component';  // Đảm bảo chỉ khai báo ở đây
 import { UserManagementComponent } from './component/users/user.component';
@@ -23,6 +24,10 @@ import { OrderComponent } from './component/order/order.component';
 import { OrderDetailComponent } from './component/order/order-detail/order-detail.component';
 import { PaymentHistoryComponent } from './component/payment-history/payment-history.component';
 import { PaymentComponent } from './component/payment/payment.component';
+import { AddExcelProductComponent } from './component/products/add-excel-product/add-excel-product.component';
+import { AddExcelProductImageComponent } from './component/products/add-excel-product-image/add-excel-product-image.component';
+import { AddExcelProductVariantComponent } from './component/products/add-excel-product-variant/add-excel-product-variant.component';
+import { VoucherComponent } from './component/voucher/voucher.component';
 
 @NgModule({
   declarations: [
@@ -44,12 +49,18 @@ import { PaymentComponent } from './component/payment/payment.component';
     OrderDetailComponent,
     PaymentHistoryComponent,
     PaymentComponent,
+    AddExcelProductComponent,
+    AddExcelProductImageComponent,
+    AddExcelProductVariantComponent,
+    VoucherComponent,
+    
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     MaterialModule,
     NgChartsModule,  // Import ChartsModule
+    NgxChartsModule, // �� Import ngx-charts
   ],
 })
 export class AdminModule { }

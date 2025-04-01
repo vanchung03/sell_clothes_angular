@@ -3,7 +3,8 @@ import { OrderService } from 'src/app/service/order.service';
 import { PaymentService } from 'src/app/service/payment.service';
 import { Order } from 'src/app/types/order';
 import { Payment } from 'src/app/types/payment';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
+import { ToastrService } from 'ngx-toastr';
 // ===== Import cho xuất Excel =====
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -37,7 +38,8 @@ export class OrderComponent implements OnInit {
   ];
   constructor(
     private orderService: OrderService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -102,10 +104,13 @@ export class OrderComponent implements OnInit {
     this.orderService.updateOrderStatus(orderId, status).subscribe({
       next: (response) => {
         // Handle success
-        console.log('Order status updated successfully');
+        this.toastr.success('Cập nhật trạng thái đơn hàng thành công!');
+        // console.log('Order status updated successfully');
       },
       error: (error) => {
+        
         console.error('Error updating order status:', error);
+
         // Revert the status change in UI
         const order = this.orders.find(o => o.orderId === orderId);
         if (order) {
@@ -116,7 +121,10 @@ export class OrderComponent implements OnInit {
   }
   printOrder(order: Order): void {
     // Implement print functionality
+
     console.log('Printing order:', order);
+    
+
     window.print();
   }
   // ===============================================
@@ -163,8 +171,10 @@ export class OrderComponent implements OnInit {
       saveAs(blobData, fileName);
 
       console.log('Xuất Excel thành công!');
+      this.toastr.success('Xuất Excel thành công!');
     } catch (error) {
       console.error('Lỗi khi xuất Excel:', error);
+      this.toastr.error('Lỗi khi xuất Excel!');
     }
   }
 }

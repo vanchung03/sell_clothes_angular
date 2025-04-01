@@ -1,0 +1,199 @@
+<div class="reviews-container" data-aos="fade-up">
+  <!-- Review Summary -->
+  <div class="review-summary">
+    <div class="summary-header">
+      <div class="average-rating">
+        <span class="avg-score">{{ averageRating }}/5</span>
+        <div class="stars">
+          <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+            <i 
+              class="star-icon" 
+              [class.active]="star <= averageRating"
+            ></i>
+          </ng-container>
+        </div>
+        <span class="review-count">({{ totalReviewsCount }} đánh giá)</span>
+      </div>
+      
+      <div class="rating-distribution">
+        <div *ngFor="let star of [5,4,3,2,1]; let i=index" class="dist-row">
+          <span class="star-label">{{ star }} sao</span>
+          <div class="progress-bar">
+            <div 
+              class="progress" 
+              [style.width.%]="
+                totalReviewsCount ? (starDistribution[5-star] / totalReviewsCount) * 100 : 0
+              "
+            ></div>
+          </div>
+          <span class="count">({{ starDistribution[5-star] }})</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Review -->
+  <div class="add-review-section">
+    <div class="add-review-header">
+      <h4>Viết đánh giá</h4>
+    </div>
+    <div class="add-review-content">
+      <div class="star-rating">
+        <label>Đánh giá của bạn:</label>
+        <div class="star-input">
+          <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+            <i
+              class="star-icon"
+              [class.active]="star <= newReview.rating"
+              (click)="selectNewReviewStar(star)"
+            ></i>
+          </ng-container>
+          <span class="rating-value">{{ newReview.rating }}/5</span>
+        </div>
+      </div>
+      <div class="comment-input">
+        <label>Nhận xét:</label>
+        <textarea 
+          [(ngModel)]="newReview.comment" 
+          placeholder="Chia sẻ trải nghiệm của bạn..."
+        ></textarea>
+      </div>
+      <button class="submit-review-btn" (click)="addReview()">
+        Gửi đánh giá
+      </button>
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="reviews-list">
+    <div *ngFor="let review of reviews" class="review-item" data-aos="fade-up">
+      <div class="review-header">
+        <div class="user-info">
+          <img 
+            *ngIf="review.user?.avatar" 
+            [src]="review.user.avatar" 
+            alt="User Avatar" 
+            class="user-avatar"
+          />
+          <div class="user-details">
+            <span class="user-name">{{ review.user?.fullName || 'Người dùng' }}</span>
+            <div class="review-meta">
+              <div class="stars">
+                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                  <i 
+                    class="star-icon" 
+                    [class.active]="star <= review.rating"
+                  ></i>
+                </ng-container>
+              </div>
+              <span class="review-date">{{ review.createdAt | date:'short' }}</span>
+            </div>
+          </div>
+          <div class="review-actions">
+            <div class="dropdown">
+              <button class="more-options-btn">
+                <i class="icon-more-vertical"></i>
+              </button>
+              <div class="dropdown-menu">
+                <button (click)="startEditReview(review)">
+                  <i class="icon-edit"></i> Chỉnh sửa
+                </button>
+                <button (click)="deleteReview(review.reviewId!)">
+                  <i class="icon-trash"></i> Xóa
+                </button>
+                <button (click)="toggleReplies(review.reviewId!)">
+                  <i class="icon-message-circle"></i> 
+                  {{ showRepliesMap[review.reviewId!] ? 'Ẩn' : 'Hiện' }} trả lời
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Content -->
+      <div *ngIf="editingReviewId !== review.reviewId" class="review-content">
+        <p>{{ review.comment }}</p>
+      </div>
+
+      <!-- Edit Review -->
+      <div *ngIf="editingReviewId === review.reviewId" class="edit-review-section">
+        <div class="star-rating">
+          <label>Đánh giá:</label>
+          <div class="star-input">
+            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+              <i
+                class="star-icon"
+                [class.active]="star <= editReviewData.rating"
+                (click)="selectEditReviewStar(star)"
+              ></i>
+            </ng-container>
+            <span class="rating-value">{{ editReviewData.rating }}/5</span>
+          </div>
+        </div>
+        <textarea [(ngModel)]="editReviewData.comment"></textarea>
+        <div class="edit-actions">
+          <button (click)="updateReview()">Lưu</button>
+          <button (click)="cancelEditReview()">Hủy</button>
+        </div>
+      </div>
+
+      <!-- Replies Section -->
+      <div *ngIf="showRepliesMap[review.reviewId!]" class="replies-section">
+        <!-- Add Reply -->
+        <div class="add-reply">
+          <textarea 
+            [(ngModel)]="newReply.replyContent" 
+            placeholder="Viết trả lời..."
+          ></textarea>
+          <button (click)="addReply(review)">Gửi</button>
+        </div>
+
+        <!-- Replies List -->
+        <div *ngFor="let reply of review.replies" class="reply-item">
+          <div class="reply-header">
+            <img 
+              *ngIf="reply.user?.avatar" 
+              [src]="reply.user.avatar" 
+              alt="User Avatar" 
+              class="user-avatar"
+            />
+            <div class="user-details">
+              <span class="user-name">{{ reply.user?.fullName || 'Người dùng' }}</span>
+              <span class="reply-date">{{ reply.createdAt | date:'short' }}</span>
+            </div>
+            <div class="reply-actions">
+              <div class="dropdown">
+                <button class="more-options-btn">
+                  <i class="icon-more-vertical"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <button (click)="startEditReply(reply)">
+                    <i class="icon-edit"></i> Chỉnh sửa
+                  </button>
+                  <button (click)="deleteReply(reply)">
+                    <i class="icon-trash"></i> Xóa
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Normal Reply -->
+          <div *ngIf="editingReplyId !== reply.replyId" class="reply-content">
+            <p>{{ reply.replyContent }}</p>
+          </div>
+
+          <!-- Edit Reply -->
+          <div *ngIf="editingReplyId === reply.replyId" class="edit-reply-section">
+            <textarea [(ngModel)]="editReplyData.replyContent"></textarea>
+            <div class="edit-actions">
+              <button (click)="updateReply()">Lưu</button>
+              <button (click)="cancelEditReply()">Hủy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

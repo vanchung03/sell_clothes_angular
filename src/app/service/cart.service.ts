@@ -6,16 +6,23 @@ import { Cart } from '../types/cart';
 import { CartItem } from '../types/cart-item';
 import { TokenService } from './token.service';
 
+// Thay vì import { API_URLS } from '../constants/api-urls';
+import { environment } from '../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private apiUrl = 'http://localhost:8080/api/v1/cart';
+  // Gán riêng endpoint Cart vào một biến để code gọn hơn
+  private CART_URLS = environment.API_URLS.CART;
 
-  constructor(private http: HttpClient, private tokenService: TokenService) {}
+  constructor(
+    private http: HttpClient,
+    private tokenService: TokenService
+  ) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken') || '';
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -23,7 +30,7 @@ export class CartService {
   }
 
   /**
-   * 🛒 **Lấy giỏ hàng của người dùng**
+   *  **Lấy giỏ hàng của người dùng**
    * @returns Observable<Cart>
    */
   getCart(): Observable<Cart> {
@@ -32,12 +39,12 @@ export class CartService {
       return throwError(() => new Error('Người dùng chưa đăng nhập!'));
     }
     return this.http
-      .get<Cart>(`${this.apiUrl}/${userId}`, { headers: this.getAuthHeaders() })
+      .get<Cart>(this.CART_URLS.GET_CART(userId), { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   /**
-   * ➕ **Thêm sản phẩm vào giỏ hàng**
+   *  **Thêm sản phẩm vào giỏ hàng**
    * @param variantId ID biến thể sản phẩm
    * @param quantity Số lượng
    * @returns Observable<Cart>
@@ -47,16 +54,15 @@ export class CartService {
     if (!userId) {
       return throwError(() => new Error('Người dùng chưa đăng nhập!'));
     }
-
     const cartItem: Partial<CartItem> = { variantId, quantity };
 
     return this.http
-      .post<Cart>(`${this.apiUrl}/${userId}`, cartItem, { headers: this.getAuthHeaders() })
+      .post<Cart>(this.CART_URLS.ADD_ITEM(userId), cartItem, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   /**
-   *  **Cập nhật số lượng sản phẩm trong giỏ hàng**
+   * **Cập nhật số lượng sản phẩm trong giỏ hàng**
    * @param variantId ID biến thể sản phẩm
    * @param quantity Số lượng mới
    * @returns Observable<Cart>
@@ -66,26 +72,40 @@ export class CartService {
     if (!userId) {
       return throwError(() => new Error('Người dùng chưa đăng nhập!'));
     }
-
     const cartItem: Partial<CartItem> = { variantId, quantity };
 
     return this.http
-      .put<Cart>(`${this.apiUrl}/${userId}`, cartItem, { headers: this.getAuthHeaders() })
+      .put<Cart>(this.CART_URLS.UPDATE_ITEM(userId), cartItem, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
- 
+  /**
+   ***Xóa sản phẩm khỏi giỏ hàng**
+   * @param cartItemId ID sản phẩm trong giỏ hàng
+   * @returns Observable<string>
+   */
   removeItemFromCart(cartItemId: number): Observable<string> {
     return this.http
-      .delete(`${this.apiUrl}/${cartItemId}`, {
+      .delete(this.CART_URLS.REMOVE_ITEM(cartItemId), {
         headers: this.getAuthHeaders(),
-        responseType: 'text' // ✅ Chỉ định rõ kiểu dữ liệu trả về là text
+        responseType: 'text',
       })
-      .pipe(
-        catchError(this.handleError) // ✅ Xử lý lỗi
-      );
+      .pipe(catchError(this.handleError));
   }
-  
+
+  /**
+   * **Lấy số lượng đơn hàng trong giỏ hàng của người dùng**
+   * @returns Observable<number>
+   */
+  getCartItemCount(): Observable<number> {
+    const userId = this.tokenService.getUserId();
+    if (!userId) {
+      return throwError(() => new Error('Người dùng chưa đăng nhập!'));
+    }
+    return this.http
+      .get<number>(this.CART_URLS.CART_COUNT(userId), { headers: this.getAuthHeaders() })
+      .pipe(catchError(this.handleError));
+  }
 
   /**
    * **Xử lý lỗi API**

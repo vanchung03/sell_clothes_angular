@@ -1,0 +1,341 @@
+// Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+// Variables
+$primary-color: #3f51b5;
+$secondary-color: #f50057;
+$background-color: #f5f5f5;
+$text-color: #333;
+$light-gray: #e0e0e0;
+$dark-gray: #757575;
+$success-color: #4caf50;
+$white: #fff;
+$black: #000;
+$shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+$border-radius: 4px;
+$transition-speed: 0.3s;
+
+// Base styles
+.product-list-container {
+  font-family: 'Roboto', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $background-color;
+  
+  // Page title with animation
+  .page-title {
+    font-size: 2rem;
+    color: $primary-color;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 10px;
+    font-weight: 700;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: $secondary-color;
+    }
+    
+    // AOS attributes added as a comment - will need to be added in HTML
+    // data-aos="fade-down" data-aos-duration="800"
+  }
+  
+  // Filter bar
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: $white;
+    border-radius: $border-radius;
+    box-shadow: $shadow;
+    // AOS attributes - will need to be added in HTML
+    // data-aos="fade-up" data-aos-delay="100" data-aos-duration="800"
+    
+    select {
+      padding: 10px 15px;
+      border: 1px solid $light-gray;
+      border-radius: $border-radius;
+      background-color: $white;
+      color: $text-color;
+      font-size: 0.9rem;
+      min-width: 150px;
+      outline: none;
+      transition: all $transition-speed ease;
+      
+      &:hover, &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+      }
+      
+      option {
+        padding: 10px;
+      }
+    }
+    
+    .reset-btn {
+      padding: 10px 20px;
+      background-color: $dark-gray;
+      color: $white;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: all $transition-speed ease;
+      font-weight: 500;
+      
+      &:hover {
+        background-color: darken($dark-gray, 10%);
+        transform: translateY(-2px);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+  
+  // Sort bar
+  .sort-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding: 12px 15px;
+    background-color: $white;
+    border-radius: $border-radius;
+    box-shadow: $shadow;
+    // AOS attributes - will need to be added in HTML
+    // data-aos="fade-up" data-aos-delay="200" data-aos-duration="800"
+    
+    .sort-label {
+      font-weight: 500;
+      color: $dark-gray;
+      margin-right: 10px;
+    }
+    
+    button {
+      padding: 8px 15px;
+      background-color: transparent;
+      border: 1px solid $light-gray;
+      border-radius: $border-radius;
+      color: $text-color;
+      cursor: pointer;
+      transition: all $transition-speed ease;
+      font-size: 0.9rem;
+      
+      &:hover {
+        border-color: $primary-color;
+        color: $primary-color;
+      }
+      
+      &.active {
+        background-color: $primary-color;
+        color: $white;
+        border-color: $primary-color;
+      }
+    }
+  }
+  
+  // No results message
+  .no-results {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: $white;
+    border-radius: $border-radius;
+    box-shadow: $shadow;
+    color: $dark-gray;
+    font-size: 1.1rem;
+    // AOS attributes - will need to be added in HTML
+    // data-aos="fade" data-aos-delay="300" data-aos-duration="800"
+  }
+  
+  // Product grid
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    // AOS attributes - will need to be added in HTML
+    // data-aos="fade-up" data-aos-delay="300" data-aos-duration="800"
+    
+    // Product card
+    .product-card {
+      position: relative;
+      background-color: $white;
+      border-radius: $border-radius;
+      overflow: hidden;
+      box-shadow: $shadow;
+      transition: all $transition-speed ease;
+      // Individual product cards can have staggered animations
+      // data-aos="zoom-in" data-aos-delay="400" 
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        
+        .view-detail-btn {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        
+        .product-image img {
+          transform: scale(1.1);
+        }
+      }
+      
+      // Discount badge
+      .discount-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: $secondary-color;
+        color: $white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        z-index: 2;
+        box-shadow: 0 2px 5px rgba($secondary-color, 0.5);
+        animation: pulse 2s infinite;
+      }
+      
+      // Product image container
+      .product-image {
+        position: relative;
+        overflow: hidden;
+        height: 200px;
+        background-color: #f9f9f9;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform $transition-speed ease;
+        }
+      }
+      
+      // Product info
+      .product-info {
+        padding: 15px;
+        
+        .product-name {
+          font-size: 1rem;
+          color: $text-color;
+          font-weight: 500;
+          margin-bottom: 10px;
+          height: 40px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          
+          -webkit-box-orient: vertical;
+        }
+        
+        .product-pricing {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          
+          .current-price {
+            font-size: 1.1rem;
+            color: $primary-color;
+            font-weight: 700;
+          }
+          
+          .original-price {
+            font-size: 0.9rem;
+            color: $dark-gray;
+            text-decoration: line-through;
+          }
+        }
+      }
+      
+      // View detail button
+      .view-detail-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba($primary-color, 0.9);
+        color: $white;
+        border: none;
+        padding: 12px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all $transition-speed ease;
+        opacity: 0;
+        transform: translateY(100%);
+        
+        &:hover {
+          background-color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .product-list-container {
+    padding: 15px;
+    
+    .filter-bar {
+      flex-direction: column;
+      align-items: stretch;
+      
+      select {
+        width: 100%;
+      }
+    }
+    
+    .product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+    }
+  }
+}
+
+// Loading spinner (optional)
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba($primary-color, 0.3);
+    border-radius: 50%;
+    border-top-color: $primary-color;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

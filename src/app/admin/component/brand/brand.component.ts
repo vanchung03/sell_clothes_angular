@@ -5,7 +5,7 @@ import { CloudinaryService } from 'src/app/service/cloudinary.service';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
 import { DatePipe } from '@angular/common';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
 
 @Component({
   selector: 'app-brand',

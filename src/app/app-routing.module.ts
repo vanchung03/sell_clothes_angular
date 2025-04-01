@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PageNotFoundComponent } from './exception/page-not-found.component';
+import { PageNotFoundComponent } from './exception/403';
 // Định tuyến cho các module con
 const routes: Routes = [
   { path: '', redirectTo: 'pages/home', pathMatch: 'full' },

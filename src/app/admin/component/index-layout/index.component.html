@@ -77,6 +77,10 @@
             <mat-icon>shopping_bag</mat-icon>
             <span>Thêm Sản Phẩm</span>
           </a>
+          <!-- <a mat-list-item routerLink="add-excel-product" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>shopping_bag</mat-icon>
+            <span>Thêm Sản Phẩm EXCEL</span>
+          </a> -->
           <!-- <a mat-list-item routerLink="/product-image" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>image</mat-icon>
             <span>Product Image</span>
@@ -84,6 +88,25 @@
           <a mat-list-item routerLink="/product-size" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>straighten</mat-icon>
             <span>Product Size</span>
+          </a> -->
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>card_giftcard</mat-icon> <!-- Icon quà tặng, có thể phù hợp với voucher -->
+            <span>Quản Lý Voucher</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/vouchers" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>list</mat-icon>
+            <span>Danh Sách Voucher </span>
+          </a>
+          <!-- <a mat-list-item routerLink="/add-user" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>account_circle</mat-icon>
+            <span>Thêm Voucher</span>
           </a> -->
         </mat-nav-list>
       </mat-expansion-panel>
@@ -144,18 +167,18 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>history</mat-icon>
-            <span>QuẢN lÝ Giao dỊCH</span>
+            <span>Lịch Sử GD</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
           <!-- All Orders -->
           <a mat-list-item routerLink="/payment" routerLinkActive="active-menu" class="submenu-item">
-            <mat-icon>list</mat-icon>
-            <span>Giao dỊCH</span>
+            <mat-icon>history</mat-icon>
+            <span>Giao Dịch</span>
           </a>
           <a mat-list-item routerLink="/payment-history" routerLinkActive="active-menu" class="submenu-item">
-            <mat-icon>list</mat-icon>
-            <span>LỊCH sỬ giao DỊCH</span>
+            <mat-icon>history</mat-icon>
+            <span>Lịch Sử</span>
           </a>
     
         </mat-nav-list>
@@ -171,20 +194,24 @@
         </mat-expansion-panel-header>
         <mat-nav-list>
           <!-- Revenue Report -->
-          <a mat-list-item routerLink="/statistics" routerLinkActive="active-menu" class="submenu-item">
-            <mat-icon>attach_money</mat-icon>
-            <span>Revenue Report</span>
+          <a mat-list-item routerLink="/reports" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>show_chart</mat-icon>
+            <span>Thống Kê Doanh Thu</span>
+          </a>
+          <a mat-list-item routerLink="/sptk" routerLinkActive="active-menu" class="submenu-item">
+            <mat-icon>show_chart</mat-icon>
+            <span>Thống Kê Sản Phẩm Tồn Kho</span>
           </a>
           <!-- Sales Report -->
-          <a mat-list-item routerLink="/sales-report" routerLinkActive="active-menu" class="submenu-item">
+          <!-- <a mat-list-item routerLink="/reports" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>show_chart</mat-icon>
-            <span>Sales Report</span>
-          </a>
+            <span>Report ALL</span>
+          </a> -->
           <!-- Product Performance -->
-          <a mat-list-item routerLink="/product-performance" routerLinkActive="active-menu" class="submenu-item">
+          <!-- <a mat-list-item routerLink="/product-performance" routerLinkActive="active-menu" class="submenu-item">
             <mat-icon>insights</mat-icon>
             <span>Product Performance</span>
-          </a>
+          </a> -->
         </mat-nav-list>
       </mat-expansion-panel>
 
@@ -207,23 +234,23 @@
       <span class="title">Home</span>
       <span class="spacer"></span>
       <button mat-icon-button>
-        <mat-icon>notifications</mat-icon>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-dot"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M13.916 2.314A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.74 7.327A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673 9 9 0 0 1-.585-.665"/><circle cx="18" cy="8" r="3"/></svg>
         <span class="badge">3</span>
       </button>
       <button mat-icon-button>
-        <mat-icon>email</mat-icon>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
         <span class="badge">5</span>
       </button>
-      <button mat-icon-button>
+      <!-- <button mat-icon-button>
         <mat-icon>brightness_3</mat-icon>
-      </button>
+      </button> -->
       <div class="profile-menu" (mouseenter)="showMenu = true" (mouseleave)="showMenu = false">
         <img [src]="user.avatar" alt="Avatar" class="avatar" />
           <span class="username-username">{{ user.fullName | uppercase}}</span>
         <div class="profile-dropdown" *ngIf="showMenu">
           <button mat-menu-item (click)="toggleProfileForm()">
             <mat-icon>person</mat-icon>
-            <span> Thông Tin Cá nhân</span>
+            <span>Thông Tin Cá nhân</span>
           </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>

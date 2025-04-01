@@ -1,40 +1,113 @@
-  <div class="auth-container">
-    <div class="auth-form">
-      <h2>Register</h2>
-      <form (ngSubmit)="onRegister()">
-        <mat-form-field class="full-width">
-          <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="registerData.username" name="username" required />
-        </mat-form-field>
+<div class="register-page" data-aos="fade-up">
+  <div class="register-wrapper">
+    <!-- Left Side: Thông tin thương hiệu & giới thiệu -->
+    <div class="left-side" data-aos="fade-right">
+      <div class="brand-block">
+        <h1 class="brand-name">SERENITY</h1>
+        <p class="tagline">Elevate Your Style</p>
+        <p class="desc-text">
+          Khám phá không gian thời trang cao cấp, đăng ký ngay để nhận nhiều ưu đãi dành riêng cho thành viên!
+        </p>
+      </div>
+    </div>
 
-        <mat-form-field class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="registerData.email" name="email" required />
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" [(ngModel)]="registerData.password" name="password" required />
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Full Name</mat-label>
-          <input matInput [(ngModel)]="registerData.fullName" name="fullName" required />
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Phone Number</mat-label>
-          <input matInput [(ngModel)]="registerData.phone"  name="phone" required  />
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" type="submit">Register</button>
-      </form>
-      <p class="auth-action">
-        Already have an account? <a routerLink="/auth/login">Login</a>
-      </p>
-      <div class="footer-left">
-        <mat-icon>copyright</mat-icon>
-        <span>2025 Serenity. All rights reserved by Mr. Chungcoder !</span>
+    <!-- Right Side: Form đăng ký -->
+    <div class="right-side" data-aos="fade-left">
+      <div class="register-box">
+        <h2 class="title">Register</h2>
+        <form (ngSubmit)="onRegister()" class="register-form">
+          <!-- Row 1: Username & Email -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-field">
+              <mat-label>Username</mat-label>
+              <input
+                matInput
+                [(ngModel)]="registerData.username"
+                name="username"
+                required
+                minlength="6"
+              />
+              <mat-error *ngIf="registerData.username && registerData.username.length < 6">
+                Username phải có ít nhất 6 ký tự.
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field appearance="outline" class="half-field">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                [(ngModel)]="registerData.email"
+                name="email"
+                required
+                email
+              />
+              <mat-error *ngIf="registerData.email && !isValidEmail(registerData.email)">
+                Email không hợp lệ.
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <!-- Row 2: Password & Phone -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-field">
+              <mat-label>Password</mat-label>
+              <input
+                matInput
+                type="password"
+                [(ngModel)]="registerData.password"
+                name="password"
+                required
+                minlength="6"
+              />
+              <mat-error *ngIf="registerData.password && registerData.password.length < 6">
+                Mật khẩu phải có ít nhất 6 ký tự.
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field appearance="outline" class="half-field">
+              <mat-label>Phone</mat-label>
+              <input
+                matInput
+                [(ngModel)]="registerData.phone"
+                name="phone"
+                required
+              />
+              <mat-error *ngIf="registerData.phone && !isValidPhoneNumber(registerData.phone)">
+                Số điện thoại không hợp lệ.
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <!-- Row 3: Full Name -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-field">
+              <mat-label>Full Name</mat-label>
+              <input
+                matInput
+                [(ngModel)]="registerData.fullName"
+                name="fullName"
+                required
+              />
+              <mat-error *ngIf="registerData.fullName && !isValidFullName(registerData.fullName)">
+                Họ và tên không hợp lệ (không chứa ký tự đặc biệt).
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <!-- Submit Button -->
+          <button mat-raised-button color="primary" type="submit" class="btn-submit">
+            Register
+          </button>
+        </form>
+  
+        <p class="redirect-link">
+          Already have an account? <a routerLink="/auth/login">Login</a>
+        </p>
+  
+        <div class="footer-note">
+          © 2025 Serenity. All rights reserved by Mr. Chungcoder!
+        </div>
       </div>
     </div>
   </div>
+</div>

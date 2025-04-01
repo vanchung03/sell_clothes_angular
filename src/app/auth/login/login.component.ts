@@ -5,6 +5,7 @@ import { LoginRequest } from '../../types/auth/LoginRequest';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { initAOS } from 'src/assets/aos-init';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit {
     if (localStorage.getItem('accessToken')) {
       this.authService.checkLoginStatus();
     }
+    initAOS();
   }
 
   onLogin(): void {

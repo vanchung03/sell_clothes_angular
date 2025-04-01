@@ -1,0 +1,490 @@
+// Variables for consistent styling
+$primary-color: #4a6fdc;
+$secondary-color: #ff6b6b;
+$text-color: #333;
+$light-grey: #f5f5f5;
+$medium-grey: #e0e0e0;
+$dark-grey: #757575;
+$white: #ffffff;
+$box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+$border-radius: 4px;
+
+// Quick View Overlay
+.quick-view-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 30px 0;
+  
+  // Add smooth AOS fade-in effect
+  &[data-aos="fade-in"] {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    
+    &.aos-animate {
+      opacity: 1;
+    }
+  }
+}
+
+// Quick View Container
+.quick-view-container {
+  position: relative;
+  width: 90%;
+  max-width: 1000px;
+  background-color: $white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+  
+  // AOS zoom-in animation
+  &[data-aos="zoom-in"] {
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    
+    &.aos-animate {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  // Close button
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    background-color: $light-grey;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: $transition;
+    
+    i {
+      color: $dark-grey;
+      font-size: 16px;
+      transition: $transition;
+    }
+    
+    &:hover {
+      background-color: $secondary-color;
+      transform: rotate(90deg);
+      
+      i {
+        color: $white;
+      }
+    }
+  }
+}
+
+// Quick View Content
+.quick-view-content {
+  display: flex;
+  flex-direction: column;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+// Product Images Section
+.quick-view-image {
+  flex: 1;
+  padding: 20px;
+  background-color: $light-grey;
+  
+  .main-image {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: $border-radius;
+    
+    .product-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.5s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+  
+  .image-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    
+    .thumbnail {
+      width: 60px;
+      height: 60px;
+      border: 2px solid transparent;
+      border-radius: $border-radius;
+      overflow: hidden;
+      cursor: pointer;
+      transition: $transition;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      &:hover {
+        border-color: $primary-color;
+        transform: translateY(-3px);
+      }
+      
+      &.active {
+        border-color: $primary-color;
+        box-shadow: 0 3px 8px rgba(74, 111, 220, 0.3);
+      }
+    }
+  }
+}
+
+// Product Info Section
+.quick-view-info {
+  flex: 1;
+  padding: 20px 30px;
+  
+  .product-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: $text-color;
+    margin-bottom: 15px;
+    position: relative;
+    
+    &::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: $primary-color;
+      margin-top: 8px;
+    }
+  }
+  
+  .price-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    
+    .sale-price {
+      font-size: 22px;
+      font-weight: 700;
+      color: $secondary-color;
+    }
+    
+    .old-price {
+      font-size: 16px;
+      color: $dark-grey;
+      text-decoration: line-through;
+    }
+  }
+  
+  .product-description {
+    margin-bottom: 20px;
+    color: $dark-grey;
+    font-size: 14px;
+    line-height: 1.6;
+    max-height: 100px;
+    overflow-y: auto;
+    padding-right: 10px;
+    
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: $medium-grey;
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background-color: $light-grey;
+    }
+  }
+  
+  .variant-selection {
+    margin-bottom: 20px;
+    
+    .variant-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: $text-color;
+    }
+    
+    .color-options, .size-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      
+      .color-btn, .size-btn {
+        padding: 6px 12px;
+        background-color: $light-grey;
+        border: 1px solid $medium-grey;
+        border-radius: $border-radius;
+        cursor: pointer;
+        transition: $transition;
+        color: $text-color;
+        font-size: 14px;
+        
+        &:hover {
+          background-color: darken($light-grey, 5%);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        &.active {
+          background-color: $primary-color;
+          color: $white;
+          border-color: $primary-color;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  
+  .quantity-control {
+    margin-bottom: 20px;
+    
+    .qty-box {
+      display: flex;
+      align-items: center;
+      width: fit-content;
+      border: 1px solid $medium-grey;
+      border-radius: $border-radius;
+      overflow: hidden;
+      
+      .qty-btn {
+        width: 36px;
+        height: 36px;
+        background-color: $light-grey;
+        border: none;
+        color: $text-color;
+        font-size: 16px;
+        cursor: pointer;
+        transition: $transition;
+        
+        &:hover {
+          background-color: $primary-color;
+          color: $white;
+        }
+      }
+      
+      input {
+        width: 50px;
+        height: 36px;
+        border: none;
+        border-left: 1px solid $medium-grey;
+        border-right: 1px solid $medium-grey;
+        text-align: center;
+        font-size: 14px;
+        color: $text-color;
+        
+        &:focus {
+          outline: none;
+        }
+        
+        /* Remove arrows from number input */
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+    }
+    
+    .stock-info {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: $dark-grey;
+      
+      i {
+        color: #4CAF50;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  
+  .action-buttons {
+    display: flex;
+    gap: 15px;
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: $border-radius;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: $transition;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      i {
+        margin-right: 8px;
+      }
+      
+      &.add-to-cart {
+        background-color: $primary-color;
+        color: $white;
+        flex: 1;
+        
+        &:hover {
+          background-color: darken($primary-color, 10%);
+          transform: translateY(-3px);
+          box-shadow: 0 5px 15px rgba(74, 111, 220, 0.4);
+        }
+        
+        &:active {
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+  .btn-favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    i {
+      color: rgb(27, 25, 25);
+      transition: all 0.3s ease;
+    }
+
+    &.active i {
+      color: $primary-color;
+    }
+
+    &:hover {
+      background-color: $primary-color;
+      i {
+        color: white;
+      }
+    }
+  }
+}
+
+// Animation keyframes for the fadeAnimation and slideAnimation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Specific adaptive styles for mobile
+@media (max-width: 767px) {
+  .quick-view-container {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .quick-view-image {
+    .main-image {
+      height: 250px;
+    }
+    
+    .image-thumbnails .thumbnail {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  
+  .quick-view-info {
+    padding: 15px;
+    
+    .product-title {
+      font-size: 20px;
+    }
+    
+    .price-container {
+      .sale-price {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+// Add responsiveness for larger screens
+@media (min-width: 992px) {
+  .quick-view-container {
+    max-width: 1100px;
+  }
+  
+  .quick-view-image {
+    .main-image {
+      height: 350px;
+    }
+  }
+}
+
+// Angular animation classes
+.ng-trigger-fadeAnimation {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.ng-trigger-slideAnimation {
+  animation: slideIn 0.4s ease-out;
+}
+
+// AOS animations setup
+[data-aos] {
+  visibility: hidden;
+}
+
+[data-aos].aos-animate {
+  visibility: visible;
+}

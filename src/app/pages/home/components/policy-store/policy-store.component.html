@@ -1,0 +1,33 @@
+<div class="policy-section">
+  <h2 class="section-title" data-aos="fade-up">
+    Chính sách tại <span>SERENITY</span>
+  </h2>
+  <p class="section-desc" data-aos="fade-up">
+    Với cam kết mang đến sự hài lòng tuyệt đối cho khách hàng,
+    <strong>SERENITY</strong> chú trọng vào chất lượng sản phẩm và dịch vụ tốt nhất.
+  </p>
+
+  <div class="policy-grid">
+    <div
+      class="policy-card"
+      *ngFor="let policy of policies"
+      data-aos="zoom-in"
+      data-aos-delay="200"
+    >
+      <div class="icon-wrapper">
+        <i class="fa" [ngClass]="policy.icon"></i>
+      </div>
+      <h3 class="policy-title">{{ policy.title }}</h3>
+      <p class="policy-desc">{{ policy.desc }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Banner Hệ Thống Cửa Hàng -->
+<div class="store-banner">
+  <div class="store-content" data-aos="zoom-in">
+    <h2>SERENITY</h2>
+    <p>Thời trang cao cấp SERENITY</p>
+    <button class="store-btn">Hệ thống cửa hàng</button>
+  </div>
+</div>

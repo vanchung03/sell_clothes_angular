@@ -1,8 +1,82 @@
-mat-card {
-    margin: 20px;
+
+.setting-container {
+  max-width: 800px;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif;
+
+  h2 {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
   }
-  
-  mat-slide-toggle {
-    margin: 10px 0;
+
+  .setting-section {
+    background: #f8f9fa;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background: #eef1f5;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 15px;
+
+      i {
+        margin-right: 10px;
+        color: #cfd6dd;
+      }
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      margin-bottom: 10px;
+      cursor: pointer;
+
+      input {
+        margin-right: 12px;
+      }
+    }
+
+    select,
+    button,
+    input[type="file"] {
+      width: 100%;
+      padding: 12px 0px;
+      margin-top: 10px;
+      border-radius: 5px;
+      font-size: 15px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button {
+      background-color: #b7c2ce;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+
+      &:hover {
+        background-color: #a2adb9;
+      }
+    }
   }
-  
+
+  .banner-section {
+    background: #e9f7ef;
+    border: 1px solid #d4edda;
+  }
+}

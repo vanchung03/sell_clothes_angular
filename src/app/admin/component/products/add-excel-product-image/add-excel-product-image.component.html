@@ -1,0 +1,73 @@
+<div class="import-container" data-aos="fade-up">
+    <div class="import-card">
+      <div class="card-header" data-aos="fade-down" data-aos-delay="200">
+        <h2>Import Ảnh Sản Phẩm từ Excel</h2>
+        <p class="subtitle">Tải lên file Excel và thư mục ảnh để nhập ảnh sản phẩm</p>
+      </div>
+  
+      <div class="card-body" data-aos="fade-up" data-aos-delay="300">
+        <div class="upload-section" data-aos="fade-right" data-aos-delay="400">
+          <div class="upload-box">
+            <div class="upload-icon">
+              <i class="fas fa-file-excel"></i>
+            </div>
+            <div class="upload-content">
+              <h3>File Excel</h3>
+              <p *ngIf="!fileName">Chọn file Excel để nhập dữ liệu ảnh sản phẩm</p>
+              <p *ngIf="fileName" class="file-selected">{{ fileName }}</p>
+              <label class="upload-btn">
+                Chọn File
+                <input type="file" (change)="onFileSelected($event)" accept=".xlsx" hidden>
+              </label>
+            </div>
+          </div>
+        </div>
+  
+        <div class="upload-section" data-aos="fade-left" data-aos-delay="500">
+          <div class="upload-box">
+            <div class="upload-icon">
+              <i class="fas fa-images"></i>
+            </div>
+            <div class="upload-content">
+              <h3>Thư Mục Ảnh</h3>
+              <p *ngIf="imageCount === 0">Chọn thư mục chứa ảnh sản phẩm</p>
+              <p *ngIf="imageCount > 0" class="file-selected">Đã chọn {{ imageCount }} ảnh</p>
+              <label class="upload-btn">
+                Chọn Thư Mục
+                <input type="file" (change)="onFolderSelected($event)" webkitdirectory directory multiple hidden>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="progress-container" *ngIf="isUploading || uploadComplete" data-aos="fade-up" data-aos-delay="600">
+        <div class="progress-status">
+          <span *ngIf="isUploading">Đang tải lên... {{ uploadProgress }}%</span>
+          <span *ngIf="uploadComplete && uploadSuccess" class="success-msg">Nhập ảnh thành công!</span>
+          <span *ngIf="uploadComplete && !uploadSuccess" class="error-msg">Có lỗi xảy ra!</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" [style.width.%]="uploadProgress" [ngClass]="{'complete': uploadProgress === 100}"></div>
+        </div>
+      </div>
+  
+      <div class="action-buttons" data-aos="fade-up" data-aos-delay="700">
+        <div>
+          <button class="btn" routerLink="/add-excel-product">
+            <i class="fas fa-arrow-left"></i> Quay Lại
+          </button>
+        </div>
+        <button class="import-btn" (click)="importProductImages()" [disabled]="isUploading || !selectedFile">
+          <i class="fas fa-upload"></i> Nhập Ảnh Sản Phẩm
+        </button>
+        <button class="reset-btn" (click)="resetForm()" [disabled]="isUploading">
+          <i class="fas fa-redo"></i> Làm Mới
+        </button>
+        <button class="download-btn" (click)="downloadTemplate()">
+          <i class="fas fa-file-excel"></i> Tải File Mẫu
+        </button>
+      </div>
+    </div>
+  </div>
+  

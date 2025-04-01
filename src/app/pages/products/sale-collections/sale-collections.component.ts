@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from 'src/app/service/product.service';
-import { ProductImageService } from 'src/app/service/product-image.service';
-import { Product } from 'src/app/types/products';
-import { ProductImage } from 'src/app/types/product-image';
-import { Router } from '@angular/router';
+import * as AOS from 'aos';
 
 @Component({
   selector: 'app-sale-collections',
@@ -11,49 +7,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./sale-collections.component.scss']
 })
 export class SaleCollectionsComponent implements OnInit {
-  products: Product[] = [];
-  productImages: { [key: number]: ProductImage[] } = {};
-  currentImageIndex: { [key: number]: number } = {};
-
-  constructor(
-    private productService: ProductService,
-    private productImageService: ProductImageService,
-    private router: Router
-  ) {}
+  collections = [
+    {
+      image: 'https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg',
+      title: 'Bộ Sưu Tập Xuân Hè',
+      description: 'Thời trang tươi trẻ cho mùa mới'
+    },
+    {
+      image: 'https://images.pexels.com/photos/322207/pexels-photo-322207.jpeg',
+      title: 'Thời Trang Công Sở',
+      description: 'Lịch lãm & chuyên nghiệp'
+    },
+    {
+      image: 'https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg',
+      title: 'Thời Trang Dạo Phố',
+      description: 'Sành điệu & thoải mái'
+    },
+    {
+      image: 'https://images.pexels.com/photos/322207/pexels-photo-322207.jpeg',
+      title: 'Thời Trang Nam',
+      description: 'Cá tính & phong cách'
+    }
+  ];
 
   ngOnInit(): void {
-    this.loadProducts();
-  }
-  // 🟢 Điều hướng sang trang chi tiết sản phẩm
-  onViewDetail(productId: number) {
-    this.router.navigate(['/product-detail', productId]);
-  }
-
-  loadProducts(): void {
-    this.productService.getAllProducts().subscribe(products => {
-      this.products = products;
-      this.products.forEach(product => {
-        this.loadProductImages(product.productId!);
-      });
-    });
-  }
-
-  loadProductImages(productId: number): void {
-    this.productImageService.getAllProductImages(productId).subscribe(images => {
-      this.productImages[productId] = images;
-      if (images.length > 0) {
-        this.currentImageIndex[productId] = 0;
-        this.startImageRotation(productId);
-      }
-    });
-  }
-
-  startImageRotation(productId: number): void {
-    setInterval(() => {
-      if (this.productImages[productId] && this.productImages[productId].length > 1) {
-        this.currentImageIndex[productId] =
-          (this.currentImageIndex[productId] + 1) % this.productImages[productId].length;
-      }
-    }, 3000);
+    AOS.init({ duration: 800, easing: 'ease-in-out' });
   }
 }

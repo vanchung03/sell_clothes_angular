@@ -25,7 +25,11 @@
             ],
             "allowedCommonJsDependencies": [
               "aos",
-              "file-saver"
+              "file-saver",
+              "canvg",
+              "core-js",
+              "raf",
+              "rgbcolor"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

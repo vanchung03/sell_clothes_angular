@@ -1,0 +1,418 @@
+// Color palette
+$primary-color: #e68f7d;
+$background-color: #f5f5f5;
+$text-color: #333;
+$text-muted: #888;
+$white: #fff;
+$border-color: #e0e0e0;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin shadow-subtle {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+@mixin hover-effect {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+}
+
+.reviews-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $white;
+
+  // Review Summary
+  .review-summary {
+    background-color: $background-color;
+    // border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    .summary-header {
+      @include flex-center;
+      justify-content: space-between;
+
+      .average-rating {
+        @include flex-center;
+        flex-direction: column;
+
+        .avg-score {
+          font-size: 2rem;
+          font-weight: bold;
+          color: $primary-color;
+        }
+
+        .stars {
+          margin: 10px 0;
+        }
+
+        .review-count {
+          color: $text-muted;
+        }
+      }
+
+      .rating-distribution {
+        flex-grow: 1;
+        margin-left: 30px;
+
+        .dist-row {
+          @include flex-center;
+          margin-bottom: 8px;
+
+          .star-label {
+            width: 50px;
+            color: $text-muted;
+          }
+
+          .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background-color: $border-color;
+            border-radius: 4px;
+            margin: 0 15px;
+            overflow: hidden;
+
+            .progress {
+              height: 100%;
+              background-color: $primary-color;
+            }
+          }
+
+          .count {
+            width: 50px;
+            text-align: right;
+            color: $text-muted;
+          }
+        }
+      }
+    }
+  }
+
+  // Add Review Section
+  .add-review-section {
+    background-color: $white;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    @include shadow-subtle;
+
+    .add-review-header {
+      padding: 15px;
+      border-bottom: 1px solid $border-color;
+      h4 {
+        margin: 0;
+        color: $text-color;
+      }
+    }
+
+    .add-review-content {
+      padding: 20px;
+
+      .star-rating, .comment-input {
+        margin-bottom: 15px;
+      }
+
+      .star-input {
+        @include flex-center;
+        margin-bottom: 10px;
+
+        .rating-value {
+          margin-left: 10px;
+          color: $primary-color;
+        }
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 100px;
+        border: 1px solid $border-color;
+        border-radius: 2px;
+        // padding: 10px;
+        // margin-right: 10px;
+        resize: vertical;
+      }
+
+      .submit-review-btn {
+        background-color: $primary-color;
+        color: $white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        @include hover-effect;
+      }
+    }
+  }
+
+  // Reviews List
+  .reviews-list {
+    .review-item {
+      background-color: $white;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      @include shadow-subtle;
+
+      .review-header {
+        padding: 15px;
+        border-bottom: 1px solid $border-color;
+
+        .user-info {
+          @include flex-center;
+          position: relative;
+
+          .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+          }
+
+          .user-details {
+            flex-grow: 1;
+
+            .user-name {
+              font-weight: bold;
+              color: $text-color;
+            }
+
+            .review-meta {
+              @include flex-center;
+              margin-top: 5px;
+
+              .review-date {
+                margin-left: 10px;
+                color: $text-muted;
+                font-size: 0.8rem;
+              }
+            }
+          }
+
+          .review-actions {
+            position: relative;
+          }
+        }
+      }
+
+      .review-content, .replies-section {
+        padding: 15px;
+      }
+    }
+  }
+
+  // Star Icons
+  .star-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
+    background-size: cover;
+    margin: 0 2px;
+    cursor: pointer;
+
+    &.active {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ee4d2d' stroke='%23ee4d2d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
+    }
+  }
+
+  // Dropdown Menu
+  .dropdown {
+    position: relative;
+
+    .more-options-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      
+      .icon-more-vertical {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='1'/%3E%3Ccircle cx='12' cy='5' r='1'/%3E%3Ccircle cx='12' cy='19' r='1'/%3E%3C/svg%3E");
+        background-size: cover;
+      }
+
+      &:hover .icon-more-vertical {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='1'/%3E%3Ccircle cx='12' cy='5' r='1'/%3E%3Ccircle cx='12' cy='19' r='1'/%3E%3C/svg%3E");
+      }
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: $white;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+      min-width: 150px;
+
+      button {
+        width: 100%;
+        text-align: left;
+        padding: 10px 15px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        @include flex-center;
+
+        &:hover {
+          background-color: $background-color;
+        }
+
+        i {
+          margin-right: 10px;
+          width: 16px;
+          height: 16px;
+          background-size: cover;
+        }
+
+        .icon-edit {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z'/%3E%3C/svg%3E");
+        }
+
+        .icon-trash {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E");
+        }
+
+        .icon-message-circle {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'/%3E%3C/svg%3E");
+        }
+      }
+    }
+
+    &:hover .dropdown-menu {
+      display: block;
+    }
+  }
+
+  // Replies Section
+  .replies-section {
+    background-color: $background-color;
+
+    .add-reply {
+      @include flex-center;
+      margin-bottom: 15px;
+
+      textarea {
+        flex-grow: 1;
+        width: 50%;
+        margin-right: 10px;
+        min-height: 80px;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        padding: 10px;
+        resize: vertical;
+      }
+
+      button {
+        background-color: $primary-color;
+        color: $white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+      }
+    }
+
+    .reply-item {
+      background-color: $white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid $border-color;
+
+      .reply-header {
+        padding: 10px 15px;
+        border-bottom: 1px solid $border-color;
+        @include flex-center;
+        position: relative;
+
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          margin-right: 10px;
+          object-fit: cover;
+        }
+
+        .user-details {
+          flex-grow: 1;
+
+          .user-name {
+            font-weight: bold;
+            color: $text-color;
+          }
+
+          .reply-date {
+            display: block;
+            color: $text-muted;
+            font-size: 0.8rem;
+            margin-top: 3px;
+          }
+        }
+      }
+
+      .reply-content, .edit-reply-section {
+        padding: 15px;
+      }
+    }
+  }
+
+  // Edit Sections
+  .edit-review-section, .edit-reply-section {
+    textarea {
+      width: 60%;
+      min-height: 100px;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      padding: 10px;
+      resize: vertical;
+    }
+
+    .edit-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+
+      button {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+
+        &:first-child {
+          background-color: $primary-color;
+          color: $white;
+        }
+
+        &:last-child {
+          background-color: $background-color;
+          color: $text-color;
+        }
+      }
+    }
+  }
+}
+
+// AOS Animations
+[data-aos] {
+  transition: all 0.5s ease;
+  opacity: 0;
+  transform: translateY(20px);
+
+  &.aos-animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

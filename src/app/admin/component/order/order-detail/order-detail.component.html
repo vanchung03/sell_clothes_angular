@@ -39,8 +39,20 @@
           </span>
         </div>
         <div class="info-row">
+          <span class="label">Đơn vị vận chuyển:</span>
+          <strong>{{order?.shipMethod.name}}</strong>
+        </div>
+        <div class="info-row">
+          <span class="label">Mô tả :</span>
+          <strong>{{order?.shipMethod.description}}</strong>
+        </div>
+        <div class="info-row">
           <span class="label">Phí vận chuyển:</span>
-          <strong>{{order?.shippingFee | currency:'VND'}}</strong>
+          <strong>{{order?.shipMethod.shippingFee| currency:'VND'}}</strong>
+        </div>
+        <div class="info-row">
+          <span class="label">Giảm Giá:</span>
+          <strong>{{order?.discountAmount| currency:'VND'}}</strong>
         </div>
         <div class="info-row total">
           <span class="label">Tổng tiền:</span>

@@ -1,0 +1,78 @@
+<app-header></app-header>
+
+<div class="orders-container">
+    <div class="title">
+      <h2>Danh sách đơn hàng của bạn</h2>
+    </div>
+    <!-- Lọc theo mã đơn hàng
+    <div class="search-bar">
+        <input 
+          type="text" 
+          [(ngModel)]="orderCode"
+          (input)="onOrderCodeChange()"
+          placeholder="Nhập mã đơn hàng để tìm..."
+        />
+      </div> -->
+    
+    <!-- Trạng thái lọc -->
+    <div class="status-filter">
+      <div 
+        class="status-item" 
+        *ngFor="let status of statusList" 
+        [class.active]="status === selectedStatus"
+        [attr.data-status]="status"
+        (click)="onSelectStatus(status)">
+        {{ getStatusLabel(status) }}
+      </div>
+    </div>
+  
+    
+    <!-- Hiển thị lỗi / loading -->
+    <div class="loading" *ngIf="isLoading">Đang tải đơn hàng...</div>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  
+    <!-- Danh sách đơn hàng dạng Table -->
+    <table class="orders-table" *ngIf="!isLoading && filteredOrders.length > 0">
+      <thead>
+        <tr>
+          <th>Mã ĐH</th>
+          <th hidden>Người dùng</th>
+          <th hidden>Địa chỉ</th>
+          <th>Phương thức giao hàng</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+          <th>Ngày đặt</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let order of filteredOrders; let i = index" 
+          [style.--index]="i">
+          <td>{{ order.orderId }}</td>
+          <td hidden>{{ order.userId }}</td>
+          <td hidden>{{ order.addressId }}</td>
+          <td>{{ order.shipMethod?.name}}</td>
+          <td>{{ order.totalAmount | currency:'VND' }}</td>
+          <td [ngClass]="'status-' + order.status.toLowerCase()">
+            {{ getStatusLabel(order.status) }}
+          </td>
+          <td>{{ parseDate(order.createdAt) }}</td>
+          <td>
+            <button 
+              (click)="onViewDetails(order)" 
+              class="details-btn" 
+              title="Xem chi tiết">
+              <i class="material-icons">visibility</i>Xem Chi Tiết
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Nếu không tìm thấy đơn hàng -->
+    <div class="no-results" *ngIf="!isLoading && filteredOrders.length === 0">
+      Không tìm thấy đơn hàng nào.
+    </div>
+  </div>
+

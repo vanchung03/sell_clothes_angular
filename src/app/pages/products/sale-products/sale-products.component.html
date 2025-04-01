@@ -1,6 +1,12 @@
 <app-header></app-header>
-<app-navbar></app-navbar>
+
 <div class="product-container">
+  <div class="breadcrumb">
+  <a routerLink="/home">Trang chủ</a>
+  <span class="separator"> &gt; </span>
+  <span>sản phẩm</span>
+</div>
+
   <h2 *ngIf="products.length > 0">Sản phẩm theo danh mục</h2>
   <div *ngIf="products.length > 0; else noProducts">
     <div class="product-list">
@@ -8,8 +14,8 @@
         <div class="product-image-container">
           <img [src]="product.thumbnail || 'assets/images/default-product.jpg'" alt="{{ product.name }}">
           <div class="product-overlay">
-            <button class="detail-btn"> <i class="fa fa-eye"></i>Xem chi tiết</button>
-            <button class="cart-btn">Thêm vào giỏ hàng</button>
+            <!-- <button class="detail-btn"> <i class="fa fa-eye"></i>Xem chi tiết</button> -->
+            <button class="detail-btn" (click)="onViewDetail(product.productId)"> <i class="fa fa-eye"></i>Xem chi tiết</button>
           </div>
         </div>
         <div class="product-info">

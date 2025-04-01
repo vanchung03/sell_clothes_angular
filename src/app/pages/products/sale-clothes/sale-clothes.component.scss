@@ -1,261 +1,355 @@
-// Variables
-$primary-color: #000;
-$secondary-color: #ff0000;
-$white: #fff;
-$gray-light: #f0f0f0;
-$gray-dark: #999;
-$transition: all 0.3s ease;
+/* Variables */
+$primary-color: #4a4a4a;
+$secondary-color: #f8f8f8;
+$accent-color: #ff385c;
+$accent-color-hover: #e01f45;
+$text-color: #333;
+$light-text: #777;
+$border-color: #eee;
+$success-color: #4caf50;
+$shadow-color: rgba(0, 0, 0, 0.08);
+$transition-default: all 0.3s ease;
 
-// Mixins
-@mixin flex-center {
+/* Main Container */
+.sale-clothes-container {
+  padding: 3rem 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+  color: $text-color;
+}
+
+/* Section Header */
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background-color: $accent-color;
+      border-radius: 2px;
+    }
+  }
+  
+  .section-subtitle {
+    color: $light-text;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+/* Filters Section */
+.filters {
   display: flex;
   justify-content: center;
-  align-items: center;
-}
-
-@mixin hover-transform {
-  transition: transform 0.3s ease;
-  &:hover {
-    transform: translateY(-8px);
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 2.5rem;
+  
+  .filter-btn {
+    background-color: $secondary-color;
+    border: 1px solid $border-color;
+    color: $primary-color;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: $transition-default;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    &:hover {
+      background-color: $primary-color;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px $shadow-color;
+    }
+    
+    i {
+      font-size: 0.8rem;
+    }
   }
 }
 
-.product-section {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.2rem;
+  }
+}
 
-  .product-filters {
-    @include flex-center;
-    gap: 1rem;
-    margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-
-    .filter-btn {
-      padding: 0.8rem 1.5rem;
-      background: transparent;
-      border: 2px solid $primary-color;
-      color: $primary-color;
-      cursor: pointer;
-      transition: $transition;
+/* Product Card */
+.product-card {
+  background-color: white;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: $transition-default;
+  border: none;
+  position: relative;
+  
+  &:hover {
+    // transform: translateY(-10px);
+    // box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    
+    .product-image::before {
+      opacity: 1;
+    }
+    
+    .product-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .product-image {
+    position: relative;
+    overflow: hidden;
+    padding-top: 125%; /* 4:5 Aspect ratio */
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.1) 60%, rgba(0, 0, 0, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+    
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    
+    &:hover img {
+      transform: scale(1.1);
+    }
+  }
+  
+  .discount-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: $accent-color;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .btn-favorite {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: white;
+    color: $light-text;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition-default;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    
+    &:hover, &.active {
+      background-color: $accent-color;
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    &.active {
+      animation: heartbeat 1.2s ease-in-out;
+    }
+    
+    i {
       font-size: 1rem;
+    }
+  }
+  
+  .product-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    // padding: 1rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 2;
+    
+    .action-btn {
+      background-color: white;
+      color: $primary-color;
+      border: none;
+      // border-radius: 2px;
+      padding: 1rem 1rem;
+      font-size: 0.8rem;
       font-weight: 500;
-      border-radius: 25px;
-
+      cursor: pointer;
+      transition: $transition-default;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      
+      i {
+        font-size: 0.9rem;
+      }
+      
       &:hover {
-        background: $primary-color;
-        color: $white;
+        background-color: $accent-color;
+        color: white;
         transform: translateY(-2px);
       }
-    }
-  }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    padding: 1rem 0;
-
-    .product-card {
-      position: relative;
-      background: $white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-      @include hover-transform;
-
-      .product-image {
-        position: relative;
-        overflow: hidden;
-        aspect-ratio: 3/4;
-
-        &::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 100%);
-          opacity: 0;
-          transition: $transition;
-          z-index: 1;
-        }
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-
-        .discount-badge {
-          position: absolute;
-          top: 1rem;
-          left: 1rem;
-          background: $secondary-color;
-          color: $white;
-          padding: 0.5rem 1rem;
-          font-size: 0.9rem;
-          font-weight: 600;
-          border-radius: 20px;
-          z-index: 2;
-          animation: pulse 2s infinite;
-        }
-
-        .hover-actions {
-          position: absolute;
-          bottom: 1.5rem;
-          left: 0;
-          width: 100%;
-          @include flex-center;
-          gap: 1rem;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: $transition;
-          z-index: 2;
-
-          button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            border-radius: 25px;
-            transition: $transition;
-            
-            i {
-              margin-right: 0.5rem;
-            }
-
-            &.detail-btn {
-              background: $primary-color;
-              color: $white;
-
-              &:hover {
-                background: lighten($primary-color, 15%);
-                transform: translateY(-2px);
-              }
-            }
-
-            &.quick-view-btn {
-              background: $white;
-              color: $primary-color;
-
-              &:hover {
-                background: $gray-light;
-                transform: translateY(-2px);
-              }
-            }
-          }
-        }
-      }
-
-      &:hover {
-        .product-image {
-          img {
-            transform: scale(1.1);
-          }
-
-          &::before {
-            opacity: 1;
-          }
-
-          .hover-actions {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      }
-
-      .product-info {
-        padding: 1.5rem 5px 5px 5px;
-        text-align: left;
-
-        .product-name {
-          font-size: 1.1rem;
-          color: $primary-color;
-          font-weight: 600;
-          line-height: 1.4;
-          height: 3rem;
-          overflow: hidden;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-        }
-
-        .product-price {
-          gap: 1rem;
-
-          .current-price {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: $primary-color;
-          }
-
-          .old-price {
-            font-size: 1rem;
-            color: $gray-dark;
-            text-decoration: line-through;
-          }
-        }
-      }
-    }
-  }
-}
-
-// Animations
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-// Responsive Design
-@media (max-width: 1400px) {
-  .product-section .product-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 1024px) {
-  .product-section .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .product-section {
-    padding: 1rem;
-
-    .product-filters .filter-btn {
-      padding: 0.6rem 1rem;
-      font-size: 0.9rem;
-    }
-
-    .product-grid {
-      gap: 1rem;
       
-      .product-card {
-        .product-info {
-          padding: 1rem;
-          
-          .product-name {
-            font-size: 1rem;
-          }
-          
-          .product-price {
-            .current-price {
-              font-size: 1.1rem;
-            }
-            
-            .old-price {
-              font-size: 0.9rem;
-            }
-          }
-        }
+      &.view-details {
+        flex: 1;
+        // margin: 0px 1px;
+        
+      }
+      
+      &.add-to-cart {
+        flex: 1.1;
+        // margin-bottom: 1px;
+        // margin: 0px 1px;
+      }
+    }
+  }
+  
+  .product-info {
+    
+    
+    .product-name {
+      font-weight: 500;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; // ✅ For WebKit browsers (Chrome, Safari)
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 2.8rem;
+      line-clamp: 2; // ✅ Standard property (not fully supported in all browsers)
+      box-orient: vertical; // ✅ Standard property (for potential future support)
+      transition: all 0.3s ease;
+    
+      &:hover {
+        color: $accent-color;
+      }
+    }
+    
+    
+    .product-price {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      
+      .current-price {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: $accent-color;
+      }
+      
+      .old-price {
+        font-size: 0.9rem;
+        text-decoration: line-through;
+        color: $light-text;
+        opacity: 0.8;
       }
     }
   }
 }
 
-@media (max-width: 480px) {
-  .product-section .product-grid {
-    grid-template-columns: 1fr;
+/* No Products Found Message */
+.no-products {
+  text-align: center;
+  padding: 3rem 0;
+  
+  i {
+    font-size: 3rem;
+    color: $light-text;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: $light-text;
+    font-size: 1.1rem;
+  }
+}
+
+/* Animations */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.3);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.3);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+  .sale-clothes-container {
+    padding: 2rem 1rem;
+  }
+  
+  .section-header .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .product-card .product-actions .action-btn span {
+    display: none;
+  }
+  
+  .product-card .product-actions .action-btn {
+    padding: 0.6rem;
+  }
+  
+  .product-card .product-info .product-name {
+    font-size: 0.9rem;
   }
 }

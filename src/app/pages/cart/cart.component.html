@@ -1,66 +1,76 @@
 <app-header></app-header>
-<app-navbar></app-navbar>
 
 <div class="cart-container">
-  <h2 class="cart-title">GIỎ HÀNG CỦA BẠN</h2>
+  <div class="breadcrumb">
+    <a routerLink="/home">Trang chủ</a>
+    <span class="separator"> &gt; </span>
+    <span>Giỏ hàng</span>
+    
+    
+  </div>
+  <!-- Kiểm tra nếu giỏ hàng trống -->
+  <div *ngIf="cartItems.length === 0" class="empty-cart">
+    <i class="fa-solid fa-cart-shopping empty-cart-icon"></i>
+    <p>Giỏ hàng của bạn hiện đang trống.</p>
+    <button class="shop-now-btn" routerLink="/products-card">Mua sắm ngay</button>
+  </div>
 
   <!-- Bảng giỏ hàng -->
-  <div class="cart-table-wrapper">
-    <table class="cart-table">
-      <thead>
-        <tr>
-          <th>Thông tin sản phẩm</th>
-          <th>Đơn giá</th>
-          <th>Số lượng</th>
-          <th>Thành tiền</th>
-          <th>Xóa</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let brand of groupedCart | keyvalue">
-          <!-- Hiển thị tên thương hiệu -->
-          <tr class="brand-header">
-            <td colspan="4">
-              <img [src]="getBrandDetails(brand.value[0].variantId, 'logoUrl')" class="brand-logo" alt="Brand Logo" />
-              <strong>Thương hiệu: {{ brand.key }}</strong>
-            </td>
+  <div *ngIf="cartItems.length > 0">
+    <div class="cart-table-wrapper">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Thông tin sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+            <th>Xóa</th>
           </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let brand of groupedCart | keyvalue">
+            <!-- Hiển thị tên thương hiệu -->
+            <tr class="brand-header">
+              <td colspan="4">
+                <img [src]="getBrandDetails(brand.value[0].variantId, 'logoUrl')" class="brand-logo" alt="Brand Logo" />
+                <strong>Thương hiệu: {{ brand.key }}</strong>
+              </td>
+            </tr>
 
-          <!-- Hiển thị sản phẩm của thương hiệu -->
-          <tr *ngFor="let item of brand.value">
-            <td class="product-info">
-              <img [src]="getVariantDetails(item.variantId, 'imageUrl')" alt="Sản phẩm" class="product-img" />
-              <div>
-                <p class="product-name">Mã {{ item.variantId }}: {{ item.name }}</p>
-                <p><strong>Màu sắc:</strong> {{ getVariantDetails(item.variantId, 'color') }}</p>
-                <p><strong>Size:</strong> {{ getVariantDetails(item.variantId, 'size') }}</p>
-              </div>
-              
-            </td>
-            <td class="price">{{ item.unitPrice | number }}đ</td>
-            <td class="quantity-control">
-              <button (click)="updateQuantity(item, -1)" [disabled]="item.quantity <= 1">-</button>
-              <span>{{ item.quantity }}</span>
-              <button (click)="updateQuantity(item, 1)">+</button>
-            </td>
-            <td class="price">{{ item.totalPrice | number }}đ</td>
-            <td>
-              <button style="border: none; font-size: medium;" class="remove-btn" (click)="removeFromCart(item.cartItemId)"><i class="fa-solid fa-xmark"></i></button>
-            </td>
-          </tr>
-          <!-- Đường nét đứt ngăn cách thương hiệu -->
-          <tr class="brand-divider">
-            <td colspan="4"></td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
+            <!-- Hiển thị sản phẩm của thương hiệu -->
+            <tr *ngFor="let item of brand.value">
+              <td class="product-info">
+                <img [src]="getVariantDetails(item.variantId, 'imageUrl')" alt="Sản phẩm" class="product-img" />
+                <div>
+                  <p class="product-name">Mã {{ item.variantId }}: {{ item.name }}</p>
+                  <p><strong>Màu sắc:</strong> {{ getVariantDetails(item.variantId, 'color') }}</p>
+                  <p><strong>Size:</strong> {{ getVariantDetails(item.variantId, 'size') }}</p>
+                </div>
 
-  <!-- Tổng tiền & Thanh toán -->
-  <div class="cart-summary">
-    <p class="total-amount">Tổng tiền: <span>{{ totalPrice | number }}đ</span></p>
-    <button class="checkout-btn" (click)="checkout()">Thanh toán</button>
+              </td>
+              <td class="price">{{ item.unitPrice | number }}đ</td>
+              <td class="quantity-control">
+                <button (click)="updateQuantity(item, -1)" [disabled]="item.quantity <= 1">-</button>
+                <span>{{ item.quantity }}</span>
+                <button (click)="updateQuantity(item, 1)">+</button>
+              </td>
+              <td class="price">{{ item.totalPrice | number }}đ</td>
+              <td>
+                <button style="border: none; font-size: medium;" class="remove-btn"
+                  (click)="removeFromCart(item.cartItemId)"><i class="fa-solid fa-xmark"></i></button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tổng tiền & Thanh toán -->
+    <div class="cart-summary">
+      <p class="total-amount">Tổng tiền: <span>{{ totalPrice | number }}đ</span></p>
+      <button class="checkout-btn" (click)="checkout()">Thanh toán</button>
+    </div>
   </div>
 </div>
-<app-footer></app-footer>
+<!-- <app-footer></app-footer> -->

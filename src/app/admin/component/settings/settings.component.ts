@@ -6,14 +6,37 @@ import { Component } from '@angular/core';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent {
-  darkMode = false;
+  settings = {
+    notifications: true,
+    pushNotifications: false,
+    timezone: 'GMT+7',
+    language: 'Tiếng Việt'
+  };
 
-  toggleDarkMode() {
-    this.darkMode = !this.darkMode;
-    if (this.darkMode) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
+  timezones = ['GMT-8', 'GMT-5', 'GMT+0', 'GMT+7', 'GMT+9'];
+  languages = ['English', 'Tiếng Việt', 'Français', 'Español'];
+  currentVersion = '1.0.0';
+
+  changePassword() {
+    alert('Chức năng đổi mật khẩu đang phát triển.');
+  }
+
+  enable2FA() {
+    alert('Xác thực hai lớp sẽ được bật.');
+  }
+
+  checkForUpdates() {
+    alert('Bạn đang sử dụng phiên bản mới nhất.');
+  }
+
+  onBannerChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      console.log('Banner selected:', file.name);
     }
+  }
+
+  uploadBanner() {
+    alert('Banner đã được tải lên.');
   }
 }

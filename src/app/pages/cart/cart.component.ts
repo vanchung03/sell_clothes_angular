@@ -49,29 +49,38 @@ export class CartComponent implements OnInit {
   /**
    * 🛒 **Tải giỏ hàng**
    */
-  loadCart() {
-    this.cartService.getCart().subscribe(
-      (data) => {
-        this.cartItems = data.cartItems;
-        this.calculateTotal();
-  
-        // Lấy thông tin biến thể (size, color, image)
-        const variantIds = this.cartItems.map((item) => item.variantId);
-        variantIds.forEach((variantId) => {
-          this.loadProductVariant(variantId);
-          this.loadProductBrand(variantId);
-        });
-  
-        // Chờ một chút để dữ liệu brand được cập nhật
-        setTimeout(() => {
-          this.groupCartByBrand();
-        }, 500);
-      },
-      (error) => {
-        this.toastr.error('Không thể tải giỏ hàng!', 'Lỗi');
+  /**
+ * 🛒 **Tải giỏ hàng**
+ */
+loadCart() {
+  this.cartService.getCart().subscribe(
+    (data) => {
+      this.cartItems = data.cartItems;
+      
+      if (this.cartItems.length === 0) {
+        this.toastr.warning('Giỏ hàng của bạn đang trống!', 'Thông báo');
       }
-    );
-  }
+
+      this.calculateTotal();
+
+      // Lấy thông tin biến thể (size, color, image)
+      const variantIds = this.cartItems.map((item) => item.variantId);
+      variantIds.forEach((variantId) => {
+        this.loadProductVariant(variantId);
+        this.loadProductBrand(variantId);
+      });
+
+      // Chờ một chút để dữ liệu brand được cập nhật
+      setTimeout(() => {
+        this.groupCartByBrand();
+      }, 500);
+    },
+    (error) => {
+      // this.toastr.error('Không thể tải giỏ hàng!', 'Lỗi');
+    }
+  );
+}
+
   
 
   /**

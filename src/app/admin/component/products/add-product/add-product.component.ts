@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
 
 // Services
 import { ProductService } from 'src/app/service/product.service';

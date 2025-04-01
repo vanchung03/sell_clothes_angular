@@ -1,0 +1,67 @@
+<app-header></app-header>
+
+<div class="favorite-products-container">
+  <h2 class="section-title" data-aos="fade-down" data-aos-duration="800">Sản phẩm yêu thích</h2>
+  
+  <!-- Loading spinner -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Đang tải danh sách yêu thích...</span>
+  </div>
+  
+  <!-- Không có sản phẩm -->
+  <div *ngIf="!isLoading && favoriteProducts.length === 0" class="no-products" data-aos="fade-up" data-aos-duration="800">
+    <i class="fas fa-heart-broken"></i>
+    <p>Bạn chưa có sản phẩm nào trong danh sách yêu thích</p>
+    <button class="btn-continue-shopping" (click)="goToShop()">
+      <i class="fas fa-shopping-bag"></i> Tiếp tục mua sắm
+    </button>
+  </div>
+  
+  <!-- Lưới sản phẩm -->
+  <div class="product-grid" *ngIf="!isLoading && favoriteProducts.length > 0">
+    <div class="product-card" *ngFor="let product of favoriteProducts; let i = index" 
+      data-aos="fade-up" 
+      [attr.data-aos-delay]="i * 100" 
+      data-aos-duration="800">
+      
+      <!-- Badge giảm giá nếu có -->
+      <div class="discount-badge" *ngIf="product.salePrice && calculateDiscount(product.price, product.salePrice) > 0">
+        -{{calculateDiscount(product.price, product.salePrice)}}%
+      </div>
+      
+      <!-- Phần ảnh sản phẩm -->
+      <div class="product-image">
+        <img [src]="product.thumbnail || 'assets/images/default-product.jpg'" [alt]="product.name" />
+        
+        <!-- Nút xóa khỏi danh sách yêu thích -->
+        <button class="btn-remove-favorite" (click)="removeFavorite(product.productId)" title="Xóa khỏi yêu thích">
+          <i class="fas fa-heart-broken"></i>
+        </button>
+      </div>
+      
+      <!-- Phần thông tin sản phẩm -->
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        
+        <!-- Giá sản phẩm -->
+        <div class="product-price">
+          <span class="current-price">{{ product.salePrice || product.price | currency:'VND':'symbol':'1.0-0' }}</span>
+          <span class="old-price" *ngIf="product.salePrice">{{ product.price | currency:'VND':'symbol':'1.0-0' }}</span>
+        </div>
+        
+        <!-- Các nút hành động -->
+        <div class="product-actions">
+          <button class="btn btn-view" (click)="viewProductDetail(product.productId)">
+            <i class="fas fa-eye"></i> Xem chi tiết
+          </button>
+          <button class="btn btn-add-cart" (click)="addToCart(product)">
+            <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

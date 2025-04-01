@@ -1,0 +1,167 @@
+<div class="report-container">
+  <div class="report-header">
+    <h2 class="report-title animate__animated animate__fadeIn">Báo cáo doanh thu</h2>
+    
+    <div class="action-panel">
+      <div class="report-type-selector animate__animated animate__fadeIn">
+        <div class="toggle-container">
+          <input type="radio" id="daily" name="reportType" value="daily" [(ngModel)]="reportType" />
+          <label for="daily" class="toggle-btn">Theo ngày</label>
+          
+          <input type="radio" id="monthly" name="reportType" value="monthly" [(ngModel)]="reportType" />
+          <label for="monthly" class="toggle-btn">Theo tháng</label>
+        </div>
+      </div>
+      
+      <div class="export-buttons animate__animated animate__fadeIn">
+        <button class="btn btn-export" (click)="exportToExcel()">
+          <i class="fas fa-file-excel"></i> Xuất Excel
+        </button>
+        <button class="btn btn-export" (click)="exportToPDF()">
+          <i class="fas fa-file-pdf"></i> Xuất PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="report-controls animate__animated animate__fadeIn">
+    <div class="date-picker-container" *ngIf="reportType === 'daily'">
+      <div class="date-input">
+        <label for="fromDate">Từ ngày:</label>
+        <input type="date" id="fromDate" [(ngModel)]="fromDate" class="form-control" />
+      </div>
+      <div class="date-input">
+        <label for="toDate">Đến ngày:</label>
+        <input type="date" id="toDate" [(ngModel)]="toDate" class="form-control" />
+      </div>
+    </div>
+
+    <div class="date-picker-container" *ngIf="reportType === 'monthly'">
+      <div class="date-input month-input">
+        <label for="month">Chọn tháng:</label>
+        <input type="month" id="month" [(ngModel)]="selectedMonth" class="form-control" />
+      </div>
+    </div>
+
+    <button class="btn btn-primary" (click)="getRevenueReport()">
+      <i class="fas fa-chart-line"></i> Tạo báo cáo
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message animate__animated animate__shakeX">
+    <i class="fas fa-exclamation-triangle"></i> {{ errorMessage }}
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="loader">
+      <div class="spinner"></div>
+      <span>Đang tải dữ liệu...</span>
+    </div>
+  </div>
+
+  <div *ngIf="totalRevenue !== null && !loading" class="report-content animate__animated animate__fadeIn">
+    <div class="revenue-summary">
+      <div class="card summary-card">
+        <div class="card-content">
+          <h3>Tổng doanh thu</h3>
+          <div class="total-revenue">{{ totalRevenue | number }} VNĐ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-container">
+      <div class="chart-card">
+        <h3 class="chart-title">
+          <i class="fas fa-chart-bar"></i> Doanh thu theo {{ reportType === 'daily' ? 'ngày' : 'tháng' }}
+        </h3>
+        <div class="chart-content">
+          <ngx-charts-bar-vertical
+            [results]="barChartData"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="false"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            [xAxisLabel]="'Thời gian'"
+            [yAxisLabel]="'Doanh thu (VNĐ)'"
+            [animations]="true">
+          </ngx-charts-bar-vertical>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3 class="chart-title">
+          <i class="fas fa-chart-pie"></i> Doanh thu theo sản phẩm
+        </h3>
+        <div class="chart-content">
+          <ngx-charts-pie-chart
+            [results]="pieChartData"
+            [legend]="true"
+            [legendPosition]="legendPosition"
+            [labels]="true"
+            [doughnut]="true"
+            [animations]="true">
+          </ngx-charts-pie-chart>
+        </div>
+      </div>
+    </div>
+
+    <div class="tables-container">
+      <div class="table-card">
+        <h3 class="table-title">
+          <i class="fas fa-table"></i> Doanh thu theo {{ reportType === 'daily' ? 'ngày' : 'tháng' }}
+        </h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>{{ reportType === 'daily' ? 'Ngày' : 'Tháng/Năm' }}</th>
+                <th class="text-right">Doanh thu (VNĐ)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of (reportType === 'daily' ? dailyRevenueList : monthlyRevenueList); let i = index" 
+                  [ngClass]="{'highlight': i % 2 === 0}"
+                  class="animate__animated animate__fadeIn">
+                <td>{{ reportType === 'daily' ? (item.date | date:'dd/MM/yyyy') : ('Tháng ' + item.month + '/' + item.year) }}</td>
+                <td class="text-right">{{ item.revenue | number }}</td>
+              </tr>
+              <tr *ngIf="(reportType === 'daily' ? dailyRevenueList : monthlyRevenueList).length === 0">
+                <td colspan="2" class="no-data">Không có dữ liệu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <h3 class="table-title">
+          <i class="fas fa-shopping-cart"></i> Doanh thu theo sản phẩm
+        </h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sản phẩm</th>
+                <th class="text-right">Số lượng</th>
+                <th class="text-right">Doanh thu (VNĐ)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of productRevenueList; let i = index" 
+                  [ngClass]="{'highlight': i % 2 === 0}"
+                  class="animate__animated animate__fadeIn">
+                <td>{{ product.productName }}</td>
+                <td class="text-right">{{ product.totalQuantitySold }}</td>
+                <td class="text-right">{{ product.totalRevenue | number }}</td>
+              </tr>
+              <tr *ngIf="productRevenueList.length === 0">
+                <td colspan="3" class="no-data">Không có dữ liệu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

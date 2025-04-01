@@ -7,38 +7,34 @@ import { ProductVariantService } from 'src/app/service/product-variant.service';
 import { PaymentMethodService } from 'src/app/service/payment-method.service';
 import { ToastrService } from 'ngx-toastr';
 import { TokenService } from 'src/app/service/token.service';
-import { UserAddress } from 'src/app/types/user-address';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router';
 import { ShipMethodService } from 'src/app/service/ship-method.service';
 import { ShipMethod } from 'src/app/types/ship-method';
+import { UserAddress } from 'src/app/types/user-address';
+import { initAOS } from 'src/assets/aos-init';
+
+import { VoucherService } from 'src/app/service/voucher.service';
+import { Voucher } from 'src/app/types/voucher'
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-  paymentMethod: string = '';
+  // Dữ liệu giỏ hàng
   cartItems: any[] = [];
   totalPrice: number = 0;
   productVariants: { [variantId: number]: any } = {};
+
+  // Phương thức thanh toán
+  paymentMethod: string = '';
   paymentMethods: any[] = [];
-  userAddresses: UserAddress[] = [];
-  selectedAddressId: number | null = null;
-  showAddressForm: boolean = false;
-  isEditingAddress: boolean = false;
 
-  shippingMethods: ShipMethod[] = [];
-  selectedShippingMethodId: number = 0;
 
-  newAddress: UserAddress = {
-    addressId: 0,
-    userId: 0,
-    addressLine: '',
-    city: '',
-    district: '',
-    ward: '',
-    isDefault: true
-  };
+  voucherCode: string = '';
+  activeVoucher: Voucher | null = null;
+
+
 
   paymentIcons: { [key: string]: string } = {
     'COD': 'https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR-1.png',
@@ -46,7 +42,6 @@ export class CheckoutComponent implements OnInit {
     'vnpay': 'https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR-1.png',
     'paypal': 'https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR-1.png'
   };
-
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
@@ -57,7 +52,8 @@ export class CheckoutComponent implements OnInit {
     private toastr: ToastrService,
     private tokenService: TokenService,
     private router: Router,
-    private shipMethodService: ShipMethodService
+    private shipMethodService: ShipMethodService,
+    private voucherService: VoucherService
   ) { }
 
   ngOnInit(): void {
@@ -65,9 +61,119 @@ export class CheckoutComponent implements OnInit {
     this.loadPaymentMethods();
     this.loadUserAddresses();
     this.loadShippingMethods();
+    initAOS();
   }
 
-  // ✅ Lấy giỏ hàng
+   // Biến hiển thị loading khi xử lý thanh toán
+   isProcessingPayment: boolean = false;
+
+  // Địa chỉ giao hàng
+  userAddresses: UserAddress[] = [];
+  selectedAddressId: number | null = null;
+  showAddressForm: boolean = false;
+  // Thêm biến để toggle danh sách lựa chọn địa chỉ
+  showAddressSelection: boolean = false;
+
+  // Phương thức vận chuyển
+  shippingMethods: ShipMethod[] = [];
+  selectedShippingMethodId: number = 0;
+  // Thêm biến để toggle danh sách lựa chọn phương thức vận chuyển
+  showShippingSelection: boolean = false;
+
+  // Dữ liệu cho form thêm/sửa địa chỉ
+  newAddress: UserAddress = {
+    addressId: 0,
+    userId: 0,
+    addressLine: '',
+    city: '',
+    district: '',
+    ward: '',
+    isDefault: true
+  };
+  applyVoucher() {
+    if (!this.voucherCode.trim()) {
+        this.toastr.warning('Vui lòng nhập mã giảm giá!', 'Thông báo');
+        return;
+    }
+
+    this.voucherService.getVoucherByCode(this.voucherCode).subscribe({
+        next: (voucher) => {
+          
+
+            if (!voucher) {
+                this.toastr.error('Không tìm thấy voucher!', 'Thất bại');
+                return;
+            }
+
+            const expiryDate = new Date(voucher.expiryDate);
+            const currentTime = new Date();
+
+            // ✅ Kiểm tra nếu `voucher.quantity` bằng 0
+            if (voucher.quantity <= 0) {
+                this.toastr.error('Mã giảm giá đã hết số lượng sử dụng!', 'Thất bại');
+                this.activeVoucher = null;
+                return;
+            }
+
+            // ✅ Kiểm tra nếu voucher không hoạt động
+            if (!voucher.active) {
+                this.toastr.error('Mã giảm giá không hợp lệ hoặc đã bị vô hiệu hóa!', 'Thất bại');
+                this.activeVoucher = null;
+                return;
+            }
+
+            // ✅ Kiểm tra hạn sử dụng
+            if (expiryDate.getTime() < currentTime.getTime()) {
+                this.toastr.error('Mã giảm giá đã hết hạn!', 'Thất bại');
+                this.activeVoucher = null;
+                return;
+            }
+
+            // ✅ Nếu tất cả điều kiện hợp lệ, áp dụng voucher
+            this.activeVoucher = voucher;
+            this.toastr.success(`Áp dụng thành công: ${voucher.voucherCode}!`, 'Thành công');
+        },
+        error: (error) => {
+            this.toastr.error('Mã giảm giá không hợp lệ hoặc đã hết số lượng!', 'Thất bại');
+            this.activeVoucher = null;
+        }
+    });
+}
+
+
+  // ✅ Xóa mã giảm giá
+  removeVoucher() {
+    this.activeVoucher = null;
+    this.voucherCode = '';
+  }
+
+  // ✅ Tính số tiền được giảm từ voucher
+  getVoucherDiscount(): number {
+    if (!this.activeVoucher) return 0;
+
+    let discount = 0;
+    if (this.activeVoucher.discountType === 'FIXED_AMOUNT') {
+      discount = this.activeVoucher.discountAmount;
+    } else if (this.activeVoucher.discountType === 'PERCENTAGE') {
+      discount = (this.totalPrice * this.activeVoucher.discountAmount) / 100;
+      if (this.activeVoucher.maxDiscount) {
+        discount = Math.min(discount, this.activeVoucher.maxDiscount);
+      }
+    }
+
+    return Math.min(discount, this.totalPrice);
+  }
+
+  // ✅ Tính tổng giá cuối cùng (Sau giảm giá)
+  getFinalTotal(): number {
+    return this.totalPrice + this.getShippingFee() - this.getVoucherDiscount();
+  }
+
+  goBackToCart(){
+    this.router.navigate(['/cart']);
+  }
+
+  // Lấy giỏ hàng
   loadCart() {
     this.cartService.getCart().subscribe(
       (data) => {
@@ -79,7 +185,15 @@ export class CheckoutComponent implements OnInit {
     );
   }
 
-  //  Lấy thông tin biến thể sản phẩm từ `ProductVariantService`
+  // Tính tổng tiền
+  calculateTotal() {
+    this.totalPrice = this.cartItems.reduce(
+      (sum, item) => sum + (this.getVariantDetails(item.variantId, 'price') * item.quantity),
+      0
+    );
+  }
+
+  // Lấy thông tin biến thể sản phẩm
   loadProductDetails() {
     const variantIds = this.cartItems.map((item) => item.variantId);
     variantIds.forEach((variantId) => {
@@ -109,48 +223,64 @@ export class CheckoutComponent implements OnInit {
       }
     );
   }
+
+  // Lấy phương thức vận chuyển
   loadShippingMethods() {
     this.shipMethodService.getAllShipMethods().subscribe({
       next: (data: ShipMethod[]) => {
+        // console.log("✅ API trả về phương thức vận chuyển:", data);
+        if (!Array.isArray(data) || data.length === 0) {
+          // console.error("API không trả về mảng hợp lệ hoặc rỗng!", data);
+          this.shippingMethods = [];
+          return;
+        }
         this.shippingMethods = data;
+        if (!this.selectedShippingMethodId && this.shippingMethods.length > 0) {
+          this.selectedShippingMethodId = this.shippingMethods[0].ship_method_id;
+        }
       },
       error: (error) => {
-        console.error('Error loading shipping methods:', error);
-        this.toastr.error('Không thể tải phương thức vận chuyển!', 'Lỗi');
+        // console.error("Lỗi khi tải phương thức vận chuyển:", error);
+        this.toastr.error("Không thể tải phương thức vận chuyển!", "Lỗi");
       }
     });
   }
-  selectShippingMethod(methodId: number) {
-    this.selectedShippingMethodId = methodId;
-    console.log('Shipping method selected:', methodId); // Debug log
+
+  selectShippingMethod(method: ShipMethod) {
+    if (!method || !method.ship_method_id) {
+      this.toastr.warning("Phương thức vận chuyển không hợp lệ!", "Thông báo");
+      return;
+    }
+    this.selectedShippingMethodId = method.ship_method_id;
+    this.showShippingSelection = false; // ẩn danh sách sau khi chọn
+    // console.log("🚀 Đã chọn phương thức vận chuyển:", method);
   }
-  // Thêm hàm để lấy phí vận chuyển
+
   getShippingFee(): number {
     const selectedMethod = this.shippingMethods.find(m => m.ship_method_id === this.selectedShippingMethodId);
     return selectedMethod ? selectedMethod.shippingFee : 0;
   }
 
-
-  // ✅ Lấy phương thức thanh toán
+  // Lấy phương thức thanh toán
   loadPaymentMethods() {
     this.paymentMethodService.getAllPaymentMethods().subscribe(
       (data) => {
         this.paymentMethods = data.map(method => ({
           ...method,
-          iconUrl: this.paymentIcons[method.code] || this.paymentIcons['default']
+          iconUrl: this.paymentIcons[method.code] || this.paymentIcons['COD']
         }));
       },
       () => this.toastr.error('Không thể tải phương thức thanh toán!', 'Lỗi')
     );
   }
 
-  //  Lấy danh sách địa chỉ giao hàng
+  // Lấy danh sách địa chỉ giao hàng
   loadUserAddresses() {
     const userId = this.tokenService.getUserId();
     this.userAddressService.getAddressesByUserId(userId).subscribe(
       (data) => {
         if (!Array.isArray(data)) {
-          console.error('Lỗi: API trả về không phải mảng', data);
+          // console.error('Lỗi: API trả về không phải mảng', data);
           this.userAddresses = [];
           return;
         }
@@ -163,16 +293,26 @@ export class CheckoutComponent implements OnInit {
     );
   }
 
-  //  Chọn địa chỉ mặc định
+  // Chọn địa chỉ mặc định
   setDefaultAddress(addressId: number) {
     this.userAddresses.forEach(addr => addr.isDefault = addr.addressId === addressId);
     this.selectedAddressId = addressId;
+    this.showAddressSelection = false; // ẩn danh sách sau khi chọn
   }
 
-  //  Hiển thị form thêm/sửa địa chỉ
-  toggleAddressForm(editing = false, address: UserAddress | null = null) {
+  // Hàm trợ giúp: trả về đối tượng địa chỉ theo ID
+  getAddress(addressId: number): UserAddress | undefined {
+    return this.userAddresses.find(address => address.addressId === addressId);
+  }
+
+  // Hàm trợ giúp: trả về đối tượng phương thức vận chuyển theo ID
+  getShippingMethod(methodId: number): ShipMethod | undefined {
+    return this.shippingMethods.find(method => method.ship_method_id === methodId);
+  }
+
+  // Toggle hiển thị form thêm/sửa địa chỉ
+  toggleAddressForm(editing: boolean = false, address: UserAddress | null = null) {
     this.showAddressForm = !this.showAddressForm;
-    this.isEditingAddress = editing;
     if (editing && address) {
       this.newAddress = { ...address };
     } else {
@@ -187,9 +327,20 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
-  //  Lưu địa chỉ mới / cập nhật địa chỉ
+  // Toggle hiển thị danh sách địa chỉ (để lựa chọn)
+  toggleAddressSelection(): void {
+    this.showAddressSelection = !this.showAddressSelection;
+  }
+
+  // Toggle hiển thị danh sách phương thức vận chuyển (để lựa chọn)
+  toggleShippingSelection(): void {
+    this.showShippingSelection = !this.showShippingSelection;
+  }
+
+  // Lưu địa chỉ mới / cập nhật địa chỉ
   saveAddress() {
-    if (this.isEditingAddress) {
+    if (this.newAddress.addressId && this.userAddresses.find(addr => addr.addressId === this.newAddress.addressId)) {
+      // Cập nhật địa chỉ
       this.userAddressService.updateAddress(this.newAddress.addressId, this.newAddress).subscribe(
         () => {
           this.toastr.success('Cập nhật địa chỉ thành công!');
@@ -199,6 +350,7 @@ export class CheckoutComponent implements OnInit {
         () => this.toastr.error('Lỗi khi cập nhật địa chỉ!')
       );
     } else {
+      // Tạo địa chỉ mới
       this.userAddressService.createAddress(this.newAddress).subscribe(
         () => {
           this.toastr.success('Thêm địa chỉ mới thành công!');
@@ -210,17 +362,12 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
-  //  Tính tổng tiền đơn hàng
-  calculateTotal() {
-    this.totalPrice = this.cartItems.reduce((sum, item) => sum + (this.getVariantDetails(item.variantId, 'price') * item.quantity), 0);
-  }
-
-  //  Lấy thông tin sản phẩm từ productVariants
+  // Lấy thông tin sản phẩm từ productVariants
   getVariantDetails(variantId: number, key: 'size' | 'color' | 'imageUrl' | 'price'): any {
     return this.productVariants[variantId]?.[key] || (key === 'price' ? 0 : 'N/A');
   }
 
-  //  Đặt hàng (Checkout + Thanh toán)
+  // Đặt hàng (Checkout + Thanh toán)
   placeOrder() {
     if (!this.selectedAddressId) {
       this.toastr.warning('Vui lòng chọn địa chỉ giao hàng!', 'Thông báo');
@@ -237,33 +384,56 @@ export class CheckoutComponent implements OnInit {
 
     const userId = this.tokenService.getUserId();
 
-    this.orderService.checkout(userId, this.selectedAddressId, this.selectedShippingMethodId).subscribe(
-      (order) => {
-        this.processPayment(order.orderId);
-      },
-      () => this.toastr.error('Lỗi khi tạo đơn hàng!', 'Thất bại')
-    );
+    // this.orderService.checkout(userId, this.selectedAddressId, this.selectedShippingMethodId,this.activeVoucher?.voucherCode).subscribe(
+    //   (order) => {
+    //     this.processPayment(order.orderId);
+    //   },
+    //   (error) => {
+    //     // console.error("🚨 Lỗi khi tạo đơn hàng:", error);
+    //     this.toastr.error(error.error?.message || 'Lỗi khi tạo đơn hàng!', 'Thất bại');
+    //   }
+    // );
+    this.orderService.checkout(userId, this.selectedAddressId, this.selectedShippingMethodId, this.activeVoucher?.voucherCode)
+      .subscribe({
+        next: (order) => {
+          // Sau khi checkout thành công, gửi email xác nhận đơn hàng
+          this.orderService.sendOrderMail(order.orderId).subscribe({
+            next: () => {
+              this.toastr.success('Email xác nhận đã được gửi đến bạn!');
+            },
+            error: (err) => {
+              this.toastr.error('Lỗi gửi email xác nhận: ' + err);
+            }
+          });
+
+          // Sau đó, xử lý thanh toán
+          this.processPayment(order.orderId);
+        },
+        error: (error) => {
+          this.toastr.error(error.error?.message || 'Lỗi khi tạo đơn hàng!', 'Thất bại');
+        }
+      });
   }
 
-
-
-  //  Xử lý thanh toán
+  // Xử lý thanh toán
   processPayment(orderId: number) {
-    this.paymentService.createPayment(orderId, this.paymentMethod).subscribe(
-      (response) => {
-        // Nếu là thanh toán online, chuyển hướng đến cổng thanh toán
+    // Bắt đầu hiển thị loading
+    this.isProcessingPayment = true;
+
+    this.paymentService.createPayment(orderId, this.paymentMethod).subscribe({
+      next: (response: string) => {
+        // Kết thúc loading
+        this.isProcessingPayment = false;
         if (response.startsWith('http')) {
           window.location.href = response;
         } else {
-          // Chuyển hướng đến trang thông báo
           this.router.navigate(['/payment-result'], { queryParams: { status: 'success' } });
         }
       },
-      () => {
+      error: () => {
+        this.isProcessingPayment = false;
         this.router.navigate(['/payment-result'], { queryParams: { status: 'failed' } });
       }
-    );
+    });
   }
-
-
 }

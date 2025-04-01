@@ -5,8 +5,7 @@
       <div class="header-actions">
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Tìm kiếm sản phẩm</mat-label>
-          <input #searchInput matInput (input)="applyFilter($event)" 
-                 placeholder="Tên, mã sản phẩm..." />
+          <input #searchInput matInput (input)="applyFilter($event)" placeholder="Tên, mã sản phẩm..." />
           <mat-icon matPrefix>search</mat-icon>
           <button mat-icon-button matSuffix (click)="clearSearch(searchInput)">
             <mat-icon>close</mat-icon>
@@ -18,25 +17,54 @@
           <span>Xuất Excel</span>
         </button>
 
-        <button mat-raised-button class="btn-add" color="primary" 
-                [routerLink]="['/add-product']">
-          <mat-icon>add_circle</mat-icon>
+        <mat-menu #addProductMenu="matMenu">
+          <button mat-menu-item [routerLink]="['/add-product']">
+           
+            Thêm sản phẩm (Thủ Công )
+          </button>
+          <button mat-menu-item [routerLink]="['/add-excel-product']">
+            
+            Thêm sản phẩm (Excel)
+          </button>
+          <button mat-menu-item [routerLink]="['/add-excel-product-image']">
+            
+            Nhập ảnh sản phẩm (Excel)
+          </button>
+          <button mat-menu-item [routerLink]="['/add-excel-product-variant']">
+           
+            Nhập biến thể sản phẩm (Excel)
+          </button>
+        </mat-menu>
+        
+        <!-- Nút mở menu -->
+        <button mat-raised-button class="btn-add" color="primary" [matMenuTriggerFor]="addProductMenu">
+          <mat-icon>add</mat-icon>
           <span>Thêm sản phẩm</span>
         </button>
+        
+        
       </div>
     </div>
   </header>
 
   <div class="table-container" data-aos="fade-up" data-aos-delay="200">
-    
+
     <table mat-table [dataSource]="dataSource" class="products-table">
       <!-- Avatar & Info Column -->
       <ng-container matColumnDef="avatarAndInfo">
-        <th mat-header-cell *matHeaderCellDef>Thông tin sản phẩm</th>
+        <th mat-header-cell *matHeaderCellDef><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="lucide lucide-database-backup">
+            <ellipse cx="12" cy="5" rx="9" ry="3" />
+            <path d="M3 12a9 3 0 0 0 5 2.69" />
+            <path d="M21 9.3V5" />
+            <path d="M3 5v14a9 3 0 0 0 6.47 2.88" />
+            <path d="M12 12v4h4" />
+            <path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16" />
+          </svg>Thông tin sản phẩm</th>
         <td mat-cell *matCellDef="let product" class="product-info-cell">
           <div class="product-info">
-            <img [src]="product.thumbnail" [alt]="product.name" 
-                 class="product-image" loading="lazy"/>
+            <img [src]="product.thumbnail" [alt]="product.name" class="product-image" loading="lazy" />
             <div class="info-details">
               <span class="product-id">#{{product.productId}}</span>
               <span class="brand-name">{{getBrandName(product.brandId)}}</span>
@@ -48,7 +76,14 @@
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-icon>label</mat-icon> Tên sản phẩm
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-book-type">
+            <path d="M10 13h4" />
+            <path d="M12 6v7" />
+            <path d="M16 8V6H8v2" />
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+          </svg> Tên sản phẩm
         </th>
         <td mat-cell *matCellDef="let product" class="product-name-cell">
           <strong>{{product.name}}</strong>
@@ -59,7 +94,13 @@
       <!-- Price Info Column -->
       <ng-container matColumnDef="priceInfo">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-icon>payments</mat-icon> Thông tin giá
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-circle-dollar-sign">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+            <path d="M12 18V6" />
+          </svg>Thông tin giá
         </th>
         <td mat-cell *matCellDef="let product" class="price-info-cell">
           <div class="price-container">
@@ -77,13 +118,15 @@
       <!-- Status Column -->
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-icon>toggle_on</mat-icon> Trạng thái
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-toggle-left">
+            <rect width="20" height="12" x="2" y="6" rx="6" ry="6" />
+            <circle cx="8" cy="12" r="2" />
+          </svg> Trạng thái
         </th>
         <td mat-cell *matCellDef="let product">
-          <mat-slide-toggle
-            [checked]="product.status"
-            (change)="updateStatus(product)"
-            [color]="'primary'">
+          <mat-slide-toggle [checked]="product.status" (change)="updateStatus(product)" [color]="'primary'">
             {{product.status ? 'Đang bán' : 'Ngừng bán'}}
           </mat-slide-toggle>
         </td>
@@ -91,35 +134,42 @@
 
       <!-- Actions Column -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Thao tác</th>
+        <th mat-header-cell *matHeaderCellDef><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="lucide lucide-loader-pinwheel">
+            <path d="M22 12a1 1 0 0 1-10 0 1 1 0 0 0-10 0" />
+            <path d="M7 20.7a1 1 0 1 1 5-8.7 1 1 0 1 0 5-8.6" />
+            <path d="M7 3.3a1 1 0 1 1 5 8.6 1 1 0 1 0 5 8.6" />
+            <circle cx="12" cy="12" r="10" />
+          </svg>Thao tác</th>
         <td mat-cell *matCellDef="let product" class="actions-cell">
-          <button mat-icon-button color="primary" 
-                  [routerLink]="['/update-product', product.productId]"
-                  matTooltip="Chỉnh sửa">
-                  <i class="fa-solid fa-file-pen"></i>
+          <button mat-icon-button color="primary" [routerLink]="['/update-product', product.productId]"
+            matTooltip="Chỉnh sửa">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-eye">
+              <path
+                d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
           </button>
-          <button mat-icon-button color="warn"
-                  (click)="onDeleteProduct(product.productId)"
-                  matTooltip="Xóa sản phẩm">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <button mat-icon-button color="accent"
-                  
-                  matTooltip="Xem chi tiết">
-            <mat-icon>visibility</mat-icon>
-          </button>
-        </td>
+          <button mat-icon-button color="warn" (click)="onDeleteProduct(product.productId)" matTooltip="Xóa sản phẩm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-copy-x">
+              <line x1="12" x2="18" y1="12" y2="18" />
+              <line x1="12" x2="18" y1="18" y2="12" />
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+            </svg></button>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-          [class.inactive]="!row.status"
-          data-aos="fade-up"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.inactive]="!row.status" data-aos="fade-up">
+      </tr>
     </table>
 
-    <mat-paginator [pageSize]="5" 
-                   [pageSizeOptions]="[5, 10, 25, 50]"
-                   showFirstLastButtons>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons>
     </mat-paginator>
   </div>
 </div>

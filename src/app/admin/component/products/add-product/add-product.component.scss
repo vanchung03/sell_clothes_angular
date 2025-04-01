@@ -5,211 +5,310 @@
   opacity: 1 !important; 
   transform: none !important;
 }
+// Variables
+$primary-color: #3f51b5;
+$secondary-color: #f5f5f5;
+$accent-color: #ff4081;
+$text-color: #333;
+$border-color: #e0e0e0;
+$success-color: #4caf50;
+$warning-color: #ff9800;
+$error-color: #f44336;
+$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
 
-// ======== Biến màu và thông số cơ bản ========
-$primary: #2c3e50;
-$accent: #27ae60;
-$warning: #f39c12;
-$danger: #e74c3c;
-$info: #3498db;
-$light-bg: #f8f9fa;
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-$card-shadow: 0 2px 12px rgba(0,0,0,0.08);
-$border-radius: 12px;
-$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-// ======== Wrapper chính cho trang Add Product ========
-.add-product-wrapper {
-  padding: 2rem;
-  min-height: 100vh;
-  background: $light-bg;
-  position: relative;
-
-  // Nếu trang Add Product cũng có overlay loading
-  .loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(white, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+@mixin card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: $card-shadow;
+  overflow: hidden;
+  transition: $transition;
+  
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   }
+}
 
-  // Tiêu đề trang
+// Global styles
+.add-product-wrapper {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px;
+  
   .page-header {
-    background: white;
-    padding: 1.5rem;
-    border-radius: $border-radius;
-    box-shadow: $card-shadow;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+    @include flex-between;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid $border-color;
+    
     h2 {
       margin: 0;
       font-size: 1.8rem;
-      color: $primary;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-
+      color: $primary-color;
+      
       i {
-        color: $accent;
+        margin-right: 10px;
+        opacity: 0.8;
       }
     }
+    
+    .header-actions {
+      button {
+        mat-icon {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  
+  form {
+    display: grid;
+    grid-gap: 30px;
+  }
+}
 
-    // Ví dụ nút “Quay lại”
-    .btn-back {
-      padding: 0.8rem 1.5rem;
-      border: none;
-      background: rgba($primary, 0.1);
-      color: $primary;
+// Main content layout - two columns
+.form-section {
+  @include card;
+  margin-bottom: 30px;
+  
+  &.basic-info-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    
+    .info-column {
+      padding: 20px;
+    }
+    
+    .image-column {
+      padding: 20px;
+      background-color: $secondary-color;
+      border-left: 1px solid $border-color;
+    }
+  }
+  
+  mat-card-header {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid $border-color;
+    
+    mat-card-title {
+      font-size: 1.4rem;
+      color: $primary-color;
+      margin: 0;
+      
+      i {
+        margin-right: 10px;
+        opacity: 0.8;
+      }
+    }
+  }
+  
+  mat-card-content {
+    padding: 15px;
+  }
+}
+
+// Form grid layout
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  
+  .full-width {
+    grid-column: 1 / -1;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  .price-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    grid-column: 1 / -1;
+  }
+}
+
+// Image uploader styles
+.thumbnail-upload {
+  grid-column: 1 / -1;
+  margin-bottom: 20px;
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: $text-color;
+  }
+  
+  .upload-zone {
+    height: 200px;
+    width: 100%;
+    border: 2px dashed $border-color;
+    border-radius: 8px;
+    @include flex-center;
+    flex-direction: column;
+    cursor: pointer;
+    transition: $transition;
+    background-color: $secondary-color;
+    
+    &:hover {
+      border-color: $primary-color;
+      background-color: rgba($primary-color, 0.05);
+    }
+    
+    &.has-image {
+      border-style: solid;
+      border-color: $primary-color;
+      
+      img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+      }
+    }
+    
+    .upload-placeholder {
+      text-align: center;
+      color: rgba($text-color, 0.6);
+      
+      i {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+      
+      span {
+        display: block;
+      }
+    }
+  }
+}
+
+// Images gallery
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 20px;
+  margin-bottom: 20px;
+  
+  .image-item {
+    .image-preview {
+      height: 150px;
+      @include flex-center;
+      border: 1px solid $border-color;
       border-radius: 8px;
+      overflow: hidden;
       cursor: pointer;
+      transition: $transition;
+      background-color: $secondary-color;
+      
+      &:hover {
+        border-color: $primary-color;
+      }
+      
+      &.has-image {
+        border-color: $primary-color;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      
+      .upload-placeholder {
+        width: 100%;
+        height: 100%;
+        @include flex-center;
+        
+        i {
+          font-size: 2rem;
+          color: rgba($text-color, 0.5);
+        }
+      }
+    }
+    
+    .image-controls {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      transition: $transition;
-
-      &:hover {
-        background: $primary;
-        color: white;
+      justify-content: space-between;
+      margin-top: 10px;
+      
+      mat-form-field {
+        width: 100%;
+        margin-right: 10px;
+        font-size: 0.9rem;
       }
     }
   }
+}
 
-  // Nội dung chính
-  // Ở ví dụ “Update Product” là .product-update-layout, 
-  // với “Add Product” bạn có thể tương tự: .add-product-layout
-  // Hoặc bạn cứ dùng <mat-card class="form-section"> – tuỳ theo HTML.
+// Variants section
+.variants-container {
+  margin-top: 30px;
   
-  // Mỗi "form-section" (mat-card) => thiết kế chung
-  .form-section {
-    margin-bottom: 2rem;
-    background: white;
-    border-radius: $border-radius;
-    box-shadow: $card-shadow;
-
-    mat-card-header {
-      border-bottom: 1px solid rgba($primary, 0.1);
-
-      mat-card-title {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        color: $primary;
-        font-size: 1.2rem;
-
-        i {
-          color: $accent;
-        }
+  mat-accordion {
+    margin-bottom: 20px;
+    
+    mat-expansion-panel {
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
       }
-    }
-
-    mat-card-content {
-      padding: 1.5rem;
-
-      // Lưới form
-      .form-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-      }
-
-      .thumbnail-upload {
-        grid-column: 2 / -1; // Chiếm cả hàng 
-        width: 300px;
-        label {
-          display: block;
-          margin-bottom: 0.5rem;
-          color: rgba($primary, 0.7);
-          font-weight: 500;
-        }
-
-        .upload-zone {
-          aspect-ratio: 1; // Tỷ lệ 1:1
-          border: 2px dashed #ddd;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: $transition;
-          position: relative;
-          overflow: hidden;
-
-          &:hover {
-            border-color: $accent;
-          }
-
-          &.has-image {
-            border: none;
-            
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              border-radius: 8px;
-            }
-          }
-
-          .upload-placeholder {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            color: #666;
-
-            i {
-              font-size: 2rem;
-            }
-          }
-        }
-      }
-
-      .price-group {
-        display: grid;
-        width: 500px;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-      }
-
-      // Slide toggle => margin-top
-      mat-slide-toggle {
-        margin-top: 1rem;
+      
+      mat-expansion-panel-header {
+        height: 60px;
       }
     }
   }
-
-  // Thư viện ảnh
-  .images-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1rem;
-
-    .image-item {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      padding: 0.5rem;
-
+  
+  .variant-form {
+    padding: 15px 0;
+    
+    .variant-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+    }
+    
+    .variant-image {
+      margin-top: 20px;
+      
       .image-preview {
-        aspect-ratio: 1;
-        border: 2px dashed #ddd;
+        height: 120px;
+        width: 120px;
+        @include flex-center;
+        border: 1px solid $border-color;
         border-radius: 8px;
+        overflow: hidden;
         cursor: pointer;
         transition: $transition;
-        position: relative;
-        overflow: hidden;
-
+        background-color: $secondary-color;
+        
         &:hover {
-          border-color: $accent;
+          border-color: $primary-color;
         }
-
+        
         &.has-image {
-          border: none;
+          border-color: $primary-color;
           
           img {
             width: 100%;
@@ -217,133 +316,84 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             object-fit: cover;
           }
         }
-
+        
         .upload-placeholder {
-          position: absolute;
-          inset: 0;
           display: flex;
+          flex-direction: column;
           align-items: center;
-          justify-content: center;
-          font-size: 1.5rem;
-          color: #666;
-        }
-      }
-
-      .image-controls {
-        margin-top: 0.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-    }
-  }
-
-  // Variants Section
-  .variants-container {
-    mat-expansion-panel {
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-
-      .variant-form {
-        padding: 1rem 0;
-
-        .variant-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1rem;
-        }
-
-        .variant-image {
-          margin: 1rem 0;
-          max-width: 200px;
-
-          .image-preview {
-            aspect-ratio: 1;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: $transition;
-
-            &:hover {
-              border-color: $accent;
-            }
-
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            }
-
-            .upload-placeholder {
-              position: absolute;
-              inset: 0;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              gap: 0.5rem;
-              color: #666;
-
-              i {
-                font-size: 2rem;
-              }
-            }
+          
+          i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: rgba($text-color, 0.5);
           }
-        }
-
-        .variant-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 1rem;
-          padding-top: 1rem;
-          border-top: 1px solid #eee;
-
-          button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
+          
+          span {
+            font-size: 0.8rem;
+            color: rgba($text-color, 0.5);
           }
         }
       }
     }
+    
+    .variant-footer {
+      @include flex-between;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid $border-color;
+    }
   }
+  
+  button {
+    margin-top: 10px;
+  }
+}
 
-  // Nút hành động cuối form
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-    background: white;
-    padding: 1rem;
-    border-radius: $border-radius;
-    box-shadow: $card-shadow;
-
-    button {
-      min-width: 120px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+// Form actions
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+  
+  button {
+    min-width: 150px;
+    
+    mat-icon {
+      margin-right: 8px;
     }
   }
 }
 
-// ======== Utilities ========
-.full-width {
-  width: 100%;
+// Two column layout for the first section
+.basic-info-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+  
+  .left-column {
+    grid-column: 1;
+  }
+  
+  .right-column {
+    grid-column: 2;
+    background-color: $secondary-color;
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 1px solid $border-color;
+    
+    .product-image-section {
+      h3 {
+        margin-top: 0;
+        color: $primary-color;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+    }
+  }
 }
 
-// ======== Responsive ========
-@media (max-width: 768px) {
-  .add-product-wrapper {
-    padding: 1rem;
-  }
-
-  .form-section mat-card-content {
-    padding: 1rem !important;
-  }
+// Animation support
+[data-aos] {
+  transition-duration: 600ms !important;
 }

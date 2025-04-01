@@ -3,43 +3,45 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Role } from '../types/roles';
-import { TokenService } from './token.service'; // Đảm bảo đã có TokenService để lấy token
+import { TokenService } from './token.service';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolesService {
-  private apiUrl = 'http://localhost:8080/api/v1/roles'; // ✅ API endpoint cho roles
+  // Sử dụng các endpoint đã cấu hình cho Roles
+  private ROLES_URLS = environment.API_URLS.ROLES;
 
   constructor(private http: HttpClient, private tokenService: TokenService) {}
 
   // ✅ Lấy danh sách tất cả roles từ backend
   getRoles(): Observable<Role[]> {
-    return this.http.get<Role[]>(`${this.apiUrl}`, { headers: this.getAuthHeaders() })
+    return this.http.get<Role[]>(this.ROLES_URLS.GET_ALL, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   // ✅ Lấy role theo ID
   getRoleById(roleId: number): Observable<Role> {
-    return this.http.get<Role>(`${this.apiUrl}/${roleId}`, { headers: this.getAuthHeaders() })
+    return this.http.get<Role>(this.ROLES_URLS.GET_BY_ID(roleId), { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   // ✅ Thêm role mới
   addRole(roleData: Role): Observable<Role> {
-    return this.http.post<Role>(`${this.apiUrl}`, roleData, { headers: this.getAuthHeaders() })
+    return this.http.post<Role>(this.ROLES_URLS.CREATE, roleData, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   // ✅ Cập nhật role
   updateRole(roleId: number, roleData: Role): Observable<Role> {
-    return this.http.put<Role>(`${this.apiUrl}/${roleId}`, roleData, { headers: this.getAuthHeaders() })
+    return this.http.put<Role>(this.ROLES_URLS.UPDATE(roleId), roleData, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   // ✅ Xóa role
   deleteRole(roleId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${roleId}`, { headers: this.getAuthHeaders() })
+    return this.http.delete<void>(this.ROLES_URLS.DELETE(roleId), { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 

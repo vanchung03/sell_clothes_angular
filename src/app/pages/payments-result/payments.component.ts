@@ -22,19 +22,19 @@ export class PaymentComponent implements OnInit {
 
     if (this.status === 'success') {
       this.toastr.success('Thanh toán thành công! Cảm ơn bạn đã mua hàng 🎉', 'Thành công');
-      setTimeout(() => {
-        this.router.navigate(['/home']); // Chuyển hướng về trang chủ
-      }, 3000);
+      // setTimeout(() => {
+      //   this.router.navigate(['/home']); // Chuyển hướng về trang chủ
+      // }, 3000);
     } else if (this.status === 'cancel') {
       this.toastr.warning('Bạn đã hủy thanh toán. Đơn hàng chưa được xác nhận.', 'Thông báo');
-      setTimeout(() => {
-        this.router.navigate(['/home']); // Chuyển về giỏ hàng
-      }, 3000);
+      // setTimeout(() => {
+      //   this.router.navigate(['/home']); // Chuyển về giỏ hàng
+      // }, 3000);
     } else {
       this.toastr.error('Thanh toán thất bại! Vui lòng thử lại hoặc chọn phương thức khác.', 'Lỗi');
-      setTimeout(() => {
-        this.router.navigate(['/home']); // Chuyển hướng về trang thanh toán
-      }, 3000);
+      // setTimeout(() => {
+      //   this.router.navigate(['/home']); // Chuyển hướng về trang thanh toán
+      // }, 3000);
     }
   }
 }

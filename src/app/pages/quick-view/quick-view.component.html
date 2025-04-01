@@ -1,0 +1,97 @@
+<!-- Quick View Modal -->
+<div class="quick-view-overlay" *ngIf="productId" (click)="closeModal()" [@fadeAnimation]>
+    <div class="quick-view-container" (click)="$event.stopPropagation()" [@slideAnimation] data-aos="zoom-in" data-aos-duration="400">
+      <button class="close-btn" (click)="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="quick-view-content">
+        <!-- Product Images Section -->
+        <div class="quick-view-image">
+          <div class="main-image">
+            <img [src]="selectedImage" alt="{{ product?.name }}" class="product-img">
+          </div>
+          
+          <div class="image-thumbnails">
+            <div 
+              *ngFor="let img of productImages" 
+              class="thumbnail" 
+              [ngClass]="{'active': selectedImage === img.imageUrl}"
+              (click)="onSelectImage(img.imageUrl)"
+            >
+              <img [src]="img.imageUrl" alt="Thumbnail">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Info Section -->
+        <div class="quick-view-info">
+          <h2 class="product-title">{{ product?.name }}</h2>
+          
+          <div class="price-container">
+            <span class="sale-price">{{ product?.salePrice || product?.price | number }}đ</span>
+            <span class="old-price" *ngIf="product?.salePrice">{{ product?.price | number }}đ</span>
+          </div>
+          
+          <div class="product-description">
+            <p>{{ product?.description }}</p>
+          </div>
+          
+          <!-- Color Selection -->
+          <div class="variant-selection">
+            <h3 class="variant-title">Màu sắc</h3>
+            <div class="color-options">
+              <button 
+                *ngFor="let color of uniqueColors" 
+                class="color-btn"
+                [ngClass]="{'active': selectedColor === color}"
+                (click)="onSelectColor(color)"
+              >
+                {{ color }}
+              </button>
+            </div>
+          </div>
+          
+          <!-- Size Selection -->
+          <div class="variant-selection">
+            <h3 class="variant-title">Kích thước</h3>
+            <div class="size-options">
+              <button 
+                *ngFor="let size of uniqueSizes" 
+                class="size-btn"
+                [ngClass]="{'active': selectedSize === size}"
+                (click)="onSelectSize(size)"
+              >
+                {{ size }}
+              </button>
+            </div>
+          </div>
+          
+          <!-- Quantity Controls -->
+          <div class="quantity-control">
+            <h3 class="variant-title">Số lượng</h3>
+            <div class="qty-box">
+              <button class="qty-btn" (click)="onDecreaseQuantity()">-</button>
+              <input type="number" [(ngModel)]="quantity" min="1" max="{{ selectedVariant?.stockQuantity || 1 }}" />
+              <button class="qty-btn" (click)="onIncreaseQuantity()">+</button>
+            </div>
+            <span class="stock-info" *ngIf="selectedVariant">
+              <i class="fas fa-check-circle"></i> Còn {{ selectedVariant.stockQuantity }} sản phẩm
+            </span>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn add-to-cart" (click)="onAddToCart()">
+              <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
+            </button>
+            <!-- Nút yêu thích -->
+<button class="btn-favorite" (click)="toggleFavorite()" [class.active]="product?.isFavorite">
+  <i class="fas" [ngClass]="product?.isFavorite ? 'fa-heart' : 'fa-heart'"></i>
+</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

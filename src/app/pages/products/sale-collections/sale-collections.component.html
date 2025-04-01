@@ -1,21 +1,14 @@
-<div class="product-container">
-  <h2>Danh sách sản phẩm</h2>
-  <div class="product-grid">
-    <div *ngFor="let product of products" class="product-card">
-      <div class="product-image-container">
-        <img 
-          *ngIf="currentImageIndex[product.productId] !== undefined" 
-          [src]="productImages[product.productId]?.[currentImageIndex[product.productId]]?.imageUrl" 
-          alt="Product Image"
-        />
+<div class="collection-section">
+  <h2 class="section-title" data-aos="fade-up">Bộ Sưu Tập</h2>
+  <div class="collection-grid">
+    <div class="collection-card" *ngFor="let collection of collections" data-aos="zoom-in">
+      <div class="collection-image">
+        <img [src]="collection.image" alt="Bộ sưu tập" />
         <div class="overlay">
-          <button class="detail-button"(click)="onViewDetail(product.productId)"> <i class="fa fa-eye"></i>Xem chi tiết</button>
-          <button class="quick-view-button"> <i class="fa fa-eye"></i>Xem nhanh</button>
+          <h3>{{ collection.title }}</h3>
+          <p>{{ collection.description }}</p>
         </div>
       </div>
-      <h3 class="product-name">{{ product.name }}</h3>
-      <p class="product-description">{{ product.description }}</p>
-      <p class="product-price">{{ product.salePrice || product.price | currency :'VND' }}</p>
     </div>
   </div>
 </div>

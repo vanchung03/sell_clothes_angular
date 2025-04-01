@@ -5,9 +5,9 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { PageNotFoundComponent } from './exception/page-not-found.component';
+import { PageNotFoundComponent } from './exception/403';
 // Import MaterialModule
-import { MaterialModule } from './material.module'; 
+import { MaterialModule } from '../assets/material.module'; 
 // Import admin and pages module
 import { AdminModule } from './admin/admin.module';  
 import { PagesModule } from './pages/pages.module';
@@ -21,6 +21,7 @@ import { DatePipe } from '@angular/common';
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+ 
 
   ],
   imports: [

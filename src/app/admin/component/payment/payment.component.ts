@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PaymentService } from 'src/app/service/payment.service';
 import { Payment } from 'src/app/types/payment';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',

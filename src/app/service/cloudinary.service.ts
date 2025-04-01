@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CloudinaryService {
-  private apiUrl = 'http://localhost:8080/api/cloudinary';
+  // Lấy URL từ environment
+  private CLOUDINARY_URLS = environment.API_URLS.CLOUDINARY;
 
   constructor(private http: HttpClient) {}
 
-  // Lấy token từ localStorage (hoặc từ 1 tokenService)
+  // Lấy token từ localStorage hoặc từ 1 TokenService
   private getAuthHeadersWithoutContentType(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -18,29 +20,47 @@ export class CloudinaryService {
     }
     return new HttpHeaders({
       Authorization: `Bearer ${token}`
-      // KHÔNG set Content-Type thủ công, để HttpClient tự set với FormData
+      // Không set Content-Type, để HttpClient tự set với FormData
     });
   }
 
-  // Gửi file lên API /upload-product, nhận về URL
+  // Gửi file lên API /upload-product, nhận về URL ảnh
   uploadProductImage(file: File): Observable<any> {
     const formData = new FormData();
-    formData.append('file', file);  // key = "file" vì server @RequestParam("file")
+    formData.append('file', file);
 
     return this.http.post<any>(
-      `${this.apiUrl}/upload-product`,
+      this.CLOUDINARY_URLS.UPLOAD_PRODUCT,
       formData,
       { headers: this.getAuthHeadersWithoutContentType() }
     );
   }
+
+  // Gửi file lên API /upload-logo-brand, nhận về URL ảnh logo
   uploadLogoImage(file: File): Observable<any> {
     const formData = new FormData();
-    formData.append('file', file);  // key = "file" vì server @RequestParam("file")
+    formData.append('file', file);
 
     return this.http.post<any>(
-      `${this.apiUrl}/upload-logo-brand`,
+      this.CLOUDINARY_URLS.UPLOAD_LOGO,
       formData,
       { headers: this.getAuthHeadersWithoutContentType() }
     );
   }
+
+  uploadFolderImages(files: FileList): Observable<any> {
+    const formData = new FormData();
+    Array.from(files).forEach(file => {
+      console.log("📢 Đang gửi file:", file.name);
+      formData.append('files', file);
+    });
+  
+    return this.http.post<any>(
+      this.CLOUDINARY_URLS.UPLOAD_FOLDER,
+      formData,
+      { headers: this.getAuthHeadersWithoutContentType() }
+    );
+  }
+  
+  
 }

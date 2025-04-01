@@ -1,213 +1,216 @@
+// Import fonts
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
 // Variables
-$primary-color: #5a67d8;
-$secondary-color: #4c51bf;
-$accent-color: #6875f5;
-$text-color: #333;
-$light-text: #666;
-$lighter-text: #999;
-$background-color: #f7fafc;
-$border-color: #e2e8f0;
-$success-color: #48bb78;
-$error-color: #f56565;
-$warning-color: #ed8936;
-$hover-transition: all 0.3s ease;
+$primary-color: #030202;
+$secondary-color: #f5efe8;
+$accent-color: #211b17;
+$dark-color: #413735;
+$light-color: #f9f6f3;
+$danger-color: #e55c5c;
+$success-color: #5cb85c;
+$shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+$border-radius: 8px;
+$font-primary: 'Playfair Display', serif;
+$font-secondary: 'Poppins', sans-serif;
 
 // Mixins
-@mixin card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: $hover-transition;
-  
-  &:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  }
+@mixin flex($direction: row, $justify: flex-start, $align: stretch) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin transition($property: all, $duration: 0.3s) {
+  transition: $property $duration ease-in-out;
 }
 
 @mixin button {
   padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
   border: none;
+  border-radius: $border-radius;
+  font-family: $font-secondary;
+  font-weight: 500;
   cursor: pointer;
-  transition: $hover-transition;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  @include transition;
 }
 
-// Main Styles
+// Base styles
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-secondary;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: $dark-color;
+}
+
+// Container
 .checkout-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px 20px;
-  font-family: 'Segoe UI', 'Roboto', sans-serif;
-  color: $text-color;
-  background-color: $background-color;
-  min-height: 100vh;
+  max-width: 1300px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: $shadow;
   
-  .page-title {
+  .page {
+    font-family: $font-primary;
     text-align: center;
     font-size: 2.5rem;
-    margin-bottom: 2rem;
-    color: $primary-color;
     font-weight: 700;
+    margin-bottom: 30px;
+    color: $primary-color;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    
+    &::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 3px;
+      background-color: $accent-color;
+      margin: 15px auto;
+    }
+  }
+}
+
+// Checkout content (columns layout)
+.checkout-content {
+  @include flex(row, space-between, flex-start);
+  gap: 25px;
+  
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+}
+
+// Common styles for each column
+.checkout-col {
+  flex: 1;
+  min-width: 0;
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  
+  &.col-summary {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+}
+
+// Section styles (address, shipping, payment)
+.form-section {
+  margin-bottom: 30px;
+  border-radius: $border-radius;
+  overflow: hidden;
+  
+  .section-title {
+    font-family: $font-primary;
+    color: $dark-color;
+    padding: 15px 0;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
+    font-weight: 600;
+    border-bottom: 2px solid $secondary-color;
     
     i {
+      margin-right: 10px;
+      color: $primary-color;
+    }
+    
+    .toggle-icon {
+      margin-left: auto;
+      cursor: pointer;
       color: $accent-color;
     }
   }
 }
 
-.checkout-content {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 30px;
-  
-  @media (max-width: 992px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-// Left Side - Checkout Form
-.checkout-form {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.form-section {
-  @include card;
-  padding: 25px;
-  .section-title {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    border-bottom: 1px solid $border-color;
-    padding-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    
-    i {
-      color: $primary-color;
-    }
-  }
-}
-
-// Address List
-.address-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
+// Address styles
+.selected-address, .address-selection {
+  margin-bottom: 15px;
 }
 
 .address-item {
-  border: 1px solid $border-color;
-  border-radius: 8px;
+  @include flex(row, space-between, center);
   padding: 15px;
+  border-radius: $border-radius;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: $hover-transition;
-  
-  &:hover {
-    border-color: $accent-color;
-    transform: translateY(-2px);
-  }
   
   &.selected {
-    border-color: $primary-color;
-    border-width: 2px;
-    background-color: rgba($primary-color, 0.05);
+    border: 2px solid $primary-color;
+    background-color: rgba($primary-color, 0.03);
   }
   
-  .address-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  &:hover {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   }
   
   .address-info {
     flex: 1;
     
-    .address-line {
-      font-weight: 600;
+    div {
       margin-bottom: 5px;
-      
-      i {
-        color: $primary-color;
-        margin-right: 5px;
-      }
-    }
-    
-    .address-location {
-      color: $light-text;
-      margin-bottom: 10px;
-      
-      i {
-        color: $accent-color;
-        margin-right: 5px;
-      }
     }
     
     .default-label {
-      display: inline-flex;
-      align-items: center;
-      background-color: rgba($success-color, 0.15);
-      color: $success-color;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      
-      i {
-        margin-right: 5px;
-      }
+      display: inline-block;
+      padding: 3px 8px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: white;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-top: 5px;
     }
   }
   
-  .address-actions {
-    display: flex;
-    gap: 10px;
+  .edit-btn {
+    background: none;
+    border: none;
+    color: $primary-color;
+    cursor: pointer;
+    font-size: 1rem;
     
-    .edit-btn, .delete-btn {
-      @include button;
-      border: 0;
-      background-color: white;
-      &:hover {
-        color: $primary-color;
-      }
+    &:hover {
+      color: darken($primary-color, 15%);
     }
   }
 }
 
+// Add address button
 .add-address-btn {
   @include button;
-  background-color: white;
-  color: $primary-color;
-  border: 1px dashed $primary-color;
-  padding: 10px 0px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #f6f9ff 100%);
+  border: 1px dashed $accent-color;
+  color: $accent-color;
   width: 100%;
-  
-  &:hover {
-    background-color: rgba($primary-color, 0.05);
-  }
+  padding: 12px;
+  margin: 15px 0;
   
   i {
     margin-right: 8px;
   }
+  
+  &:hover {
+    background-color: $light-color;
+  }
 }
 
-// Address Form
+// Address form
 .address-form {
-  background-color: rgba($primary-color, 0.02);
-  border-radius: 8px;
+  background-color: $light-color;
   padding: 20px;
-  animation: slideDown 0.3s ease;
+  border-radius: $border-radius;
+  margin-top: 15px;
   
   .form-group {
     margin-bottom: 15px;
@@ -215,75 +218,49 @@ $hover-transition: all 0.3s ease;
     label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 600;
-      color: $primary-color;
-      
-      i {
-        margin-right: 5px;
-      }
+      font-weight: 500;
     }
     
     input[type="text"] {
       width: 100%;
-      padding: 12px 15px;
-      border: 1px solid $border-color;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: $hover-transition;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: $border-radius;
       
       &:focus {
-        border-color: $primary-color;
         outline: none;
-        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
       }
     }
-  }
-  
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-  }
-  
-  .checkbox-group {
-    label {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      
-      input[type="checkbox"] {
-        accent-color: $primary-color;
-        width: 16px;
-        height: 16px;
-      }
-      
-      span {
+    
+    &.checkbox-group {
+      label {
         display: flex;
         align-items: center;
+        font-weight: normal;
         
-        i {
-          color: $primary-color;
-          margin-right: 5px;
+        input[type="checkbox"] {
+          margin-right: 10px;
         }
       }
     }
   }
   
   .form-actions {
-    display: flex;
+    @include flex(row, flex-end, center);
     gap: 10px;
     margin-top: 20px;
     
     .cancel-btn {
       @include button;
-      background-color: white;
-      border: 1px solid $border-color;
-      color: $light-text;
-      flex: 1;
+      background-color: transparent;
+      border: 1px solid $dark-color;
+      color: $dark-color;
       
       &:hover {
-        background-color: $border-color;
+        background-color: $dark-color;
+        color: white;
       }
     }
     
@@ -291,393 +268,391 @@ $hover-transition: all 0.3s ease;
       @include button;
       background-color: $primary-color;
       color: white;
-      flex: 2;
       
       &:hover {
-        background-color: $secondary-color;
+        background-color: darken($primary-color, 10%);
       }
     }
   }
 }
 
-// Empty state
-.no-address-message {
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 30px 0;
-    
-    i {
-      font-size: 3rem;
-      color: $lighter-text;
-      margin-bottom: 15px;
-    }
-    
-    p {
-      color: $light-text;
-      margin-bottom: 20px;
-    }
-  }
+// Shipping options
+.shipping-options, .selected-shipping {
+  margin-top: 15px;
 }
 
-// Shipping Options
-.shipping-options {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.shipping-option {
-  display: flex;
-  align-items: center;
+.shipping-option, .payment-option {
+  @include flex(row, flex-start, center);
   padding: 15px;
-  border: 1px solid $border-color;
-  border-radius: 8px;
+  border-radius: $border-radius;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: $hover-transition;
-  
-  &:hover {
-    border-color: $accent-color;
-  }
   
   &.selected {
-    border-color: $primary-color;
-    border-width: 2px;
-    background-color: rgba($primary-color, 0.05);
+    border: 2px solid $primary-color;
+    background-color: rgba($primary-color, 0.03);
   }
   
-  .shipping-radio {
+  &:hover {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .shipping-radio, .payment-radio {
     margin-right: 15px;
     
     input[type="radio"] {
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border: 2px solid $border-color;
-      border-radius: 50%;
-      outline: none;
-      transition: $hover-transition;
-      position: relative;
-      
-      &:checked {
-        border-color: $primary-color;
-        
-        &:after {
-          content: '';
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          background-color: $primary-color;
-          border-radius: 50%;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-      }
+      accent-color: $primary-color;
+      width: 18px;
+      height: 18px;
     }
   }
   
-  .shipping-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    background-color: rgba($primary-color, 0.1);
-    border-radius: 8px;
-    margin-right: 15px;
-    
-    i {
-      color: $primary-color;
-      font-size: 1.2rem;
-    }
-  }
-  
-  .shipping-info {
+  .shipping-info, .payment-info {
     flex: 1;
     
-    .shipping-name {
+    .shipping-name, .payment-name {
       font-weight: 600;
       margin-bottom: 5px;
     }
     
-    .shipping-description {
-      color: $light-text;
+    .shipping-description, .payment-description {
       font-size: 0.9rem;
-    }
-  }
-  
-  .shipping-price {
-    font-weight: 600;
-    color: $primary-color;
-  }
-}
-
-// Payment Options
-.payment-options {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.payment-option {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  border: 1px solid $border-color;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: $hover-transition;
-  
-  &:hover {
-    border-color: $accent-color;
-  }
-  
-  &.selected {
-    border-color: $primary-color;
-    border-width: 2px;
-    background-color: rgba($primary-color, 0.05);
-  }
-  
-  .payment-radio {
-    margin-right: 15px;
-    
-    input[type="radio"] {
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border: 2px solid $border-color;
-      border-radius: 50%;
-      outline: none;
-      transition: $hover-transition;
-      position: relative;
-      
-      &:checked {
-        border-color: $primary-color;
-        
-        &:after {
-          content: '';
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          background-color: $primary-color;
-          border-radius: 50%;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-      }
-    }
-  }
-  
-  .payment-icon-wrapper {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 15px;
-    
-    .payment-icon {
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-    }
-  }
-  
-  .payment-info {
-    flex: 1;
-    
-    .payment-name {
-      font-weight: 600;
-      margin-bottom: 5px;
+      color: rgba($dark-color, 0.7);
     }
     
-    .payment-description {
-      color: $light-text;
-      font-size: 0.9rem;
-    }
-  }
-}
-
-// Right Side - Order Summary
-.order-summary {
-  .summary-section {
-    @include card;
-    padding: 25px;
-    position: sticky;
-    top: 20px;
-  }
-}
-
-// Cart Items
-.cart-items-container {
-  max-height: 350px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-  
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: $border-color;
-    border-radius: 10px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: $accent-color;
-    border-radius: 10px;
-  }
-}
-
-.cart-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.cart-item {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid $border-color;
-  
-  &:last-child {
-    border-bottom: none;
-  }
-  
-  .item-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 15px;
-  }
-  
-  .item-details {
-    flex: 1;
-    
-    .item-name {
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    
-    .item-variant {
-      color: $light-text;
-      font-size: 0.85rem;
-      margin-bottom: 5px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      
-      .variant-size, .variant-color {
-        display: flex;
-        align-items: center;
-        
-        i {
-          margin-right: 5px;
-          color: $accent-color;
-        }
-      }
-    }
-    
-    .item-price {
-      font-weight: 600;
+    .shipping-fee {
+      margin-top: 5px;
+      font-weight: 500;
       color: $primary-color;
     }
   }
-  
-  .item-quantity {
-    .quantity-badge {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: $primary-color;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      font-weight: 600;
-    }
-  }
 }
 
-// Order Note
-.order-note {
-  margin-bottom: 20px;
+// Summary card
+.summary-card {
+  padding: 20px;
   
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: $primary-color;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
   
-  textarea {
-    width: 100%;
-    height: 70px;
-    padding: 12px 15px;
-    border: 1px solid $border-color;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    resize: none;
-    transition: $hover-transition;
+  .cart-items {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 5px;
     
-    &:focus {
-      border-color: $primary-color;
-      outline: none;
-      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    /* Custom scrollbar */
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: $light-color;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 10px;
     }
   }
-}
-
-// Price Summary
-.price-summary {
-  margin-bottom: 25px;
   
-  .price-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px dashed $border-color;
-    font-size: 0.95rem;
+  .cart-item {
+    @include flex(row, flex-start, center);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     
     &:last-child {
       border-bottom: none;
     }
     
-    &.discount {
-      color: $success-color;
+    .item-image {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: $border-radius;
+      margin-right: 15px;
     }
     
-    &.total {
-      border-top: 2px solid $border-color;
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-top: 10px;
-      padding-top: 15px;
-      color: $primary-color;
+    .item-details {
+      flex: 1;
+      
+      .item-name {
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+      
+      .item-variant {
+        font-size: 0.85rem;
+        color: rgba($dark-color, 0.7);
+        margin-bottom: 5px;
+      }
+      
+      .item-price {
+        color: $primary-color;
+        font-weight: 500;
+      }
+    }
+    
+    .item-quantity {
+      font-weight: 500;
     }
   }
 }
 
-// Checkout Button
+// Price summary
+.price-summary {
+  margin: 20px 0;
+  
+  .price-row {
+    @include flex(row, space-between, center);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    &.total {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: $primary-color;
+      padding-top: 15px;
+      margin-top: 5px;
+    }
+  }
+}
+
+// Checkout button
 .checkout-btn {
   @include button;
   background-color: $primary-color;
   color: white;
   width: 100%;
   font-size: 1.1rem;
-  margin-bottom: 15px;
-  height: 54px;
+  padding: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   
-  i {
-    font-size: 1.2rem;
+  &:hover {
+    background-color: darken($primary-color, 10%);
   }
+  
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+// Back to cart link
+.back-to-cart {
+  text-align: center;
+  margin-top: 15px;
+  
+  a {
+    color: $dark-color;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    
+    &:hover {
+      color: $primary-color;
+      text-decoration: underline;
+    }
+    
+    &::before {
+      content: '←';
+      margin-right: 5px;
+    }
+  }
+}
+
+// Add voucher section
+.voucher-section {
+  margin: 20px 0;
+  padding-top: 15px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  
+  .voucher-title {
+    font-weight: 500;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    
+    i {
+      margin-right: 8px;
+      color: $primary-color;
+    }
+  }
+  
+  .voucher-form {
+    @include flex(row, space-between, center);
+    gap: 10px;
+    
+    input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: $border-radius;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+    
+    button {
+      @include button;
+      background-color: $accent-color;
+      color: white;
+      padding: 12px 15px;
+      
+      &:hover {
+        background-color: darken($accent-color, 10%);
+      }
+    }
+  }
+  
+  .active-voucher {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: rgba($success-color, 0.1);
+    border: 1px solid $success-color;
+    border-radius: $border-radius;
+    @include flex(row, space-between, center);
+    
+    .voucher-info {
+      @include flex(row, flex-start, center);
+      
+      i {
+        color: $success-color;
+        margin-right: 10px;
+      }
+    }
+    
+    .remove-voucher {
+      background: none;
+      border: none;
+      color: $danger-color;
+      cursor: pointer;
+    }
+  }
+}
+
+// AOS animations
+[data-aos] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  
+  &.aos-animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+  
+  &.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Custom animations
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+.zoom-in {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Responsive design
+@media (max-width: 992px) {
+  .checkout-content {
+    flex-direction: column;
+  }
+  
+  .checkout-col {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .checkout-container {
+    padding: 15px;
+    margin: 10px;
+  }
+  
+  .voucher-form {
+    flex-direction: column;
+    
+    input, button {
+      width: 100%;
+    }
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+.back-to-cart {
+  display: flex;
+  align-items: center;
+  gap: 8px; // Khoảng cách giữa icon và text
+  // background-color: #918d8d;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  transition: background 0.3s ease;
+
+  mat-icon {
+    font-size: 20px;
+    
+  }
+
+  &:hover {
+    // background-color: #837c77;
+    color: #f3dece;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    color:white;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

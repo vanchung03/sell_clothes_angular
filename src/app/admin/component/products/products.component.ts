@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ProductService } from '../../../service/product.service';
 import { Product } from '../../../types/products';
 import { ToastrService } from 'ngx-toastr';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
 import { Router } from '@angular/router';
 // Thư viện xuất Excel
 import * as XLSX from 'xlsx';

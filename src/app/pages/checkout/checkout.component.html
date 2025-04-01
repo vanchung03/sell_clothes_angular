@@ -1,117 +1,155 @@
 <div class="checkout-container">
-  <h1 class="page-title">Thanh toán</h1>
+  <!-- Logo / Tiêu đề -->
+  <h1 class="page" data-aos="fade-down">SERENITY</h1>
 
   <div class="checkout-content">
-    <!-- Left side - Checkout Form -->
-    <div class="checkout-form">
-      <!-- Shipping Address Section -->
-      <div class="form-section">
+
+    <!-- CỘT 1: Thông tin nhận hàng -->
+    <div class="checkout-col col-address" data-aos="fade-up" data-aos-delay="100">
+      <!-- Phần Thông tin nhận hàng -->
+      <div class="form-section address-section">
         <h2 class="section-title">
-          <i class="fa fa-map-marker"></i> Địa chỉ giao hàng
+          <i class="material-icons">location_on</i>Thông tin nhận hàng
+          <i class="material-icons toggle-icon" (click)="toggleAddressSelection()">
+            {{ showAddressSelection ? 'expand_less' : 'expand_more' }}
+          </i>
         </h2>
 
-        <!-- Address List -->
-        <div class="address-list" *ngIf="userAddresses.length > 0 && !showAddressForm">
-          <div *ngFor="let address of userAddresses" class="address-item"
-            [class.selected]="address.addressId === selectedAddressId" (click)="setDefaultAddress(address.addressId)">
-            <div class="address-content">
-              <div class="address-info">
-                <div>{{ address.addressLine }}</div>
-                <div>{{ address.ward }}, {{ address.district }}, {{ address.city }}</div>
-                <span *ngIf="address.isDefault" class="default-label">Mặc định</span>
+        <!-- Nếu đã chọn địa chỉ và danh sách ẩn -->
+        <div class="selected-address" *ngIf="selectedAddressId && !showAddressSelection">
+          <div class="address-item selected zoom-in">
+            <div class="address-info">
+              <div>{{ getAddress(selectedAddressId)?.addressLine }}</div>
+              <div>
+                {{ getAddress(selectedAddressId)?.ward }},
+                {{ getAddress(selectedAddressId)?.district }},
+                {{ getAddress(selectedAddressId)?.city }}
               </div>
-              <div class="address-actions">
-                <button class="edit-btn" (click)="toggleAddressForm(true, address); $event.stopPropagation()"><i class="fa fa-edit"></i></button>
-              </div>
+              <span *ngIf="getAddress(selectedAddressId)?.isDefault" class="default-label">
+                Mặc định
+              </span>
             </div>
+            <button class="edit-btn"
+              (click)="toggleAddressForm(true, getAddress(selectedAddressId)); $event.stopPropagation()">
+              <i class="fa-solid fa-file-pen"></i>
+            </button>
           </div>
         </div>
 
-        <!-- Add New Address Button -->
-        <div *ngIf="!showAddressForm" class="add-address-btn" (click)="toggleAddressForm()">
-          <i class="fa fa-plus"></i> Thêm địa chỉ mới
+        <!-- Danh sách địa chỉ để chọn (hiển thị khi toggle) -->
+        <div class="address-selection" *ngIf="showAddressSelection">
+          <div *ngFor="let address of userAddresses; let i = index" class="address-item fade-up"
+            [ngClass]="{'active': true, 'selected': address.addressId === selectedAddressId}"
+            [style.animation-delay]="i * 100 + 'ms'" (click)="setDefaultAddress(address.addressId)">
+            <div class="address-info">
+              <div>{{ address.addressLine }}</div>
+              <div>
+                {{ address.ward }}, {{ address.district }}, {{ address.city }}
+              </div>
+              <span *ngIf="address.isDefault" class="default-label">Mặc định</span>
+            </div>
+            <button class="edit-btn" (click)="toggleAddressForm(true, address); $event.stopPropagation()">
+              <i class="fa-solid fa-file-pen"></i>
+            </button>
+          </div>
         </div>
 
-        <!-- Address Form (Add/Edit) -->
-        <div *ngIf="showAddressForm" class="address-form">
+        <!-- Nút thêm địa chỉ mới (ẩn nếu danh sách đang hiển thị) -->
+        <div *ngIf="!showAddressSelection">
+          <button class="add-address-btn" (click)="toggleAddressForm()">
+            <i class="material-icons">add</i> Thêm địa chỉ mới
+          </button>
+        </div>
+
+        <!-- Form Thêm/Sửa Địa chỉ -->
+        <div class="address-form" *ngIf="showAddressForm" [@fadeInOut]>
           <div class="form-group">
             <label for="addressLine">Địa chỉ</label>
             <input type="text" id="addressLine" [(ngModel)]="newAddress.addressLine" placeholder="Số nhà, tên đường">
           </div>
-
           <div class="form-group">
             <label for="city">Thành phố</label>
             <input type="text" id="city" [(ngModel)]="newAddress.city" placeholder="Thành phố">
           </div>
-
           <div class="form-group">
             <label for="district">Quận/Huyện</label>
             <input type="text" id="district" [(ngModel)]="newAddress.district" placeholder="Quận/Huyện">
           </div>
-
           <div class="form-group">
             <label for="ward">Phường/Xã</label>
             <input type="text" id="ward" [(ngModel)]="newAddress.ward" placeholder="Phường/Xã">
           </div>
-
-          <div class="form-group">
+          <div class="form-group checkbox-group">
             <label>
               <input type="checkbox" [(ngModel)]="newAddress.isDefault"> Đặt làm địa chỉ mặc định
             </label>
           </div>
-
           <div class="form-actions">
             <button class="cancel-btn" (click)="toggleAddressForm()">Hủy</button>
             <button class="save-btn" (click)="saveAddress()">Lưu địa chỉ</button>
           </div>
         </div>
-
-        <!-- No Addresses Message -->
-        <div *ngIf="userAddresses.length === 0 && !showAddressForm">
-          <p>Bạn chưa có địa chỉ giao hàng. Vui lòng thêm địa chỉ mới.</p>
-          <button class="add-address-btn" (click)="toggleAddressForm()">
-            <i class="fa fa-plus"></i> Thêm địa chỉ mới
-          </button>
-        </div>
       </div>
-      <div class="form-section">
+    </div>
+
+    <!-- CỘT 2: Vận chuyển + Thanh toán -->
+    <div class="checkout-col col-shipping-payment" data-aos="fade-up" data-aos-delay="200">
+      <!-- Shipping Method Section -->
+      <div class="form-section shipping-section">
         <h2 class="section-title">
-          <i class="fa fa-ship"></i> Phương thức vận chuyển
+          <i class="material-icons">local_shipping</i>Vận chuyển
+          <i class="material-icons toggle-icon" (click)="toggleShippingSelection()">
+            {{ showShippingSelection ? 'expand_less' : 'expand_more' }}
+          </i>
         </h2>
-        <!-- Thay thế phần shipping-options bằng code sau -->
-        <div class="shipping-options">
-          <div *ngFor="let method of shippingMethods" class="shipping-option"
-            [class.selected]="selectedShippingMethodId === method.ship_method_id"
-            (click)="selectShippingMethod(method.ship_method_id)">
+
+        <!-- Nếu đã chọn phương thức vận chuyển và danh sách ẩn -->
+        <div class="selected-shipping" *ngIf="selectedShippingMethodId && !showShippingSelection">
+          <div class="shipping-option selected zoom-in">
+            <div class="shipping-info">
+              <div class="shipping-name">{{ getShippingMethod(selectedShippingMethodId)?.name }}</div>
+              <div class="shipping-description">{{ getShippingMethod(selectedShippingMethodId)?.description }}</div>
+              <div class="shipping-fee">
+                Phí: {{ getShippingMethod(selectedShippingMethodId)?.shippingFee | currency:'VND':'symbol':'1.0-0' }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danh sách phương thức để chọn (hiển thị khi toggle) -->
+        <div class="shipping-options" *ngIf="showShippingSelection">
+          <div *ngFor="let method of shippingMethods; let i = index" class="shipping-option fade-up"
+            [ngClass]="{'active': true, 'selected': selectedShippingMethodId === method.ship_method_id}"
+            [style.animation-delay]="i * 100 + 'ms'" (click)="selectShippingMethod(method)">
             <div class="shipping-radio">
               <input type="radio" [id]="'shipping-' + method.ship_method_id" [value]="method.ship_method_id"
-                [checked]="selectedShippingMethodId === method.ship_method_id"
-                (change)="selectShippingMethod(method.ship_method_id)" name="shippingMethod">
+                [checked]="selectedShippingMethodId === method.ship_method_id" (change)="selectShippingMethod(method)"
+                name="shippingMethod">
             </div>
             <div class="shipping-info">
-              <div class="shipping-name">{{ method.methodName }}</div>
-              <div class="shipping-description">{{ method.description}}</div>
-              <div class="shipping-fee">Phí: {{ method.shippingFee | currency:'VND':'symbol':'1.0-0' }}</div>
+              <div class="shipping-name">{{ method.name }}</div>
+              <div class="shipping-description">{{ method.description }}</div>
+              <div class="shipping-fee">
+                Phí: {{ method.shippingFee | currency:'VND':'symbol':'1.0-0' }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-
       <!-- Payment Method Section -->
-      <div class="form-section">
+      <div class="form-section payment-section">
         <h2 class="section-title">
-          <i class="fa fa-credit-card"></i> Phương thức thanh toán
+          <i class="material-icons">credit_card</i>Thanh toán
         </h2>
-
         <div class="payment-options">
-          <div *ngFor="let method of paymentMethods" class="payment-option"
-            [class.selected]="paymentMethod === method.code" (click)="paymentMethod = method.code">
+          <div *ngFor="let method of paymentMethods; let i = index" class="payment-option fade-up"
+            [ngClass]="{'active': true, 'selected': paymentMethod === method.code}"
+            [style.animation-delay]="i * 100 + 'ms'" (click)="paymentMethod = method.code">
             <div class="payment-radio">
               <input type="radio" [id]="'payment-' + method.code" [value]="method.code" [(ngModel)]="paymentMethod"
                 name="paymentMethod">
             </div>
-            <img *ngIf="method.iconUrl" [src]="method.iconUrl" alt="Payment icon" class="payment-icon">
             <div class="payment-info">
               <div class="payment-name">{{ method.name }}</div>
               <div class="payment-description">{{ method.description }}</div>
@@ -121,14 +159,14 @@
       </div>
     </div>
 
-    <!-- Right side - Order Summary -->
-    <div class="order-summary">
-      <div class="summary-section">
-        <h2 class="section-title">Tóm tắt đơn hàng</h2>
-
+    <!-- CỘT 3: Tóm tắt đơn hàng -->
+    <div class="checkout-col col-summary" data-aos="fade-up" data-aos-delay="300">
+      <div class="summary-card">
+        <h2 class="section-title">Đơn hàng</h2>
         <!-- Cart Items -->
         <div class="cart-items">
-          <div *ngFor="let item of cartItems" class="cart-item">
+          <div *ngFor="let item of cartItems; let i = index" class="cart-item fade-up" [ngClass]="{'active': true}"
+            [style.animation-delay]="i * 100 + 'ms'">
             <img [src]="getVariantDetails(item.variantId, 'imageUrl')" alt="Product image" class="item-image">
             <div class="item-details">
               <div class="item-name">{{ item.productName }}</div>
@@ -136,36 +174,75 @@
                 Size: {{ getVariantDetails(item.variantId, 'size') }},
                 Màu: {{ getVariantDetails(item.variantId, 'color') }}
               </div>
-              <div class="item-price">{{ getVariantDetails(item.variantId, 'price') | currency:'VND':'symbol':'1.0-0' }}
+              <div class="item-price">
+                {{ getVariantDetails(item.variantId, 'price') | currency:'VND':'symbol':'1.0-0' }}
               </div>
             </div>
             <div class="item-quantity">x{{ item.quantity }}</div>
           </div>
         </div>
 
-        <!-- Cập nhật phần price summary để hiển thị phí vận chuyển -->
+        <!-- Voucher Section - NEW -->
+        <div class="voucher-section" data-aos="fade-up">
+          <div class="voucher-title">
+            <i class="material-icons">card_giftcard</i> Mã giảm giá
+          </div>
+          <div class="voucher-form" *ngIf="!activeVoucher">
+            <input type="text" [(ngModel)]="voucherCode" placeholder="Nhập mã giảm giá">
+            <button (click)="applyVoucher()">Áp dụng</button>
+          </div>
+          <div class="active-voucher" *ngIf="activeVoucher">
+            <div class="voucher-info">
+              <i class="material-icons">check_circle</i>
+              <div><b>{{ activeVoucher.voucherCode }}</b></div>
+              <div>Giảm {{ activeVoucher.discountAmount }}
+                {{ activeVoucher.discountType === 'PERCENTAGE' ? '%' : 'VND' }}
+              </div>
+            </div>
+            <button class="remove-voucher" (click)="removeVoucher()">
+              <i class="material-icons">close</i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Price Summary -->
         <div class="price-summary">
           <div class="price-row">
-            <div>Tổng tiền hàng:</div>
+            <div>Tạm tính</div>
             <div>{{ totalPrice | currency:'VND':'symbol':'1.0-0' }}</div>
           </div>
           <div class="price-row">
-            <div>Phí vận chuyển:</div>
+            <div>Phí vận chuyển</div>
             <div>{{ getShippingFee() | currency:'VND':'symbol':'1.0-0' }}</div>
           </div>
+          <!-- Voucher discount - NEW -->
+          <div class="price-row" *ngIf="activeVoucher">
+            <div>Giảm giá</div>
+            <div>-{{ getVoucherDiscount() | currency:'VND':'symbol':'1.0-0' }}</div>
+          </div>
           <div class="price-row total">
-            <div>Tổng thanh toán:</div>
-            <div>{{ totalPrice + getShippingFee() | currency:'VND':'symbol':'1.0-0' }}</div>
+            <div>Tổng cộng</div>
+            <div>{{ getFinalTotal() | currency:'VND':'symbol':'1.0-0' }}</div>
           </div>
         </div>
 
         <!-- Checkout Button -->
-        <button class="checkout-btn"
-          [disabled]="!selectedAddressId || !paymentMethod || selectedShippingMethodId === 0 || cartItems.length === 0"
+        <button class="checkout-btn pulse"
+          [disabled]="!selectedAddressId || !paymentMethod || !selectedShippingMethodId || cartItems.length === 0 || isProcessingPayment"
           (click)="placeOrder()">
-          Đặt hàng
+          ĐẶT HÀNG
+          <span *ngIf="isProcessingPayment" class="spinner"></span>
         </button>
+
+
+        <button mat-button class="back-to-cart" (click)="goBackToCart()">
+          <mat-icon>undo</mat-icon>
+          Quay về giỏ hàng
+        </button>
+
+
       </div>
     </div>
-  </div>
-</div>
+
+  </div> <!-- end .checkout-content -->
+</div> <!-- end .checkout-container -->

@@ -1,32 +1,47 @@
+<!-- slider.component.html -->
 <div class="home-page">
-  <!-- Slider / Banner lớn -->
+  <!-- Slider / Banner lớn với hiệu ứng mới -->
   <div class="home-slider">
-    <div class="slide" *ngFor="let s of slides; let i = index" [class.active]="i === currentSlide"
-      [class.next]="i === getNextSlideIndex()" [class.prev]="i === getPrevSlideIndex()">
+    <div class="slide" *ngFor="let s of slides; let i = index" 
+         [class.active]="i === currentSlide"
+         [class.next]="i === getNextSlideIndex()"
+         [class.prev]="i === getPrevSlideIndex()">
       <img [src]="s.image" [alt]="s.title" />
       <div class="slide-caption">
         <h2>{{ s.title }}</h2>
         <p>{{ s.description }}</p>
-        <button class="action-btn" (click)="onSlideAction(s)">Mua ngay</button>
+        <button class="action-btn" (click)="onSlideAction(s)">{{ s.buttonText }}</button>
       </div>
     </div>
     <div class="slider-controls">
-      <button class="prev-btn" (click)="prevSlide()">&#10094;</button>
+      <button class="prev-btn" (click)="prevSlide()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
       <div class="dots">
-        <span *ngFor="let s of slides; let i = index" [class.active]="i === currentSlide" (click)="goToSlide(i)">
+        <span *ngFor="let s of slides; let i = index" 
+              [class.active]="i === currentSlide" 
+              (click)="goToSlide(i)">
         </span>
       </div>
-      <button class="next-btn" (click)="nextSlide()">&#10095;</button>
+      <button class="next-btn" (click)="nextSlide()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
   </div>
 
-  <!-- Danh mục (Category) -->
-  <div class="category-section container">
-    <h2>Danh mục nổi bật</h2>
-    <div class="category-grid">
-      <div class="category-item" *ngFor="let c of categories">
-        <img [src]="c.image" [alt]="c.name" />
-        <div class="cat-name">{{ c.name }}</div>
+  <!-- Danh mục (Category) với thiết kế mới -->
+  <div class="category-section">
+    <div class="container">
+      <h2>Khám Phá Bộ Sưu Tập</h2>
+      <div class="category-grid">
+        <div class="category-item" *ngFor="let c of categories">
+          <img [src]="c.image" [alt]="c.name" />
+          <div class="cat-name">{{ c.name }}</div>
+        </div>
       </div>
     </div>
   </div>

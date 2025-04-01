@@ -10,9 +10,11 @@ import { Payment } from 'src/app/types/payment';
 import { OrderItem } from 'src/app/types/order-item';
 import { ProductVariantService } from 'src/app/service/product-variant.service';
 import { ProductVariant } from 'src/app/types/product-variant';
-import { initAOS } from 'src/app/aos-init';
+import { initAOS } from 'src/assets/aos-init';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { ShipMethodService } from 'src/app/service/ship-method.service';
+
 
 // =========== Thư viện xuất PDF ============
 import jsPDF from 'jspdf';
@@ -35,14 +37,15 @@ export class OrderDetailComponent implements OnInit {
     private orderItemService: OrderItemService,
     private productVariantService: ProductVariantService,
     private paymentService: PaymentService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private shipMethodService: ShipMethodService
+  ) { }
 
   ngOnInit(): void {
     initAOS();
     const orderId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadOrderDetails(orderId);
-   
+
   }
   getStatusText(status: string | undefined): string {
     if (!status) return 'N/A';
@@ -94,7 +97,15 @@ export class OrderDetailComponent implements OnInit {
 
       // ✅ Lấy địa chỉ giao hàng
       this.addressService.getAddressById(order.addressId).subscribe(address => this.order!.address = address);
-
+      // 5) Lấy ShipMethod
+      this.shipMethodService.getShipMethodById(order.shipMethodId).subscribe({
+        next: (shipMethod) => {
+          order.shipMethod = shipMethod; // 🔥 Gán phương thức vận chuyển
+        },
+        error: (err) => {
+          console.warn('Không thể lấy ShipMethod:', err);
+        }
+      });
       // ✅ Lấy danh sách sản phẩm trong đơn hàng
       this.orderItemService.getOrderItemsByOrderId(orderId).subscribe(items => {
         this.orderItems = items;
@@ -111,12 +122,13 @@ export class OrderDetailComponent implements OnInit {
       this.paymentService.getPaymentByOrderId(orderId).subscribe(payment => this.payment = payment);
     });
   }
-   // ==============================================================
+  // ==============================================================
   // =============== XUẤT EXCEL = 2 SHEET =========================
   // ==============================================================
   exportOrderToExcel(): void {
     if (!this.order) {
       console.warn('Chưa có dữ liệu đơn hàng, không thể xuất Excel!');
+
       return;
     }
     try {
@@ -129,7 +141,7 @@ export class OrderDetailComponent implements OnInit {
       const orderInfo: (string | number)[][] = [
         ['Mã Đơn Hàng', this.order.orderId || 'N/A'],
         ['Trạng Thái', this.getStatusText(this.order.status)],
-        ['Phí Vận Chuyển', this.order.shippingFee ?? 0],
+        ['Phí Vận Chuyển', this.order.shipMethod.shippingFee ?? 0],
         ['Tổng Tiền', this.order.totalAmount ?? 0],
       ];
       // Thêm thông tin khách hàng, địa chỉ
@@ -201,12 +213,12 @@ export class OrderDetailComponent implements OnInit {
         unit: 'px',
         format: 'a4'
       });
-  
+
       // ===== Tiêu đề chung (bỏ dấu) =====
       const title = this.removeVietnameseTones(`Chi Tiết Đơn Hàng #${this.order.orderId}`);
       doc.setFontSize(16);
       doc.text(title, 40, 40);
-  
+
       // =========================================================
       // 1) BẢNG THÔNG TIN ĐƠN HÀNG (Order Info)
       // =========================================================
@@ -223,7 +235,7 @@ export class OrderDetailComponent implements OnInit {
         ],
         [
           this.removeVietnameseTones('Phí Vận Chuyển'),
-          this.removeVietnameseTones(String(this.order.shippingFee ?? 0))
+          this.removeVietnameseTones(String(this.order.shipMethod.shippingFee ?? 0))
         ],
         [
           this.removeVietnameseTones('Tổng Tiền'),
@@ -250,7 +262,7 @@ export class OrderDetailComponent implements OnInit {
           )
         ]
       ];
-  
+
       // Thêm info thanh toán (nếu có)
       if (this.payment) {
         orderInfoData.push(
@@ -272,10 +284,10 @@ export class OrderDetailComponent implements OnInit {
           ]
         );
       }
-  
+
       // Chuyển orderInfoData => body 2 cột
       const orderInfoBody = orderInfoData.map(row => [row[0], row[1]]);
-  
+
       // In bảng "Thông tin đơn hàng" bằng autoTable
       let finalY = 60; // toạ độ Y bắt đầu bảng
       autoTable(doc, {
@@ -289,10 +301,10 @@ export class OrderDetailComponent implements OnInit {
         headStyles: { fillColor: [41, 128, 185], textColor: '#fff' },
         margin: { left: 40, right: 40 }
       });
-  
+
       // Lấy toạ độ Y kết thúc bảng 1, +20 để xuống dưới 1 chút
       finalY = (doc as any).lastAutoTable.finalY + 20;
-  
+
       // =========================================================
       // 2) BẢNG DANH SÁCH SẢN PHẨM (Order Items)
       // =========================================================
@@ -306,7 +318,7 @@ export class OrderDetailComponent implements OnInit {
         this.removeVietnameseTones('Số Lượng'),
         this.removeVietnameseTones('Thành Tiền')
       ]];
-  
+
       const itemBody = this.orderItems.map((item, idx) => [
         this.removeVietnameseTones(String(idx + 1)),
         this.removeVietnameseTones(String(item.variantId)),
@@ -317,7 +329,7 @@ export class OrderDetailComponent implements OnInit {
         this.removeVietnameseTones(String(item.quantity)),
         this.removeVietnameseTones(String(item.totalPrice))
       ]);
-  
+
       autoTable(doc, {
         head: itemHead,
         body: itemBody,
@@ -326,13 +338,13 @@ export class OrderDetailComponent implements OnInit {
         headStyles: { fillColor: [41, 128, 185], textColor: '#fff' },
         margin: { left: 40, right: 40 }
       });
-  
+
       // Lưu file PDF
       const fileName = this.removeVietnameseTones(
         `DonHang_${this.order.orderId}_${new Date().toISOString().slice(0, 10)}.pdf`
       );
       doc.save(fileName);
-  
+
       console.log('Xuất PDF KHÔNG DẤU thành công!');
     } catch (error) {
       console.error('Lỗi khi xuất PDF:', error);
@@ -345,6 +357,6 @@ export class OrderDetailComponent implements OnInit {
       .replace(/đ/g, 'd')
       .replace(/Đ/g, 'D');
   }
-  
-  
+
+
 }

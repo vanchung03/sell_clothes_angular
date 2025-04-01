@@ -1,0 +1,183 @@
+<div class="voucher-container" data-aos="fade-in">
+  <div class="header">
+    <h1>Quản lý Voucher</h1>
+    <div class="actions">
+      <div class="search-box">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="searchVouchers()" 
+          placeholder="Tìm kiếm mã voucher..."
+          data-aos="fade-left"
+        >
+        <i class="fa fa-search"></i>
+      </div>
+      <button class="btn-add" (click)="openModal()" data-aos="fade-left" data-aos-delay="100">
+        <i class="fa fa-plus"></i> Thêm Voucher
+      </button>
+    </div>
+  </div>
+
+  <div class="voucher-list" *ngIf="!isLoading; else loadingTemplate">
+    <div class="empty-state" *ngIf="filteredVouchers.length === 0" data-aos="fade-up">
+      <img src="assets/images/empty.svg" alt="No vouchers found">
+      <p>Không tìm thấy voucher nào. Hãy tạo voucher mới!</p>
+    </div>
+
+    <div class="voucher-grid" *ngIf="filteredVouchers.length > 0">
+      <div class="voucher-card" *ngFor="let voucher of filteredVouchers; let i = index" 
+        [attr.data-aos]="'fade-up'" 
+        [attr.data-aos-delay]="i * 50"
+        (click)="openModal(voucher)">
+        <div class="voucher-header" [ngClass]="{'active': voucher.active, 'inactive': !voucher.active}">
+          <span class="voucher-code">{{voucher.voucherCode}}</span>
+          <span class="status-badge" [ngClass]="{'active': voucher.active, 'inactive': !voucher.active}">
+            {{voucher.active ? 'Hoạt động' : 'Hết hạn'}}
+          </span>
+        </div>
+        <div class="voucher-body">
+          <div class="discount-info">
+            <span class="discount-label">Giảm giá:</span>
+            <span class="discount-value">{{formatDiscount(voucher)}}</span>
+          </div>
+        
+          <div class="expiry-info">
+            <span class="expiry-label">Hết hạn:</span>
+            <span class="expiry-value">{{formatDate(voucher.expiryDate)}}</span>
+          </div>
+          <div class="quantity-info">
+            <span class="quantity-label">Số lượng:</span>
+            <span class="quantity-value">{{voucher.quantity || 'Không có dữ liệu'}}</span> <!-- ✅ Xử lý trường hợp undefined -->
+          </div>
+          
+        </div>
+        <div class="voucher-footer">
+          <button class="btn-edit" (click)="openModal(voucher); $event.stopPropagation()">
+            <i class="fa fa-edit"></i> Sửa
+          </button>
+          <button class="btn-delete" (click)="deleteVoucher(voucher.voucherId, $event)">
+            <i class="fa fa-trash"></i> Xóa
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-container" data-aos="fade-in">
+      <div class="spinner"></div>
+      <p>Đang tải dữ liệu...</p>
+    </div>
+  </ng-template>
+
+  <!-- Modal Form -->
+  <div class="modal-overlay" *ngIf="modalVisible" (click)="closeModal()">
+    <div class="modal-container" data-aos="zoom-in" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{isEditing ? 'Cập nhật Voucher' : 'Thêm Voucher mới'}}</h2>
+        <button class="btn-close" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="voucherForm" (ngSubmit)="saveVoucher()">
+          <div class="form-group">
+            <label for="voucherCode">Mã Voucher *</label>
+            <input 
+              type="text" 
+              id="voucherCode" 
+              formControlName="voucherCode"
+              [ngClass]="{'invalid': voucherForm.get('voucherCode')?.invalid && voucherForm.get('voucherCode')?.touched}"
+            >
+            <div class="error-message" *ngIf="voucherForm.get('voucherCode')?.invalid && voucherForm.get('voucherCode')?.touched">
+              <span *ngIf="voucherForm.get('voucherCode')?.errors?.['required']">Vui lòng nhập mã voucher</span>
+              <span *ngIf="voucherForm.get('voucherCode')?.errors?.['minlength']">Mã voucher phải có ít nhất 3 ký tự</span>
+              <span *ngIf="voucherForm.get('voucherCode')?.errors?.['maxlength']">Mã voucher không được vượt quá 20 ký tự</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="discountType">Loại giảm giá *</label>
+            <select id="discountType" formControlName="discountType">
+              <option value="PERCENTAGE">Theo phần trăm (%)</option>
+              <option value="FIXED_AMOUNT">Số tiền cố định</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="discountAmount">
+              {{voucherForm.get('discountType')?.value === 'PERCENTAGE' ? 'Phần trăm giảm giá (%)' : 'Số tiền giảm giá'}} *
+            </label>
+            <input 
+              type="number" 
+              id="discountAmount" 
+              formControlName="discountAmount"
+              [ngClass]="{'invalid': voucherForm.get('discountAmount')?.invalid && voucherForm.get('discountAmount')?.touched}"
+            >
+            <div class="error-message" *ngIf="voucherForm.get('discountAmount')?.invalid && voucherForm.get('discountAmount')?.touched">
+              <span *ngIf="voucherForm.get('discountAmount')?.errors?.['required']">Vui lòng nhập giá trị giảm giá</span>
+              <span *ngIf="voucherForm.get('discountAmount')?.errors?.['min']">Giá trị giảm giá phải lớn hơn 0</span>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="voucherForm.get('discountType')?.value === 'PERCENTAGE'">
+            <label for="maxDiscount">Giảm tối đa (đ) *</label>
+            <input 
+              type="number" 
+              id="maxDiscount" 
+              formControlName="maxDiscount"
+              [ngClass]="{'invalid': voucherForm.get('maxDiscount')?.invalid && voucherForm.get('maxDiscount')?.touched}"
+            >
+            <div class="error-message" *ngIf="voucherForm.get('maxDiscount')?.invalid && voucherForm.get('maxDiscount')?.touched">
+              <span *ngIf="voucherForm.get('maxDiscount')?.errors?.['required']">Vui lòng nhập giá trị giảm tối đa</span>
+              <span *ngIf="voucherForm.get('maxDiscount')?.errors?.['min']">Giá trị giảm tối đa phải lớn hơn 0</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="expiryDate">Ngày hết hạn *</label>
+            <input 
+              type="date" 
+              id="expiryDate" 
+              formControlName="expiryDate"
+              [ngClass]="{'invalid': voucherForm.get('expiryDate')?.invalid && voucherForm.get('expiryDate')?.touched}"
+            >
+            <div class="error-message" *ngIf="voucherForm.get('expiryDate')?.invalid && voucherForm.get('expiryDate')?.touched">
+              <span *ngIf="voucherForm.get('expiryDate')?.errors?.['required']">Vui lòng chọn ngày hết hạn</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Số lượng voucher *</label>
+            <input 
+              type="number" 
+              id="quantity" 
+              formControlName="quantity"
+              min="1" max="100"
+              [ngClass]="{'invalid': voucherForm.get('quantity')?.invalid && voucherForm.get('quantity')?.touched}"
+            >
+            <div class="error-message" *ngIf="voucherForm.get('quantity')?.invalid && voucherForm.get('quantity')?.touched">
+              <span *ngIf="voucherForm.get('quantity')?.errors?.['required']">Vui lòng nhập số lượng</span>
+              <span *ngIf="voucherForm.get('quantity')?.errors?.['min']">Số lượng tối thiểu là 1</span>
+              <span *ngIf="voucherForm.get('quantity')?.errors?.['max']">Số lượng tối đa là 100</span>
+            </div>
+          </div>
+          
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-container">
+              <input type="checkbox" formControlName="active">
+              <span class="checkmark"></span>
+              Kích hoạt voucher
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="closeModal()">Hủy</button>
+            <button type="submit" class="btn-save" [disabled]="isLoading">
+              <span *ngIf="!isLoading">{{isEditing ? 'Cập nhật' : 'Thêm mới'}}</span>
+              <span *ngIf="isLoading" class="spinner-sm"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
