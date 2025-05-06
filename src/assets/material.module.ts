@@ -49,9 +49,6 @@ import { MatSortModule } from '@angular/material/sort';
     MatOptionModule, 
     MatCheckboxModule, // Thêm module checkbox
     MatChipsModule, // Import MatChipsModule
-    
-    
-
   ]
 })
 export class MaterialModule { }

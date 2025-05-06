@@ -44,6 +44,7 @@
           <th>Ngày đặt</th>
           <th>Hành động</th>
         </tr>
+        
       </thead>
       <tbody>
         <tr 
@@ -57,13 +58,15 @@
           <td [ngClass]="'status-' + order.status.toLowerCase()">
             {{ getStatusLabel(order.status) }}
           </td>
-          <td>{{ parseDate(order.createdAt) }}</td>
+          <td>
+            {{ order.createdAt ? parseDate(order.createdAt) : 'Đang xử lý...' }}
+          </td>          
           <td>
             <button 
               (click)="onViewDetails(order)" 
               class="details-btn" 
               title="Xem chi tiết">
-              <i class="material-icons">visibility</i>Xem Chi Tiết
+              Xem Chi Tiết
             </button>
           </td>
         </tr>
@@ -75,4 +78,5 @@
       Không tìm thấy đơn hàng nào.
     </div>
   </div>
+  <app-chat-box></app-chat-box>
 

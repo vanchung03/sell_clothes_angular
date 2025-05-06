@@ -1,93 +1,29 @@
-<div class="voucher-container" *ngIf="!isLoading; else loadingTemplate">
-  <div class="voucher-header-section" data-aos="fade-down" data-aos-duration="800">
-    <h2><i class="fas fa-ticket-alt"></i> Danh sách mã giảm giá</h2>
-    <p class="subtitle">Sử dụng mã giảm giá để tiết kiệm khi mua sắm</p>
-  </div>
-  
-  <div class="empty-state" *ngIf="vouchers.length === 0" data-aos="fade-up" data-aos-duration="800">
-    <div class="empty-icon">
-      <i class="fas fa-search"></i>
+<!-- Nút mở danh sách voucher -->
+<button class="floating-btn" (click)="toggleVouchers()" data-aos="fade-left">
+  <i class="fas fa-ticket-alt"></i>
+</button>
+
+<!-- Danh sách voucher nhỏ gọn ở góc phải -->
+<div class="voucher-popup" *ngIf="showVouchers" data-aos="fade-left">
+  <div class="voucher-card"
+       *ngFor="let voucher of vouchers; let i = index"
+       [ngClass]="{'expired': !voucher.active || isExpired(voucher.expiryDate) || voucher.quantity === 0}"
+       [attr.data-aos-delay]="i * 50"
+       data-aos="fade-up">
+
+    <div class="code">{{ voucher.voucherCode }}</div>
+    <div class="info">
+      <small>
+        {{ voucher.discountType === 'PERCENTAGE' ? voucher.discountAmount + '%' : formatCurrency(voucher.discountAmount) }}
+        - {{ voucher.quantity > 0 ? 'Còn ' + voucher.quantity : 'Hết lượt' }}
+      </small>
+      <small>
+        {{ isExpired(voucher.expiryDate) ? 'Hết hạn' : 'HSD: ' + (voucher.expiryDate | date:'dd/MM') }}
+      </small>
     </div>
-    <p>Không có voucher nào khả dụng.</p>
-    <button class="refresh-btn" (click)="loadVouchers()">
-      <i class="fas fa-sync-alt"></i> Tải lại
+    <button class="copy-btn" (click)="copyToClipboard(voucher.voucherCode)"
+            [disabled]="!voucher.active || isExpired(voucher.expiryDate) || voucher.quantity === 0">
+      <i class="far fa-copy"></i>
     </button>
   </div>
-  
-  <div class="voucher-grid" *ngIf="vouchers.length > 0">
-    <div class="voucher-card" *ngFor="let voucher of vouchers; let i = index"
-         [ngClass]="{'inactive': !voucher.active || voucher.quantity === 0}"
-         data-aos="zoom-in" 
-         [attr.data-aos-delay]="i * 100"
-         data-aos-duration="800">
-      
-      <div class="voucher-left">
-        <div class="discount-badge" [ngClass]="{
-          'percentage': voucher.discountType === 'PERCENTAGE',
-          'fixed': voucher.discountType === 'FIXED_AMOUNT'
-        }">
-          <span class="discount-amount">
-            {{ voucher.discountType === 'PERCENTAGE' ? voucher.discountAmount + '%' : (voucher.discountAmount | number) + 'đ' }}
-          </span>
-        </div>
-      </div>
-      
-      <div class="voucher-divider">
-        <div class="circle top"></div>
-        <div class="dashed-line"></div>
-        <div class="circle bottom"></div>
-      </div>
-      
-      <div class="voucher-right">
-        <div class="voucher-title">
-          <span class="voucher-code" 
-                [ngClass]="{'expired': !voucher.active || voucher.quantity === 0}">
-            {{ voucher.voucherCode }}
-          </span>
-          
-          <div class="status-indicator" *ngIf="!voucher.active || voucher.quantity === 0 || isExpired(voucher.expiryDate)">
-            <span class="status-badge">Hết hạn</span>
-          </div>
-        </div>
-        
-        <div class="voucher-details">
-          <div class="detail-item" *ngIf="voucher.discountType === 'PERCENTAGE' && voucher.maxDiscount">
-            <i class="fas fa-info-circle"></i>
-            <span>Tối đa: {{ voucher.maxDiscount | number }}đ</span>
-          </div>
-          
-          <div class="detail-item">
-            <i class="fas fa-box-open"></i>
-            <span [ngClass]="{'out-of-stock': voucher.quantity === 0}">
-              {{ voucher.quantity > 0 ? 'Còn ' + voucher.quantity + ' lượt sử dụng' : 'Hết lượt sử dụng' }}
-            </span>
-          </div>
-          
-          <div class="detail-item">
-            <i class="far fa-calendar-alt"></i>
-            <span [ngClass]="{'expired': isExpired(voucher.expiryDate) || !voucher.active}">
-              {{ voucher.active ? (isExpired(voucher.expiryDate) ? 'Hết hạn' : 'HSD: ' + (voucher.expiryDate | date: 'dd/MM/yyyy')) : 'Hết hạn' }}
-            </span>
-          </div>
-        </div>
-        
-        <div class="voucher-actions">
-          <button class="copy-btn" 
-                  (click)="copyToClipboard(voucher.voucherCode)"
-                  [disabled]="!voucher.active || voucher.quantity === 0">
-            <i class="far fa-copy"></i> Sao chép mã
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-
-<ng-template #loadingTemplate>
-  <div class="loading-container" data-aos="fade">
-    <div class="loading-icon">
-      <i class="fas fa-spinner fa-spin"></i>
-    </div>
-    <p>Đang tải danh sách voucher...</p>
-  </div>
-</ng-template>

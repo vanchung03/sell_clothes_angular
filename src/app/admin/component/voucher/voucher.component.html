@@ -1,4 +1,4 @@
-<div class="voucher-container" data-aos="fade-in">
+<div class="voucher-container">
   <div class="header">
     <h1>Quản lý Voucher</h1>
     <div class="actions">
@@ -18,48 +18,49 @@
     </div>
   </div>
 
-  <div class="voucher-list" *ngIf="!isLoading; else loadingTemplate">
+  <div class="voucher-table-container" *ngIf="!isLoading; else loadingTemplate">
     <div class="empty-state" *ngIf="filteredVouchers.length === 0" data-aos="fade-up">
       <img src="assets/images/empty.svg" alt="No vouchers found">
       <p>Không tìm thấy voucher nào. Hãy tạo voucher mới!</p>
     </div>
 
-    <div class="voucher-grid" *ngIf="filteredVouchers.length > 0">
-      <div class="voucher-card" *ngFor="let voucher of filteredVouchers; let i = index" 
-        [attr.data-aos]="'fade-up'" 
-        [attr.data-aos-delay]="i * 50"
-        (click)="openModal(voucher)">
-        <div class="voucher-header" [ngClass]="{'active': voucher.active, 'inactive': !voucher.active}">
-          <span class="voucher-code">{{voucher.voucherCode}}</span>
-          <span class="status-badge" [ngClass]="{'active': voucher.active, 'inactive': !voucher.active}">
-            {{voucher.active ? 'Hoạt động' : 'Hết hạn'}}
-          </span>
-        </div>
-        <div class="voucher-body">
-          <div class="discount-info">
-            <span class="discount-label">Giảm giá:</span>
-            <span class="discount-value">{{formatDiscount(voucher)}}</span>
-          </div>
-        
-          <div class="expiry-info">
-            <span class="expiry-label">Hết hạn:</span>
-            <span class="expiry-value">{{formatDate(voucher.expiryDate)}}</span>
-          </div>
-          <div class="quantity-info">
-            <span class="quantity-label">Số lượng:</span>
-            <span class="quantity-value">{{voucher.quantity || 'Không có dữ liệu'}}</span> <!-- ✅ Xử lý trường hợp undefined -->
-          </div>
-          
-        </div>
-        <div class="voucher-footer">
-          <button class="btn-edit" (click)="openModal(voucher); $event.stopPropagation()">
-            <i class="fa fa-edit"></i> Sửa
-          </button>
-          <button class="btn-delete" (click)="deleteVoucher(voucher.voucherId, $event)">
-            <i class="fa fa-trash"></i> Xóa
-          </button>
-        </div>
-      </div>
+    <div class="table-responsive" *ngIf="filteredVouchers.length > 0" data-aos="fade-up">
+      <table class="voucher-table">
+        <thead>
+          <tr>
+            <th>Mã Voucher</th>
+            <th>Giảm giá</th>
+            <th>Ngày hết hạn</th>
+            <th>Số lượng</th>
+            <th>Trạng thái</th>
+            <th class="actions-column">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let voucher of filteredVouchers; let i = index" 
+              [attr.data-aos]="'fade-up'" 
+              [attr.data-aos-delay]="i * 50"
+              [ngClass]="{'expired-row': !voucher.active}">
+            <td class="voucher-code">{{voucher.voucherCode}}</td>
+            <td>{{formatDiscount(voucher)}}</td>
+            <td>{{formatDate(voucher.expiryDate)}}</td>
+            <td>{{voucher.quantity || 'Không có dữ liệu'}}</td>
+            <td>
+              <span class="status-badge" [ngClass]="{'active': voucher.active, 'inactive': !voucher.active}">
+                {{voucher.active ? 'Hoạt động' : 'Hết hạn'}}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <button class="btn-action btn-edit" (click)="openModal(voucher)" title="Sửa">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn-action btn-delete" (click)="deleteVoucher(voucher.voucherId, $event)" title="Xóa">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -144,6 +145,7 @@
               <span *ngIf="voucherForm.get('expiryDate')?.errors?.['required']">Vui lòng chọn ngày hết hạn</span>
             </div>
           </div>
+          
           <div class="form-group">
             <label for="quantity">Số lượng voucher *</label>
             <input 
@@ -159,7 +161,6 @@
               <span *ngIf="voucherForm.get('quantity')?.errors?.['max']">Số lượng tối đa là 100</span>
             </div>
           </div>
-          
 
           <div class="form-group checkbox-group">
             <label class="checkbox-container">

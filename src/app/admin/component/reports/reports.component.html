@@ -59,6 +59,47 @@
     </div>
   </div>
 
+  <div class="table-card">
+    <h3 class="table-title">
+      <i class="fas fa-list"></i>
+      Danh sách đơn hàng
+    </h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Mã đơn</th>
+            <th>Mã user</th>
+            <th>Danh sách Item</th>
+            <th>Ngày tạo</th>
+            <th class="text-right">Số tiền (VNĐ)</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let order of orders; let i = index"
+            [ngClass]="{'highlight': i % 2 === 0}"
+            class="animate__animated animate__fadeIn"
+          >
+            <td>{{ order.orderId }}</td>
+            <td>{{ order.userId }}</td>
+            <td>{{ order.orderItems?.length || 0 }} sản phẩm</td>
+            <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td class="text-right">{{ order.totalAmount | number }}</td>
+            <td>{{ order.status }}</td>
+          </tr>
+          <tr *ngIf="orders.length === 0">
+            <td colspan="6" class="no-data">
+              Không có đơn hàng nào
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+
   <div *ngIf="totalRevenue !== null && !loading" class="report-content animate__animated animate__fadeIn">
     <div class="revenue-summary">
       <div class="card summary-card">

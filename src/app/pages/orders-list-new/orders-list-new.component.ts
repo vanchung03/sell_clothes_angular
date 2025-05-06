@@ -30,7 +30,7 @@ export class OrdersListNewComponent implements OnInit {
   constructor(private orderService: OrderService,
     private router: Router,
     private shipMethodService: ShipMethodService // ���️ import
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchOrdersByUser();
@@ -61,57 +61,61 @@ export class OrdersListNewComponent implements OnInit {
   }
 
   // Lấy danh sách đơn hàng của người dùng
-    // Gọi API lấy đơn hàng
-    fetchOrdersByUser(): void {
-      this.isLoading = true;
-      this.orderService.getOrdersByUser().subscribe({
-        next: (response) => {
-          this.orders = response.map(order => {
-            return {
-              ...order,
-              createdAt: order.createdAt ? new Date(order.createdAt) : new Date()
-            };
-          });
-  
-          // GỌI shipMethodService CHO MỖI ĐƠN HÀNG
-          this.orders.forEach(order => {
-            if (order.shipMethodId) {
-              // Lấy thông tin shipMethod
-              this.shipMethodService.getShipMethodById(order.shipMethodId).subscribe({
-                next: (method) => {
-                  order.shipMethod = method;
-                },
-                error: (err) => {
-                }
-              });
-            } else {
-              order.shipMethod.name = 'Không có';
-            }
-          });
-  
-          // Lưu mảng filteredOrders
-          this.filteredOrders = this.orders;
-          this.isLoading = false;
-        },
-        error: (error) => {
-          this.errorMessage = 'Không thể tải danh sách đơn hàng. Vui lòng thử lại sau.';
-          this.isLoading = false;
-          console.error('Lỗi khi tải đơn hàng:', error);
-        }
-      });
-    }
+  // Gọi API lấy đơn hàng
+  fetchOrdersByUser(): void {
+    this.isLoading = true;
+    this.orderService.getOrdersByUser().subscribe({
+      next: (response) => {
+        this.orders = response.map(order => {
+          const createdAt = order.createdAt ? new Date(order.createdAt) : new Date();
+          const isValid = !isNaN(createdAt.getTime());
+          console.log('🧾 Order:', order.orderId, '| createdAt:', order.createdAt, '| Parsed:', createdAt, '| Valid:', isValid);
+        
+          return {
+            ...order,
+            createdAt: isValid ? createdAt : null
+          };
+        });
+        
+        // GỌI shipMethodService CHO MỖI ĐƠN HÀNG
+        this.orders.forEach(order => {
+          if (order.shipMethodId) {
+            // Lấy thông tin shipMethod
+            this.shipMethodService.getShipMethodById(order.shipMethodId).subscribe({
+              next: (method) => {
+                order.shipMethod = method;
+              },
+              error: (err) => {
+              }
+            });
+          } else {
+            order.shipMethod.name = 'Không có';
+          }
+        });
+
+        // Lưu mảng filteredOrders
+        this.filteredOrders = this.orders;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = 'Không thể tải danh sách đơn hàng. Vui lòng thử lại sau.';
+        this.isLoading = false;
+        console.error('Lỗi khi tải đơn hàng:', error);
+      }
+    });
+  }
   // Lọc đơn hàng theo mã và trạng thái
   filterOrders(): void {
     const code = this.orderCode.toLowerCase().trim();
     this.filteredOrders = this.orders.filter((order) => {
       // Kiểm tra trạng thái
-      const matchesStatus = 
-        this.selectedStatus === 'TẤT CẢ' || 
+      const matchesStatus =
+        this.selectedStatus === 'TẤT CẢ' ||
         this.getStatusLabel(order.status).toUpperCase() === this.selectedStatus;
 
       // Kiểm tra mã đơn hàng
-      const matchesCode = code 
-        ? order.orderId.toString().toLowerCase().includes(code) 
+      const matchesCode = code
+        ? order.orderId.toString().toLowerCase().includes(code)
         : true;
 
       return matchesStatus && matchesCode;
@@ -131,46 +135,52 @@ export class OrdersListNewComponent implements OnInit {
 
   // Xem chi tiết đơn hàng
   onViewDetails(order: Order) {
-  this.router.navigate(['/order-details-new', order.orderId]);
-}
+    this.router.navigate(['/order-details-new', order.orderId]);
+  }
 
 
-  // Định dạng ngày tháng
   parseDate(dateStr: any): string {
-    if (!dateStr) return 'Không có';
-
+    if (!dateStr) {
+      console.warn('⚠️ dateStr is null or undefined');
+      return 'Không có';
+    }
+  
     try {
       let date: Date;
-      
-      // Xác định kiểu dữ liệu ngày
-      if (dateStr instanceof Date) {
+  
+      if (Array.isArray(dateStr) && dateStr.length >= 6) {
+        // Dạng [2025, 4, 16, 2, 22, 21, ...]
+        const [year, month, day, hour, minute, second] = dateStr;
+        date = new Date(year, month - 1, day, hour, minute, second);
+      } else if (dateStr instanceof Date) {
         date = dateStr;
-      } else if (typeof dateStr === 'string') {
-        date = new Date(dateStr);
-      } else if (typeof dateStr === 'number') {
+      } else if (typeof dateStr === 'string' || typeof dateStr === 'number') {
         date = new Date(dateStr);
       } else {
-        console.warn('Không hỗ trợ kiểu dữ liệu date:', dateStr);
+        console.warn('❌ Không hỗ trợ kiểu dữ liệu date:', dateStr);
         return 'Không xác định';
       }
-
-      // Kiểm tra ngày hợp lệ
+  
       if (isNaN(date.getTime())) {
-        console.warn('Giá trị ngày không hợp lệ:', dateStr);
+        console.warn('❌ Giá trị ngày không hợp lệ:', dateStr);
         return 'Không hợp lệ';
       }
-
-      // Định dạng ngày theo dd/mm/yyyy HH:mm
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const year = date.getFullYear();
+  
+      const dayStr = date.getDate().toString().padStart(2, '0');
+      const monthStr = (date.getMonth() + 1).toString().padStart(2, '0');
+      const yearStr = date.getFullYear();
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
-
-      return `${day}/${month}/${year} ${hours}:${minutes}`;
+      const seconds = date.getSeconds().toString().padStart(2, '0');
+  
+      const formatted = `${dayStr}/${monthStr}/${yearStr} ${hours}:${minutes}:${seconds}`;
+      console.log('✅ Định dạng thành công:', dateStr, '→', formatted);
+      return formatted;
     } catch (error) {
-      console.error('Lỗi khi định dạng ngày:', error);
+      console.error('❌ Lỗi khi định dạng ngày:', dateStr, '| Error:', error);
       return 'Lỗi';
     }
   }
+  
+  
 }

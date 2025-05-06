@@ -12,43 +12,37 @@ import * as AOS from 'aos';
 export class VoucherListComponent implements OnInit {
   vouchers: Voucher[] = [];
   isLoading = false;
+  showVouchers = false;
 
   constructor(
-    private voucherService: VoucherService, 
+    private voucherService: VoucherService,
     private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    // Khởi tạo hiệu ứng AOS
-    AOS.init({
-      once: true,
-      offset: 100,
-      duration: 800,
-      easing: 'ease-in-out',
-      delay: 100,
-    });
-    
-    this.loadVouchers();
+    AOS.init({ once: true, offset: 100, duration: 800, easing: 'ease-in-out', delay: 100 });
+  }
+
+  toggleVouchers(): void {
+    this.showVouchers = !this.showVouchers;
+    if (this.showVouchers && this.vouchers.length === 0) {
+      this.loadVouchers();
+    }
+    setTimeout(() => AOS.refresh(), 300);
   }
 
   loadVouchers(): void {
     this.isLoading = true;
     this.voucherService.getAllVouchers().subscribe({
       next: (data) => {
-        // Sắp xếp voucher: đang hoạt động trước, sắp hết hạn kế tiếp
         this.vouchers = data.sort((a, b) => {
-          // Ưu tiên voucher đang hoạt động
           if (a.active && !b.active) return -1;
           if (!a.active && b.active) return 1;
-          
-          // Nếu cả hai đều hoạt động, ưu tiên theo thời gian hết hạn
           if (a.active && b.active) {
             return new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime();
           }
-          
           return 0;
         });
-        
         this.isLoading = false;
         setTimeout(() => AOS.refresh(), 500);
       },
@@ -63,9 +57,7 @@ export class VoucherListComponent implements OnInit {
   copyToClipboard(voucherCode: string): void {
     navigator.clipboard.writeText(voucherCode).then(() => {
       this.toastr.success(`Đã sao chép mã: ${voucherCode}`, 'Thành công', {
-        timeOut: 2000,
-        positionClass: 'toast-bottom-right',
-        progressBar: true
+        timeOut: 2000, positionClass: 'toast-bottom-right', progressBar: true
       });
     }).catch((error) => {
       console.error('Lỗi khi sao chép:', error);
@@ -77,11 +69,7 @@ export class VoucherListComponent implements OnInit {
     return new Date(expiryDate).getTime() < new Date().getTime();
   }
 
-  // Định dạng số tiền
   formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('vi-VN', { 
-      style: 'currency', 
-      currency: 'VND' 
-    }).format(amount);
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   }
 }

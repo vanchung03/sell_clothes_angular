@@ -31,7 +31,8 @@ import { QuickViewComponent } from './quick-view/quick-view.component';
 import { PolicyStoreComponent } from './home/components/policy-store/policy-store.component';
 import { FavoriteComponent } from './favorite/favorite.component';
 import { ReviewsComponent } from './reviews/reviews.component';
-import { ChatFloatingComponent } from './home/components/chat-floating/chat-floating.component';
+import { ChatBoxComponent } from './home/components/chat-box/chat-box.component';
+
 
 @NgModule({
   declarations: [HomeComponent, PaymentComponent, HeaderComponent, SaleProductsComponent, ProductDetailComponent, SliderComponent, TopBarComponent, DropdownMenuComponent, SaleCollectionsComponent, SaleClothesComponent, FooterComponent, CartComponent,
@@ -48,13 +49,17 @@ import { ChatFloatingComponent } from './home/components/chat-floating/chat-floa
      PolicyStoreComponent,
      FavoriteComponent,
      ReviewsComponent,
-     ChatFloatingComponent
+     ChatBoxComponent,
+
+
+
     ],
   imports: [
     CommonModule,
     PagesRoutingModule,
     FormsModule,  // Import FormsModule để sử dụng form controls
     MaterialModule,  // Import MaterialModule
+   
   ],
 })
 export class PagesModule { }

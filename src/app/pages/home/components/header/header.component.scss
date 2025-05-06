@@ -8,6 +8,7 @@ $border-color: #ddd;
 
 // Main Navigation Styles
 .navbar-header {
+  border-top: 1.5px solid $secondary-color;
   width: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky; /* hoặc fixed */

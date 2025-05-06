@@ -60,7 +60,8 @@ $shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 .brand-container {
-  padding: 30px;
+  padding: 50px ;
+  
   max-width: 100%;
   margin: 0 auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -335,7 +336,7 @@ $shadow-color: rgba(0, 0, 0, 0.1);
   .form-header {
     @include flex(space-between, center);
     color: black;
-    padding: 20px;
+    padding: 10px;
     
     h3 {
       font-size: 20px;
@@ -515,7 +516,6 @@ $shadow-color: rgba(0, 0, 0, 0.1);
   .form-actions {
     @include flex(flex-end, center);
     gap: 15px;
-    margin-top: 30px;
     
     .btn-cancel {
       @include button-style($secondary-color);

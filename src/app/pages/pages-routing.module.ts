@@ -18,6 +18,7 @@ import { FavoriteComponent } from './favorite/favorite.component';
 
 import { ProductCardComponent } from './products/product-card-all/product-card-all.component';
 
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'payment-result', component: PaymentComponent },
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'news', component: NewsComponent }, 
   { path: 'contact', component: ContactComponent }, 
   { path: 'checkout', component: CheckoutComponent }, 
+
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
