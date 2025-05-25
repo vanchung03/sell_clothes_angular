@@ -1,0 +1,16 @@
+<div class="feature-container">
+  <div *ngFor="let feature of features" class="feature-item" [ngClass]="{'highlight': feature.name === 'Khách hàng (CRM cơ bản)'}">
+    <div class="feature-info">
+      <i [class]="feature.iconClass"></i>
+      <div>
+        <div class="feature-title">{{ feature.name }}</div>
+        <div class="feature-desc" *ngIf="feature.desc">{{ feature.desc }}</div>
+      </div>
+    </div>
+    <div class="feature-toggle">
+      <button [ngClass]="{'enabled': feature.enabled, 'disabled': !feature.enabled}">
+        {{ feature.enabled ? 'Đang bật' : 'Đang tắt' }}
+      </button>
+    </div>
+  </div>
+</div>

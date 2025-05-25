@@ -89,7 +89,7 @@
             [ngClass]="{'success': payment.paymentStatus === 'SUCCESS',
                        'pending': payment.paymentStatus === 'PENDING',
                        'failed': payment.paymentStatus === 'FAILED'}"
-            data-aos="fade-up">
+           >
           <td>{{payment.paymentId}}</td>
           <td>
             <div class="transaction-code">
@@ -103,11 +103,7 @@
           </td>
           <td>
             <span class="payment-method">
-              <i class="fas" [ngClass]="{
-                'fa-money-bill': payment.method === 'COD',
-                'fa-credit-card': payment.method === 'VNPAY',
-                'fa-wallet': payment.method === 'MOMO'
-              }"></i>
+              <i class="fas fa-credit-card"></i>
               {{payment.method || "N/A"}}
             </span>
           </td>

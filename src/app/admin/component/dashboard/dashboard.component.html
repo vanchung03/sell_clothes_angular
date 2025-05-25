@@ -1,31 +1,40 @@
-<!-- dashboard.component.html -->
 <div class="dashboard-container">
-  <!-- Header Section -->
-  <div class="dashboard-header" data-aos="fade-down" data-aos-duration="800">
-    <h1>Tổng quan kinh doanh</h1>
-    <p class="subtitle">Thống kê hoạt động cửa hàng</p>
-  </div>
-
-  <!-- KPI Cards Section -->
-  <div class="kpi-cards">
-    <div class="card" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
-      <div class="card-icon">
-        <i class="fas fa-money-bill-wave"></i>
-      </div>
-      <div class="card-content">
-        <h3>Tổng doanh thu</h3>
-        <p class="card-value">{{ totalRevenue | currency:'VND':'symbol':'1.0-0' }}</p>
-      </div>
+  <h1>Bảng điều khiển</h1>
+  
+  <div class="summary-cards">
+    <div class="card">
+      <h2>Tổng doanh thu</h2>
+      <p>{{ totalRevenue | currency:'VND':'symbol-narrow':'1.0-0' }}</p>
     </div>
-
-    <div class="card" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
-      <div class="card-icon">
-        <i class="fas fa-shopping-cart"></i>
-      </div>
-      <div class="card-content">
-        <h3>Tổng đơn hàng</h3>
-        <p class="card-value">{{ totalOrders }}</p>
-      </div>
+    <div class="card">
+      <h2>Tổng đơn hàng</h2>
+      <p>{{ totalOrders }}</p>
+    </div>
+  </div>
+  
+  <div class="charts-container">
+    <div class="chart-column">
+      <h3>Doanh thu theo thời gian</h3>
+      <canvas baseChart
+        [data]="combinedChartData"
+        [options]="chartOptions"
+        [type]="chartType">
+      </canvas>
+    </div>
+    
+    <div class="chart-pie">
+      <h3>Phân bổ doanh thu</h3>
+      <canvas baseChart
+        [data]="{
+          labels: pieChartLabels,
+          datasets: [{
+            data: pieChartData,
+            backgroundColor: pieChartColors[0].backgroundColor
+          }]
+        }"
+        [options]="pieChartOptions"
+        [type]="pieChartType">
+      </canvas>
     </div>
   </div>
 </div>

@@ -5,6 +5,7 @@ const authUrl = 'http://localhost:8080/api';
 const shippingUrl = 'http://localhost:8080/api/shipping';
 const cloudinaryUrl = 'http://localhost:8080/api';
 const voucherUrl = cloudinaryUrl;
+const chatUrl = 'http://localhost:8080/api'; // URL
 export const environment = {
   production: false,
 
@@ -13,6 +14,7 @@ export const environment = {
   apiShippingUrl: shippingUrl,
   apiCloudinaryUrl: cloudinaryUrl,
   apiVoucherUrl: voucherUrl,  // ✅ Đúng baseUrl
+  apiChatUrl: chatUrl, // ✅ Đúng baseUrl
 
 
   API_URLS: {
@@ -21,12 +23,15 @@ export const environment = {
     AUTH_URL: authUrl,
     SHIPPING_URL: shippingUrl,
     CLOUDINARY_URL: cloudinaryUrl,
+    CHAT_URL: chatUrl, // ✅ Đúng baseUrl
+
 
     STATISTICS: {
       TOTAL_REVENUE: `${baseUrl}/statistics/total-revenue`,
       TOTAL_ORDERS: `${baseUrl}/statistics/total-orders`,
       TOP_PRODUCTS: `${baseUrl}/statistics/top-products`,
     },
+    CHAT_BOX: `${chatUrl}/chat`, // ✅ Đúng baseUrl
 
     REPORTS: {
       REVENUE: `${baseUrl}/reports/revenue`,

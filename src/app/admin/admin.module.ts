@@ -28,6 +28,7 @@ import { AddExcelProductComponent } from './component/products/add-excel-product
 import { AddExcelProductImageComponent } from './component/products/add-excel-product-image/add-excel-product-image.component';
 import { AddExcelProductVariantComponent } from './component/products/add-excel-product-variant/add-excel-product-variant.component';
 import { VoucherComponent } from './component/voucher/voucher.component';
+import { ProductSummaryComponent } from './component/reports/product-summary/product-summary.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { VoucherComponent } from './component/voucher/voucher.component';
     AddExcelProductImageComponent,
     AddExcelProductVariantComponent,
     VoucherComponent,
+    ProductSummaryComponent,
     
   ],
   imports: [

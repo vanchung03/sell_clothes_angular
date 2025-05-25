@@ -11,6 +11,7 @@ import { AdminLayoutComponent } from './component/index-layout/index.component';
 import { AuthGuard } from './auth.guard'; // Import AuthGuard
 
 import { StatisticsComponent } from './component/reports/statistics/statistics.component';
+import { ProductSummaryComponent } from './component/reports/product-summary/product-summary.component';
 import { UpdateProductComponent } from './component/products/update-product/update-product.component';
 import { CategoryComponent } from './component/category/category.component';
 import { BrandComponent } from './component/brand/brand.component';
@@ -40,6 +41,7 @@ const routes: Routes = [
 
       
       { path: 'statistics', component: StatisticsComponent },
+
       { path: 'products', component: ProductsComponent },
       { path: 'add-excel-product', component: AddExcelProductComponent },  // Thêm sản phẩm từ file Excel
       { path: 'add-excel-product-image', component: AddExcelProductImageComponent },  // Thêm ảnh cho sản phẩm từ file Excel
@@ -51,6 +53,7 @@ const routes: Routes = [
       { path: 'payment-history', component: PaymentHistoryComponent }, 
       { path: 'payment', component: PaymentComponent },
       { path: 'reports', component: ReportsComponent },
+      { path: 'product-summary', component: ProductSummaryComponent },
       { path: 'brand', component: BrandComponent },
       { path: 'category', component: CategoryComponent }, 
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' }

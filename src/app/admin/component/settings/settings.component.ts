@@ -1,42 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent {
-  settings = {
-    notifications: true,
-    pushNotifications: false,
-    timezone: 'GMT+7',
-    language: 'Tiếng Việt'
-  };
-
-  timezones = ['GMT-8', 'GMT-5', 'GMT+0', 'GMT+7', 'GMT+9'];
-  languages = ['English', 'Tiếng Việt', 'Français', 'Español'];
-  currentVersion = '1.0.0';
-
-  changePassword() {
-    alert('Chức năng đổi mật khẩu đang phát triển.');
+export class SettingsComponent implements OnInit {
+  
+  ngOnInit(): void {
+            
   }
+  features = [
+  { name: 'Đa ngôn ngữ', iconClass: 'fas fa-globe', enabled: true },
+  { name: 'Quảng cáo Google Shopping', iconClass: 'fab fa-google', enabled: true },
+  { name: 'Nhật ký hoạt động', iconClass: 'fas fa-book', enabled: true },
+  { name: 'Bán hàng đa kênh', iconClass: 'fas fa-shopping-cart', enabled: true },
+  { name: 'Mã khuyến mãi sản phẩm', iconClass: 'fas fa-gift', enabled: true, desc: 'Gói Bán Thá Ga' },
+  { name: 'Mua X tặng Y', iconClass: 'fas fa-tags', enabled: true, desc: 'Gói Bán Thá Ga' },
+  { name: 'Bộ lọc sản phẩm', iconClass: 'fas fa-filter', enabled: true, desc: 'Gói Bán Thá Ga' },
+  { name: 'Khách hàng (CRM cơ bản)', iconClass: 'fas fa-users', enabled: true, desc: 'Gói Bán Thá Ga' },
+  { name: 'Landingpage', iconClass: 'fas fa-file-alt', enabled: true, desc: 'Gói Bán Thá Ga' }
+];
 
-  enable2FA() {
-    alert('Xác thực hai lớp sẽ được bật.');
-  }
 
-  checkForUpdates() {
-    alert('Bạn đang sử dụng phiên bản mới nhất.');
-  }
-
-  onBannerChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      console.log('Banner selected:', file.name);
-    }
-  }
-
-  uploadBanner() {
-    alert('Banner đã được tải lên.');
-  }
 }

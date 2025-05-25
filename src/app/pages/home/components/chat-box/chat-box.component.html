@@ -1,64 +1,28 @@
-<!-- Chat Icon Button -->
+<!-- Nút icon chat nổi -->
 <div class="chat-toggle" (click)="toggleChat()">
   💬
 </div>
 
-<!-- Chat Container -->
-<div class="chat-container" *ngIf="isChatVisible">
-  <div class="chat-header">
-    <h2>Serenity Fashion Assistant</h2>
-    <div class="connection-status" [ngClass]="{'connected': isConnected, 'disconnected': !isConnected}">
-      {{ isConnected ? 'Đang kết nối' : 'Mất kết nối' }}
-    </div>
-  </div>
+<!-- Khung chat -->
+<div class="chat-container" *ngIf="isOpen">
   
-  <div class="messages-container" #messagesContainer>
-    <div *ngFor="let message of messages" class="message" [ngClass]="message.sender.toLowerCase()">
-      <div class="message-content">
-        <div class="message-header">
-          <span class="sender">
-            {{ message.sender === 'system' ? 'Serenity Bot' : 
-              (message.sender === 'ai' ? 'Trợ lý thời trang' : message.sender) }}
-          </span>
-          <span class="timestamp">{{ message.timestamp | date:'HH:mm' }}</span>
-        </div>
-        <div class="message-text">
-          {{ message.content }}
-        </div>
-        
-        <!-- Hiển thị sản phẩm gợi ý nếu đây là tin nhắn từ hệ thống và có sản phẩm liên quan -->
-        <div class="product-suggestions" *ngIf="message.sender === 'system' && showProducts && message === messages[messages.length-1]">
-          <div class="product-card" *ngFor="let product of relatedProducts" (click)="showProductDetail(product)">
-            <img [src]="product.thumbnail || 'assets/images/product-placeholder.jpg'" alt="{{product.name}}" class="product-image">
-            <div class="product-name">{{product.name}}</div>
-            <div class="product-price">
-              <span *ngIf="product.salePrice && product.salePrice < product.price" style="text-decoration: line-through; color: #999; margin-right: 5px;">
-                {{product.price | currency:'VND':'symbol-narrow':'1.0-0'}}
-              </span>
-              {{(product.salePrice && product.salePrice < product.price ? product.salePrice : product.price) | currency:'VND':'symbol-narrow':'1.0-0'}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Hiển thị dấu hiệu "đang gõ" -->
-    <div *ngIf="isTyping" class="message system">
-      <div class="message-content">
-        <div class="message-text typing-indicator">
-          <span>.</span><span>.</span><span>.</span>
-        </div>
-      </div>
-    </div>
+  <!-- Giới thiệu -->
+  <div class="chat-intro">
+    <p>Chào mừng bạn đến với cửa hàng Serenity! 🏡</p>
   </div>
-  
-  <div class="message-input">
-    <input
-      type="text"
-      [(ngModel)]="newMessage"
-      placeholder="Hỏi về thời trang..."
-      (keyup.enter)="sendMessage()"
-      [disabled]="!isConnected"
-    />
-    <button (click)="sendMessage()" [disabled]="!isConnected">Gửi</button>
+
+  <!-- Khung hiển thị tin nhắn -->
+  <div class="chat-window">
+    <div *ngFor="let msg of messages" class="message" [ngClass]="msg.role">
+      <img [src]="msg.role === 'user' ? 'https://img.thuthuattinhoc.vn/uploads/2019/01/08/anh-anime_101906393.png' : 'https://png.pngtree.com/background/20230416/original/pngtree-ai-robot-innovation-high-tech-ppt-robot-template-background-image-picture-image_2443210.jpg'" class="avatar">
+      <span [innerHTML]="formatMessage(msg.content)"></span>
+    </div>
+    <div *ngIf="loading" class="loading">🤖 AI đang trả lời...</div>
   </div>
+
+  <!-- Ô nhập tin nhắn -->
+  <div class="chat-input">
+    <input type="text" [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Nhập tin nhắn..." />
+    <button (click)="sendMessage()" [disabled]="loading || !userInput.trim()">Gửi</button>
+  </div>
+</div>

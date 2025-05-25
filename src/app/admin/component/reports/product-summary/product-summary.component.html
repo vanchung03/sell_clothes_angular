@@ -1,0 +1,53 @@
+<h2>Thống kê tồn kho sản phẩm</h2>
+
+<div class="filter-container">
+  <label for="operator">Lọc theo tồn kho:</label>
+  <select [(ngModel)]="stockOperator">
+    <option value=">">Lớn hơn</option>
+    <option value="<">Nhỏ hơn</option>
+    <option value="=">Bằng</option>
+  </select>
+
+  <input type="number" [(ngModel)]="stockThreshold" placeholder="Nhập số lượng" />
+  <button (click)="applyFilter()">Lọc</button>
+  <button (click)="exportToExcel()">📁 Xuất Excel</button>
+</div>
+
+<table class="product-table">
+  <thead>
+    <tr>
+      <th>Tên sản phẩm</th>
+      <th>Tổng số lượng</th>
+      <th>Số biến thể</th>
+      <th>Số hình ảnh</th>
+      <th>Số đánh giá</th>
+      <th>Trung bình sao</th>
+      <th>Ảnh + Số lượng</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of filteredProductData">
+      <td>{{ product.name }}</td>
+      <td [ngClass]="{ 'low-stock': product.totalStock < 10 }">
+        {{ product.totalStock }}
+      </td>
+      <td>{{ product.variantCount }}</td>
+      <td>{{ product.imageCount }}</td>
+      <td>{{ product.reviewCount }}</td>
+      <td>{{ product.averageRating | number:'1.1-1' }}</td>
+      <td>
+        <div class="image-list">
+          <div
+            class="image-stock"
+            *ngFor="let item of product.imageStocks"
+            [ngClass]="{ 'low-stock': item.stockQuantity < 10 }"
+          >
+            <img [src]="item.imageUrl" alt="Ảnh" />
+            <span>{{ item.stockQuantity }}</span>
+            
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

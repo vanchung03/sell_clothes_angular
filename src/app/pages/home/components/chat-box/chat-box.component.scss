@@ -1,14 +1,10 @@
-// Biến SCSS
-$primary-color: #8e44ad; // Màu chủ đạo của Serenity
-$secondary-color: #9b59b6;
-$light-bg: #f5f5f5;
-$dark-text: #333;
-$light-text: #fff;
-$message-bg-user: #e9ecef;
-$message-bg-system: lighten($primary-color, 35%);
-$message-bg-ai: lighten($secondary-color, 30%);
-$border-radius: 12px;
-$box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+// Variables
+$primary-color: #4a90e2;
+$secondary-color: #f0f4f8;
+$text-color: #333;
+$light-text: #777;
+$box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+$border-radius: 10px;
 $transition: all 0.3s ease;
 
 // Chat toggle button
@@ -18,21 +14,21 @@ $transition: all 0.3s ease;
   right: 20px;
   width: 60px;
   height: 60px;
+  background-color: $primary-color;
   border-radius: 50%;
-  background: linear-gradient(135deg, $primary-color, $secondary-color);
-  color: $light-text;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
   font-size: 24px;
   cursor: pointer;
   box-shadow: $box-shadow;
+  z-index: 999;
   transition: $transition;
-  z-index: 1000;
   
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -43,272 +39,171 @@ $transition: all 0.3s ease;
   right: 20px;
   width: 350px;
   height: 500px;
+  background-color: white;
   border-radius: $border-radius;
-  background-color: $light-bg;
   box-shadow: $box-shadow;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  z-index: 999;
+  z-index: 998;
   transition: $transition;
-  animation: slideUp 0.3s ease-out;
   
-  @keyframes slideUp {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+  @media (max-width: 480px) {
+    width: calc(100% - 40px);
+    height: 450px;
   }
 }
 
-// Chat header
-.chat-header {
-  background: linear-gradient(135deg, $primary-color, $secondary-color);
-  color: $light-text;
+// Chat introduction
+.chat-intro {
+  background-color: $primary-color;
+  color: white;
   padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top-left-radius: $border-radius;
-  border-top-right-radius: $border-radius;
+  text-align: center;
+  font-weight: 500;
   
-  h2 {
+  p {
     margin: 0;
-    font-size: 18px;
-    font-weight: 500;
-  }
-  
-  .connection-status {
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 12px;
-    
-    &.connected {
-      background-color: rgba(0, 255, 0, 0.2);
-      color: #2ecc71;
-    }
-    
-    &.disconnected {
-      background-color: rgba(255, 0, 0, 0.2);
-      color: #e74c3c;
-    }
+    font-size: 14px;
   }
 }
 
-// Messages container
-.messages-container {
+// Chat window (messages area)
+.chat-window {
   flex: 1;
   padding: 15px;
   overflow-y: auto;
-  background-color: $light-bg;
+  background-color: $secondary-color;
   
   &::-webkit-scrollbar {
     width: 6px;
   }
   
   &::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: transparent;
   }
   
   &::-webkit-scrollbar-thumb {
-    background: lighten($primary-color, 20%);
-    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
   }
 }
 
-// Message styles
+// Message styling
 .message {
-  margin-bottom: 15px;
   display: flex;
-  flex-direction: column;
-  max-width: 85%;
+  align-items: flex-start;
+  margin-bottom: 15px;
   
-  &.user {
-    align-self: flex-end;
-    margin-left: auto;
-    
-    .message-content {
-      background-color: $message-bg-user;
-      border-radius: 18px 18px 0 18px;
-    }
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
   }
   
-  &.system {
-    align-self: flex-start;
+  span {
+    padding: 10px 12px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  &.user {
+    flex-direction: row-reverse;
     
-    .message-content {
-      background-color: $message-bg-system;
-      border-radius: 18px 18px 18px 0;
+    .avatar {
+      margin-right: 0;
+      margin-left: 10px;
+    }
+    
+    span {
+      background-color: $primary-color;
+      color: white;
+      border-top-right-radius: 4px;
     }
   }
   
   &.ai {
-    align-self: flex-start;
-    
-    .message-content {
-      background-color: $message-bg-ai;
-      border-radius: 18px 18px 18px 0;
-    }
-  }
-  
-  .message-content {
-    padding: 12px 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    
-    .message-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px;
-      font-size: 12px;
-      
-      .sender {
-        font-weight: 600;
-      }
-      
-      .timestamp {
-        color: #888;
-      }
-    }
-    
-    .message-text {
-      font-size: 14px;
-      line-height: 1.4;
+    span {
+      background-color: white;
+      color: $text-color;
+      border-top-left-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
   }
 }
 
-// Product suggestions
-.product-suggestions {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 10px;
-  padding: 10px 0;
-  margin-top: 5px;
-  
-  &::-webkit-scrollbar {
-    height: 4px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: lighten($primary-color, 20%);
-    border-radius: 3px;
-  }
-  
-  .product-card {
-    min-width: 120px;
-    background: $light-text;
-    border-radius: 8px;
-    padding: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: $transition;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    .product-image {
-      width: 100%;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 5px;
-    }
-    
-    .product-name {
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .product-price {
-      font-size: 11px;
-      color: $primary-color;
-    }
-  }
+// Loading animation
+.loading {
+  padding: 8px 15px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 15px;
+  display: inline-block;
+  margin-bottom: 10px;
+  color: $light-text;
+  font-size: 14px;
+  animation: pulse 1.5s infinite;
 }
 
-// Message input area
-.message-input {
-  padding: 12px;
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+// Chat input area
+.chat-input {
   display: flex;
-  background-color: $light-text;
-  border-top: 1px solid #eee;
+  padding: 10px;
+  background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   
   input {
     flex: 1;
     padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 20px;
-    margin-right: 10px;
     outline: none;
+    font-size: 14px;
     transition: $transition;
     
     &:focus {
       border-color: $primary-color;
       box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
     }
-    
-    &:disabled {
-      background-color: #f5f5f5;
-      cursor: not-allowed;
-    }
   }
   
   button {
-    background: linear-gradient(135deg, $primary-color, $secondary-color);
-    color: $light-text;
+    background-color: $primary-color;
+    color: white;
     border: none;
     border-radius: 20px;
-    padding: 10px 20px;
+    padding: 0 20px;
+    margin-left: 10px;
     cursor: pointer;
+    font-weight: 500;
     transition: $transition;
     
-    &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    &:hover:not([disabled]) {
+      background-color: darken($primary-color, 10%);
     }
     
     &:disabled {
-      opacity: 0.6;
+      background-color: #ccc;
       cursor: not-allowed;
     }
   }
 }
 
-// Responsive design
-@media screen and (max-width: 768px) {
-  .chat-container {
-    width: 100%;
-    height: 70vh;
-    bottom: 0;
-    right: 0;
-    border-radius: $border-radius $border-radius 0 0;
-  }
-  
-  .chat-toggle {
-    bottom: 75vh;
-  }
-}
-
-// Animation for new messages
-@keyframes fadeIn {
+// Animation for chat window appearance
+@keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -316,6 +211,6 @@ $transition: all 0.3s ease;
   }
 }
 
-.message {
-  animation: fadeIn 0.3s ease-out;
+.chat-container {
+  animation: slideIn 0.3s ease;
 }
